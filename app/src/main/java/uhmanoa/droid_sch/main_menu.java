@@ -105,7 +105,7 @@ public class main_menu extends Activity {
         Bitmap bmp_mmtitle = imgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_title,
                 pt_resolution.x, pt_resolution.y);
         Bitmap bmp_mmbg = imgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_bg,
-                pt_resolution.x / 8, pt_resolution.y / 8);
+                pt_resolution.x / 8, pt_resolution.y / 8); //reduces size of file by factor of 8
 
         iv_mmlogo = (ImageView) findViewById(R.id.img_logo);
         iv_mmlogo.setImageBitmap(bmp_mmlogo);
