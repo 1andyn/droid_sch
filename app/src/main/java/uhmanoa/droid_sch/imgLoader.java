@@ -14,7 +14,7 @@ import android.graphics.BitmapFactory;
  * android to load a smaller version of the image and then resize.
  *
  */
-public class imgLoader {
+public class ImgLoader {
    public static int calcInSampleSize(BitmapFactory.Options p_bmp_opt, int p_i_width,
                                       int p_i_height) {
        final int i_height = p_bmp_opt.outHeight;

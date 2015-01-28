@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class main_menu extends Activity {
+public class Main_menu extends Activity {
 
     private Drawable drw_bg;
     private Resources res_main;
@@ -46,47 +46,47 @@ public class main_menu extends Activity {
 
     protected void configureBtnListeners() {
 
-        arraylst_btn.get(app_const.buttons.create.ordinal()).setOnClickListener(
+        arraylst_btn.get(App_const.buttons.create.ordinal()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(main_menu.this, "Create Button Pressed",
+                        Toast.makeText(Main_menu.this, "Create Button Pressed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
 
-        arraylst_btn.get(app_const.buttons.view.ordinal()).setOnClickListener(
+        arraylst_btn.get(App_const.buttons.view.ordinal()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(main_menu.this, "View Button Pressed",
+                        Toast.makeText(Main_menu.this, "View Button Pressed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
 
-        arraylst_btn.get(app_const.buttons.search.ordinal()).setOnClickListener(
+        arraylst_btn.get(App_const.buttons.search.ordinal()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(main_menu.this, "Search Button Pressed",
+                        Toast.makeText(Main_menu.this, "Search Button Pressed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
 
-        arraylst_btn.get(app_const.buttons.about.ordinal()).setOnClickListener(
+        arraylst_btn.get(App_const.buttons.about.ordinal()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(main_menu.this, "About Button Pressed",
+                        Toast.makeText(Main_menu.this, "About Button Pressed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
 
-        arraylst_btn.get(app_const.buttons.exit.ordinal()).setOnClickListener(
+        arraylst_btn.get(App_const.buttons.exit.ordinal()).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        main_menu.this.finish();
+                        Main_menu.this.finish();
                     }
                 });
 
@@ -100,11 +100,11 @@ public class main_menu extends Activity {
         ImageView iv_mmlogo, iv_mmtitle;
         RelativeLayout ll_mainlayout;
 
-        Bitmap bmp_mmlogo = imgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_logo,
+        Bitmap bmp_mmlogo = ImgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_logo,
                 pt_resolution.x, pt_resolution.y);
-        Bitmap bmp_mmtitle = imgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_title,
+        Bitmap bmp_mmtitle = ImgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_title,
                 pt_resolution.x, pt_resolution.y);
-        Bitmap bmp_mmbg = imgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_bg,
+        Bitmap bmp_mmbg = ImgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_bg,
                 pt_resolution.x / 8, pt_resolution.y / 8); //reduces size of file by factor of 8
 
         iv_mmlogo = (ImageView) findViewById(R.id.img_logo);
