@@ -16,4 +16,6 @@
     <string name="bt_txt_search">Search for Courses</string>
     <string name="dsc_mm_title">Main Menu Title Image</string>
     <string name="dsc_mm_logo">Main Menu Logo Image</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="bt_search">Search</string>
 </resources>

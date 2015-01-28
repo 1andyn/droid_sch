@@ -55,8 +55,8 @@ public class Sql_datasource {
     }
 
     /* Returns corresponding Starred Row Data */
-    private star_obj cursorToStarObj(Cursor curs) {
-        star_obj so = new star_obj(curs.getString(col.course.ordinal()),
+    private Star_obj cursorToStarObj(Cursor curs) {
+        Star_obj so = new Star_obj(curs.getString(col.course.ordinal()),
                 curs.getInt(col.crn.ordinal()),
                 curs.getInt(col_id));
         return so;
@@ -66,7 +66,7 @@ public class Sql_datasource {
     * It then runs a function for converting the row into a
      * fav_obj (object/class representation of the Favorite Object */
 
-    public star_obj save_fav(star_obj pStar) {
+    public Star_obj save_fav(Star_obj pStar) {
         ContentValues values = new ContentValues();
         values.put(Sql_helper.COLUMN_CRSNAME, pStar.getCourse());
         values.put(Sql_helper.COLUMN_CRN, pStar.getCRN());
@@ -75,7 +75,7 @@ public class Sql_datasource {
         Cursor curse = database.query(Sql_helper.TABLE_NAME, fav_column, null, null, null, null,
                 null);
         curse.moveToFirst();
-        star_obj so = cursorToStarObj(curse);
+        Star_obj so = cursorToStarObj(curse);
         curse.close();
         return so;
     }
@@ -98,8 +98,8 @@ public class Sql_datasource {
         database.delete(Sql_helper.TABLE_NAME, Sql_helper.COLUMN_SCH_ID + " = " + id, null);
     }
 
-    public star_obj getStrObj(long id) {
-        star_obj so = null;
+    public Star_obj getStrObj(long id) {
+        Star_obj so = null;
         Cursor curse = database.query(Sql_helper.TABLE_NAME, fav_column, null, null, null, null,
                 Sql_helper.COLUMN_ID + " ASC,");
         curse.moveToFirst();
@@ -114,13 +114,13 @@ public class Sql_datasource {
         return so;
     }
 
-    public ArrayList<star_obj> getAllSO() {
-        ArrayList<star_obj> all_starobj = new ArrayList<star_obj>();
+    public ArrayList<Star_obj> getAllSO() {
+        ArrayList<Star_obj> all_starobj = new ArrayList<Star_obj>();
         Cursor curse = database.query(Sql_helper.TABLE_NAME, fav_column, null, null, null, null,
                 Sql_helper.COLUMN_CRN + " ASC");
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
-            star_obj so = cursorToStarObj(curse);
+            Star_obj so = cursorToStarObj(curse);
             all_starobj.add(so);
             curse.moveToNext();
         }
