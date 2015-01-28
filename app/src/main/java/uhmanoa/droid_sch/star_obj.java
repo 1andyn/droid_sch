@@ -6,9 +6,11 @@ package uhmanoa.droid_sch;
 public class star_obj {
     private String course_name;
     private int CRN;
+    private int ID; // Incase user for some reason stars both a course and class
 
     //Constructor
-    public star_obj(String pCrsname, int pCRN) {
+    public star_obj(String pCrsname, int pCRN, int pID) {
+        pID= ID;
         CRN = pCRN;
         course_name = pCrsname;
     }

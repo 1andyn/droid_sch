@@ -22,7 +22,7 @@ import android.util.Log;
 *   Schema -> course_name,
 */
 
-public class sql_helper extends SQLiteOpenHelper {
+public class Sql_helper extends SQLiteOpenHelper {
 
     /* Columns for Starred/Favorites & Schedules */
     public static final String COLUMN_CRSNAME = "strCourse"; /* This field will be used as a key
@@ -109,7 +109,7 @@ public class sql_helper extends SQLiteOpenHelper {
             + COLUMN_oc + " INT NOT NULL, "
             + COLUMN_wi + " INT NOT NULL " + " );";
 
-    public sql_helper(Context context) {
+    public Sql_helper(Context context) {
         //super(context, DATABASE_NAME, null, DATABASE_VERSION);
         super(context, "/mnt/sdcard/" + DATABASE_NAME, null, DATABASE_VERSION);
 		    /*DEBUG ONLY, use COMMENTED VERSION FOR RELEASE */
@@ -124,7 +124,7 @@ public class sql_helper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(sql_helper.class.getName(),
+        Log.w(Sql_helper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
