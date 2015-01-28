@@ -98,12 +98,6 @@ public class Sql_datasource {
         database.delete(Sql_helper.TABLE_NAME, Sql_helper.COLUMN_SCH_ID + " = " + id, null);
     }
 
-    public void deleteEvent(long id) {
-        System.out.println("Deleted event with id: " + id);
-        database.delete(Sql_helper.TABLE_NAME, Sql_helper.COLUMN_ID + " = " + id, null);
-    }
-
-
     public star_obj getStrObj(long id) {
         star_obj so = null;
         Cursor curse = database.query(Sql_helper.TABLE_NAME, fav_column, null, null, null, null,
