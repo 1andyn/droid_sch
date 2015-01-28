@@ -1,6 +1,7 @@
 package uhmanoa.droid_sch;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -68,8 +69,8 @@ public class Main_menu extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(Main_menu.this, "Search Button Pressed",
-                                Toast.LENGTH_SHORT).show();
+                        Intent switchSearch = new Intent(Main_menu.this, Search.class);
+                        startActivity(switchSearch);
                     }
                 });
 
