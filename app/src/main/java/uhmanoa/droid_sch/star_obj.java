@@ -18,6 +18,7 @@ public class star_obj {
     public int getCRN() {
         return CRN;
     }
+    public int getID() { return ID; }
 
     public String getCourse() {
         return course_name;
