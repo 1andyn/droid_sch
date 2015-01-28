@@ -9,72 +9,61 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 public class sql_datasource {
-	
-	/* Enumeration for COLUMNS */
-	private int COL_ID = 0;
-	private int COL_NAME = 1;
-	private int COL_DESC = 2;
-	private int COL_ALARM = 3;
-	private int COL_MONTH = 4;
-	private int COL_DAY = 5;
-	private int COL_YEAR = 6;
-	private int COL_START = 7;
-	private int COL_END = 8;
-	private int COL_COL = 9;
-	private int COL_REP = 10;
-	private int COL_ALA = 11;
-	
-	private int START = 0;
-	private int COL_E_ID = 1;
-	private int COL_OBJ_ID = 2;
-	
-	private String []allColumnsObj = {sql_helper.COLUMN_ID, sql_helper.COLUMN_EVENT_ID, sql_helper.COLUMN_OBJECT_ID};
-	
-	private final static String NO_OVERLAP = "N";
-	private final static String nofaultEvent = NO_OVERLAP;
-	
-	private Cal_Module cal_mod;
-	private Repetition_Module rep_mod;
-	private SQLHelper dbhelper;
-	private SQLiteDatabase database;
-	private String[] allColumns = { sql_helper.COLUMN_ID, sql_helper.COLUMN_NAME, sql_helper.COLUMN_DESC,
-			sql_helper.COLUMN_ALARM, sql_helper.COLUMN_MONTH, sql_helper.COLUMN_DAY, sql_helper.COLUMN_YEAR,
-			sql_helper.COLUMN_START, sql_helper.COLUMN_END, sql_helper.COLUMN_COLOR, sql_helper.COLUMN_REP,
-			sql_helper.COLUMN_ASEC };
-	
-	public SQL_DataSource(Context context)
+
+    /* Class Member Variables */
+    private sql_helper dbhelper;
+    private SQLiteDatabase database;
+
+    /* Enumerations for Columns */
+    static enum col {
+        course, crn, start, start2, end, end2, room, room2, prof, credit, sch_id
+    }
+
+    static enum col_gefc {
+        fga, fgb, fgc, fs, fw, da, db, dh, dl, dp, ds, dy, hsl, ni, eth,
+        hap, oc, wi
+    }
+
+	private String []fav_column = {sql_helper.COLUMN_CRSNAME, sql_helper.COLUMN_CRN};
+    private String []sch_column = {sql_helper.COLUMN_CRSNAME, sql_helper.COLUMN_CRN,
+            sql_helper.COLUMN_START, sql_helper.COLUMN_START2, sql_helper.COLUMN_END,
+        sql_helper.COLUMN_END2, sql_helper.COLUMN_ROOM, sql_helper.COLUMN_ROOM2,
+        sql_helper.COLUMN_PROF, sql_helper.COLUMN_CREDIT, sql_helper.COLUMN_SCH_ID };
+
+    private String []gefc_column = {sql_helper.COLUMN_fga, sql_helper.COLUMN_fgb,
+            sql_helper.COLUMN_fgc, sql_helper.COLUMN_fs, sql_helper.COLUMN_fw, sql_helper.COLUMN_da,
+            sql_helper.COLUMN_db, sql_helper.COLUMN_dh, sql_helper.COLUMN_dl, sql_helper.COLUMN_dp,
+            sql_helper.COLUMN_dy, sql_helper.COLUMN_hsl, sql_helper.COLUMN_ni,
+            sql_helper.COLUMN_eth, sql_helper.COLUMN_oc, sql_helper.COLUMN_wi };
+
+
+	public sql_datasource(Context context)
 	{
-		dbhelper = new SQLHelper(context);
+		dbhelper = new sql_helper(context);
 	}
 	
 	public void open() throws SQLException{
 		database = dbhelper.getWritableDatabase();
 	}
-	
+
+    /* Closes Database Helper */
 	public void close()
 	{
 		dbhelper.close();
 	}
-	
-	public table_insert createEvent(Event e)
+
+    /* Stores Favorite Object into corresponding Table
+    * It then runs a function for converting the row into a
+     * fav_obj (object/class representation of the Favorite Object */
+	public star_obj save_fav(star_obj pStar)
 	{
 		ContentValues values = new ContentValues();
-		values.put(SQLHelper.COLUMN_NAME, e.getName());
-		values.put(SQLHelper.COLUMN_DESC, e.getDescription());
-		values.put(SQLHelper.COLUMN_ALARM, e.getAlarm());
-		values.put(SQLHelper.COLUMN_MONTH, e.GetMonth());
-		values.put(SQLHelper.COLUMN_DAY, e.GetDay());
-		values.put(SQLHelper.COLUMN_YEAR, e.GetYear());
-		values.put(SQLHelper.COLUMN_START, e.GetStart());
-		values.put(SQLHelper.COLUMN_END, e.GetEnd());
-		values.put(SQLHelper.COLUMN_COLOR, e.getColor());
-		values.put(SQLHelper.COLUMN_REP, e.getRep());
-		values.put(SQLHelper.COLUMN_ASEC, e.get_Asec());
-		
-		/* Supposedly adds all values in ContentValues values to database*/
-		long insertId = database.insert(SQLHelper.TABLE_NAME, null, values);
-		Cursor curse = database.query(SQLHelper.TABLE_NAME, allColumns, 
-				SQLHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+		values.put(sql_helper.COLUMN_CRSNAME, pStar.getName());
+		values.put(sql_helper.COLUMN_CRN, pStar.getCRN());
+
+		long insertId = database.insert(sql_helper.TABLE_NAME, null, values);
+		Cursor curse = database.query(sql_helper.TABLE_NAME, fav_column, null, null, null, null,
+                null);
 		curse.moveToFirst();
 		Event newEvent = cursorToEvent(curse);
 		curse.close();
@@ -85,13 +74,13 @@ public class sql_datasource {
 	public String saveObjectID(long id, String ObjectID)
 	{
 		ContentValues values = new ContentValues();
-		values.put(SQLHelper.COLUMN_EVENT_ID, id);
-		values.put(SQLHelper.COLUMN_OBJECT_ID, ObjectID);
+		values.put(sql_helper.COLUMN_EVENT_ID, id);
+		values.put(sql_helper.COLUMN_OBJECT_ID, ObjectID);
 		
 		/* Supposedly adds all values in ContenValues values to second table*/
-		long insertId = database.insert(SQLHelper.OBJECT_TABLE_NAME, null, values);
-		Cursor curse = database.query(SQLHelper.OBJECT_TABLE_NAME, allColumnsObj, 
-				SQLHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+		long insertId = database.insert(sql_helper.OBJECT_TABLE_NAME, null, values);
+		Cursor curse = database.query(sql_helper.OBJECT_TABLE_NAME, allColumnsObj, 
+				sql_helper.COLUMN_ID + " = " + insertId, null, null, null, null);
 		curse.moveToFirst();
 
 		curse.close();
@@ -103,26 +92,26 @@ public class sql_datasource {
 	{
 		long id = e.GetID();
 		System.out.println("Deleted event with id: " + id);
-		database.delete(SQLHelper.TABLE_NAME, SQLHelper.COLUMN_ID + " = " + id, null);
+		database.delete(sql_helper.TABLE_NAME, sql_helper.COLUMN_ID + " = " + id, null);
 	}
 	
 	public void deleteEvent(long id)
 	{
 		System.out.println("Deleted event with id: " + id);
-		database.delete(SQLHelper.TABLE_NAME, SQLHelper.COLUMN_ID + " = " + id, null);
+		database.delete(sql_helper.TABLE_NAME, sql_helper.COLUMN_ID + " = " + id, null);
 	}
 	
 	public void deleteEventObj(long id)
 	{
 		System.out.print("Deleted objectid with event id " + id);
-		database.delete(SQLHelper.OBJECT_TABLE_NAME, SQLHelper.COLUMN_EVENT_ID + " = " + id, null);
+		database.delete(sql_helper.OBJECT_TABLE_NAME, sql_helper.COLUMN_EVENT_ID + " = " + id, null);
 	}
 	
 	public Event getEvent(long id)
 	{
 		Event my_event = new Event();
-		Cursor curse = database.query(SQLHelper.TABLE_NAME, allColumns, null, null, null, null, SQLHelper.COLUMN_YEAR + " ASC, "
-				+ SQLHelper.COLUMN_MONTH + " ASC, " + SQLHelper.COLUMN_DAY + " ASC, " + SQLHelper.COLUMN_END + " ASC");
+		Cursor curse = database.query(sql_helper.TABLE_NAME, allColumns, null, null, null, null, sql_helper.COLUMN_YEAR + " ASC, "
+				+ sql_helper.COLUMN_MONTH + " ASC, " + sql_helper.COLUMN_DAY + " ASC, " + sql_helper.COLUMN_END + " ASC");
 		curse.moveToFirst();
 		while(!curse.isAfterLast()){
 			Event event = cursorToEvent(curse);
@@ -139,7 +128,7 @@ public class sql_datasource {
 	{
 	    ArrayList<String> table_objid = new ArrayList<String>();
 
-	    Cursor curse = database.query(SQLHelper.OBJECT_TABLE_NAME, allColumnsObj, null, null, null, null, null);
+	    Cursor curse = database.query(sql_helper.OBJECT_TABLE_NAME, allColumnsObj, null, null, null, null, null);
 
 	    curse.moveToFirst();
 	    while (!curse.isAfterLast()) {
@@ -156,7 +145,7 @@ public class sql_datasource {
 	{
 		String s = null;
 		boolean stop = false;
-		Cursor curse = database.query(SQLHelper.OBJECT_TABLE_NAME, allColumnsObj, null, null, null, null, null);
+		Cursor curse = database.query(sql_helper.OBJECT_TABLE_NAME, allColumnsObj, null, null, null, null, null);
 		curse.moveToFirst();
 		while (!curse.isAfterLast() && !stop) {
 	    	  if(curse.getInt(COL_E_ID) == id){
@@ -171,8 +160,8 @@ public class sql_datasource {
 	public ArrayList<Event> getAllEvents()
 	{		
 		ArrayList<Event> allEvents = new ArrayList<Event>();
-		Cursor curse = database.query(SQLHelper.TABLE_NAME, allColumns, null, null, null, null, SQLHelper.COLUMN_YEAR + " ASC, "
-				+ SQLHelper.COLUMN_MONTH + " ASC, " + SQLHelper.COLUMN_DAY + " ASC, " + SQLHelper.COLUMN_END + " ASC");
+		Cursor curse = database.query(sql_helper.TABLE_NAME, allColumns, null, null, null, null, sql_helper.COLUMN_YEAR + " ASC, "
+				+ sql_helper.COLUMN_MONTH + " ASC, " + sql_helper.COLUMN_DAY + " ASC, " + sql_helper.COLUMN_END + " ASC");
 		curse.moveToFirst();
 		while(!curse.isAfterLast()){
 			Event event = cursorToEvent(curse);
@@ -191,8 +180,8 @@ public class sql_datasource {
 		cal_mod = null; // Deallocate (save memory)
 		rep_mod = new Repetition_Module();
 			
-		Cursor curse = database.query(SQLHelper.TABLE_NAME, allColumns, null, null, null, null, SQLHelper.COLUMN_YEAR + " ASC, "
-				+ SQLHelper.COLUMN_MONTH + " ASC, " + SQLHelper.COLUMN_DAY + " ASC, " + SQLHelper.COLUMN_END + " ASC");
+		Cursor curse = database.query(sql_helper.TABLE_NAME, allColumns, null, null, null, null, sql_helper.COLUMN_YEAR + " ASC, "
+				+ sql_helper.COLUMN_MONTH + " ASC, " + sql_helper.COLUMN_DAY + " ASC, " + sql_helper.COLUMN_END + " ASC");
 		curse.moveToFirst();
 		while(!curse.isAfterLast()){
 			Event event = cursorToEvent(curse);
@@ -240,42 +229,10 @@ public class sql_datasource {
 		return nofaultEvent;
 	}
 	
-	private int partition(ArrayList<Event> e, int left, int right)
-	{
-		int i = left, j = right;
-		Event tmp;
-		int pivot = e.get((left+right)/2).GetEnd();
-		
-		while(i <= j){
-			while(e.get(i).GetEnd() < pivot)
-				++i;
-			while(e.get(j).GetEnd() > pivot)
-				j--;
-			if(i <= j){
-				tmp = e.get(i);
-				e.set(i, e.get(j));
-				e.set(j, tmp);
-				i++;
-				j--;
-			}
-		}
-		return i;
-	}
-	
-	private void quickSort(ArrayList<Event> e, int left, int right)
-	{
-		int index = partition(e, left, right);
-		if(left < index - 1) 
-			quickSort(e, left, index - 1);
-		if(left < right) 
-			quickSort(e, index, right);
-	}
-	
-	
 	public String endTimeExists(Date d, long id)
 	{
 		String nofaultTodo = NO_OVERLAP;
-		Cursor curse = database.query(SQLHelper.TABLE_NAME, allColumns, 
+		Cursor curse = database.query(sql_helper.TABLE_NAME, allColumns, 
 				null, null, null ,null, null);
 		curse.moveToFirst();
 		while(!curse.isAfterLast())
@@ -320,33 +277,14 @@ public class sql_datasource {
 	
 	public void clear_table()
 	{
-		database.delete(SQLHelper.TABLE_NAME, null, null);
-		database.delete(SQLHelper.OBJECT_TABLE_NAME, null, null);
+		database.delete(sql_helper.TABLE_NAME, null, null);
+		database.delete(sql_helper.OBJECT_TABLE_NAME, null, null);
 		System.out.println("Removed all Table Elements");
 	}
 	
 	public void clear_object_table()
 	{
-		database.delete(SQLHelper.OBJECT_TABLE_NAME, null, null);
+		database.delete(sql_helper.OBJECT_TABLE_NAME, null, null);
 	}
-	
-	private ArrayList<Event> getEventsOfDay(Event e)
-	{
-		cal_mod = new Cal_Module();
-		rep_mod = new Repetition_Module();
-		rep_mod.set_RepString(e.getRep());
-		int dayw;
-		ArrayList<Event> repeatedEvents =  getAllEvents();
-		ArrayList<Event> specRepeatedEvents = new ArrayList<Event>();
-		for(int x = 0; x < repeatedEvents.size(); x++){	
-			dayw = cal_mod.getWeekday(repeatedEvents.get(x).GetDate().get_CDate());
-			if(rep_mod.toggle_Check(dayw)) specRepeatedEvents.add(repeatedEvents.get(x));
-		}
-		rep_mod = null; // Deallocate
-		return specRepeatedEvents;
-	}	
-	
-
-	
 	
 }

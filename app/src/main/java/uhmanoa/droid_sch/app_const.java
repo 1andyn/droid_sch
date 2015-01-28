@@ -8,11 +8,6 @@ public interface app_const {
         create, view, search, about, exit
     }
 
-    static enum gefoc {
-        fga, fgb, fgc, fs, fw, da, db, dh, dl, dp, ds, dy, hsl, ni, eth,
-        hap, oc, wi
-    }
-
     static final String gefc_fga = "Foundation GMP-A";
     static final String gefc_fgb = "Foundation GMP-B";
     static final String gefc_fgc = "Foundation GMP-C";
