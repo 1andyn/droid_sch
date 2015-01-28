@@ -8,12 +8,8 @@ public class star_obj {
     private int CRN;
 
     //Constructor
-    private star_obj(String pCrsname, int pCRN) {
-        if(pCRN == NULL) {
-            CRN = -1;
-        } else {
-            CRN = pCRN;
-        }
+    public star_obj(String pCrsname, int pCRN) {
+        CRN = pCRN;
         course_name = pCrsname;
     }
 
