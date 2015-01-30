@@ -43,7 +43,7 @@
 
         <Button
             android:gravity="center"
-            android:layout_width="155dp"
+            android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:text="@string/bt_txt_create"
             android:id="@+id/bt_create"
@@ -52,7 +52,7 @@
             style="@style/btnStyleGenoa" />
 
         <Button
-            android:layout_width="155dp"
+            android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:text="@string/bt_txt_view"
             android:id="@+id/bt_view"
@@ -61,7 +61,7 @@
             style="@style/btnStyleGenoa" />
 
         <Button
-            android:layout_width="155dp"
+            android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:text="@string/bt_txt_search"
             android:id="@+id/bt_search"
@@ -70,7 +70,7 @@
             style="@style/btnStyleGenoa" />
 
         <Button
-            android:layout_width="155dp"
+            android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:text="@string/bt_txt_about"
             android:id="@+id/bt_about"
@@ -79,7 +79,7 @@
             style="@style/btnStyleGenoa" />
 
         <Button
-            android:layout_width="155dp"
+            android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:text="@string/bt_txt_exit"
             android:id="@+id/bt_exit"
