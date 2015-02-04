@@ -40,7 +40,7 @@ public class Main_menu extends Activity {
         arraylst_btn.add((Button) findViewById(R.id.bt_create));
         arraylst_btn.add((Button) findViewById(R.id.bt_view));
         arraylst_btn.add((Button) findViewById(R.id.bt_search));
-        arraylst_btn.add((Button) findViewById(R.id.bt_about));
+        arraylst_btn.add((Button) findViewById(R.id.bt_pref));
         arraylst_btn.add((Button) findViewById(R.id.bt_exit));
         configureBtnListeners();
     }
@@ -78,7 +78,7 @@ public class Main_menu extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(Main_menu.this, "About Button Pressed",
+                        Toast.makeText(Main_menu.this, "Preferences Button Pressed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

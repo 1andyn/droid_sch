@@ -1,9 +1,10 @@
 package uhmanoa.droid_sch;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -19,13 +20,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
-public class Search extends Activity {
+public class Search extends ActionBarActivity {
 
     private Drawable drw_bg;
     private Resources res_srch;
@@ -38,14 +40,39 @@ public class Search extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         pt_resolution = new Point();
+        SelectedItems = new ArrayList();
         loadImageResources();
         configureSpinner();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Toast.makeText(Search.this, "Search commence!",
+                    Toast.LENGTH_SHORT).show();
+            //search();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+        // Associate searchable configuration with the SearchView
+
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
         return true;
     }
 
@@ -74,17 +101,19 @@ public class Search extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
+        switch(item.getItemId()) {
+            case R.id.action_gefc_fil:
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                return true;
+            case R.id.action_time_fil:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+
+
     }
 
     protected void acquireResolution() {
@@ -103,45 +132,6 @@ public class Search extends Activity {
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
         }
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        SelectedItems = new ArrayList();  // Where we track the selected items
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Set the dialog title
-        builder.setTitle("General Ed/Focus Filter")
-                // Specify the list array, the items to be selected by default (null for none),
-                // and the listener through which to receive callbacks when items are selected
-                .setMultiChoiceItems(R.array.gefc_list, null,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which,
-                                                boolean isChecked) {
-                                if (isChecked) {
-                                    // If the user checked the item, add it to the selected items
-                                    SelectedItems.add(which);
-                                } else if (SelectedItems.contains(which)) {
-                                    // Else, if the item is already in the array, remove it
-                                    SelectedItems.remove(Integer.valueOf(which));
-                                }
-                            }
-                        })
-                        // Set the action buttons
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Will Do Something
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Will Do Something
-                    }
-                });
-
-        return builder.create();
     }
 
 }
