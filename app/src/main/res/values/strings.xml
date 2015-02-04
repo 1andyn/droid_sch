@@ -52,7 +52,7 @@
     -->
 
     <string-array name="major_list">
-        <item>Filter by Major</item>
+        <item>Filter by Major (None Selected)</item>
         <item>Academy for Creative Media (ACM)</item>
         <item>Accounting (ACC)</item>
         <item>Aerospace Studies (AS)</item>

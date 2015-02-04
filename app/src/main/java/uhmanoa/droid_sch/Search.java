@@ -1,9 +1,12 @@
 package uhmanoa.droid_sch;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -12,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +58,7 @@ public class Search extends ActionBarActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(Search.this, "Search commence!",
+            Toast.makeText(Search.this, "Search for: " + query,
                     Toast.LENGTH_SHORT).show();
             //search();
         }
@@ -104,16 +108,15 @@ public class Search extends ActionBarActivity {
         //int id = item.getItemId();
         switch(item.getItemId()) {
             case R.id.action_gefc_fil:
-
+                Bundle curr_state = new Bundle();
+                super.onSaveInstanceState(curr_state);
+                Dialog dg = createFilterDialog(curr_state);
                 return true;
             case R.id.action_time_fil:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-
-
     }
 
     protected void acquireResolution() {
@@ -132,6 +135,47 @@ public class Search extends ActionBarActivity {
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
         }
+    }
+
+    public Dialog createFilterDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
+        builder.setTitle( Html.fromHtml("<font color='#66FFCC'>General Ed/ Focus Filter</font>"))
+                // Specify the list array, the items to be selected by default (null for none),
+                // and the listener through which to receive callbacks when items are selected
+                .setMultiChoiceItems(R.array.gefc_list, null,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which,
+                                                boolean isChecked) {
+                                if (isChecked) {
+                                    // If the user checked the item, add it to the selected items
+                                    SelectedItems.add(which);
+                                } else if (SelectedItems.contains(which)) {
+                                    // Else, if the item is already in the array, remove it
+                                    SelectedItems.remove(Integer.valueOf(which));
+                                }
+                            }
+                        })
+                        // Set the action buttons
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Will Do Something
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        //This is a bit hackish, maybe Google will create an easier way to change divider color?
+        Dialog dlg = builder.show();
+        int dividerId = dlg.getContext().getResources().getIdentifier("android:id/titleDivider",
+                null, null);
+        View dv = dlg.findViewById(dividerId);
+        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
+        return builder.create();
     }
 
 }
