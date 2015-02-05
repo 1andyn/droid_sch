@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -23,10 +24,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.ArrayList;
 
@@ -38,6 +44,7 @@ public class Search extends ActionBarActivity {
     private Point pt_resolution;
     private Spinner spinner;
     private ArrayList SelectedItems;
+    private SlidingUpPanelLayout slideupl;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,33 @@ public class Search extends ActionBarActivity {
         configureSpinner();
         handleIntent(getIntent());
     }
+
+
+    protected void configureSlidingPanel() {
+        slideupl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slideupl.setPanelSlideListener(new PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+            }
+
+            @Override
+            public void onPanelExpanded(View panel) {
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+            }
+        });
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -94,6 +128,7 @@ public class Search extends ActionBarActivity {
 
         ImageView iv_mmlogo, iv_mmtitle;
         RelativeLayout ll_mainlayout;
+        LinearLayout ll_sliderlayout;
 
         Bitmap bmp_bg = ImgLoader.decodedSampledBitmapResource(res_srch, R.drawable.o_bg,
                 pt_resolution.x / 8, pt_resolution.y / 8); //reduces size of file by factor of 8
@@ -101,6 +136,14 @@ public class Search extends ActionBarActivity {
         ll_mainlayout = (RelativeLayout) findViewById(R.id.srch_rllayout);
         drw_bg = new BitmapDrawable(bmp_bg);
         ll_mainlayout.setBackgroundDrawable(drw_bg);
+
+        bmp_bg = ImgLoader.decodedSampledBitmapResource(res_srch, R.drawable.mm_bg,
+                pt_resolution.x / 8, pt_resolution.y / 8);
+        ll_sliderlayout = (LinearLayout) findViewById(R.id.slide_ll);
+        drw_bg = new BitmapDrawable(bmp_bg);
+        ll_sliderlayout.setBackgroundDrawable(drw_bg);
+
+
     }
 
     @Override
@@ -137,6 +180,19 @@ public class Search extends ActionBarActivity {
         }
     }
 
+    // Override original "back" function
+    @Override
+    public void onBackPressed() {
+        if (slideupl != null &&
+                (slideupl.getPanelState() == PanelState.EXPANDED ||
+                        slideupl.getPanelState() == PanelState.ANCHORED)) {
+            slideupl.setPanelState(PanelState.COLLAPSED);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
     public Dialog createFilterDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
         builder.setTitle( Html.fromHtml("<font color='#66FFCC'>General Ed/ Focus Filter</font>"))
@@ -160,13 +216,13 @@ public class Search extends ActionBarActivity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        //Will Do Something
+                        dialog.cancel();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-
+                        dialog.cancel();
                     }
                 });
         //This is a bit hackish, maybe Google will create an easier way to change divider color?

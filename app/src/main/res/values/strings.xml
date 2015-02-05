@@ -23,8 +23,11 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="srch_title">Search for Courses</string>
-    <string name="menu_gefc">General Ed / Focus Filter</string>
-    <string name="menu_time">Time Start / End by Filter</string>
+    <string name="menu_gefc">General Education / Focus Filter</string>
+    <string name="menu_time">Course Time Start and End Filter</string>
+    <string name ="menu_fil">Search without CRN or Course Name</string>
+    <string name="action_anchor_enable">Enable Anchor Point</string>
+    <string name="action_anchor_disable">Disable Anchor Point</string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>

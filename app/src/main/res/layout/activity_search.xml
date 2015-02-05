@@ -12,16 +12,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:id="@+id/main_ll">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/main_ll"
         android:id="@+id/sec_ll">
 
         <Spinner
@@ -29,35 +19,85 @@
             android:layout_height="40dp"
             android:id="@+id/major_spinner"
             style="@style/btnStyleGenoa"/>
-
-        Button
-            android:layout_marginLeft="2dp"
-            style="@style/btnStyleGenoa"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:height="35dp"
-            android:width="45dp"
-            android:text="@string/bt_gefoc"
-            android:id="@+id/bt_filter"
-            android:textStyle="bold"/>
     </LinearLayout>
 
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
+        android:gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-<!--
-        <ExpandableListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/expandableListView" />
--->
+        <!--Layout for Search Result List-->
+
+        <RelativeLayout
+            android:id="@+id/result_layout"
+            android:paddingTop="50sp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:clickable="true">
+
+            <ViewStub
+                android:id="@+id/empty_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout="@layout/empty_search" />
+            <ListView
+                android:layout_above="@+id/empty_search"
+                android:id="@+id/eventViewGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:longClickable="true"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="2sp"/>
+        </RelativeLayout>
+
+        <!--Use this Layout for Starred Objects -->
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/slide_ll">
+
+            <TextView
+                android:textColor="@color/dark_gray"
+                android:id="@+id/star_slider"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:gravity="center|bottom"
+                android:text="Slide up to view Starred Items"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <View
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/dark_aqua"/>
+            <RelativeLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/star_layout">
+
+                <ViewStub
+                    android:id="@+id/empty_star"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout="@layout/empty_star" />
+                <ListView
+                    android:layout_above="@+id/empty_star"
+                    android:paddingTop="15dp"
+                    android:id="@+id/todoViewGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:longClickable="true"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="5sp"/>
+            </RelativeLayout>
         </LinearLayout>
-
-
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </RelativeLayout>
