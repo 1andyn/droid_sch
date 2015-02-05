@@ -1,0 +1,113 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/mm_bg"
+    android:orientation="vertical"
+    tools:context="uhmanoa.droid_sch.Available_Schedules"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/tvNumSchedules"
+            android:text="<number of schedules>"
+            style="@style/tvLabel"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="4">
+
+
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_prev"
+                android:text="@string/previous"
+                android:layout_weight="1"
+                style="@style/btnStyleGenoa"/>
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_1"
+                android:text="1"
+                android:layout_weight="1"
+                style="@style/btnStyleGenoa"/>
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_2"
+                android:text="2"
+                android:layout_weight="1"
+                style="@style/btnStyleGenoa"/>
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_3"
+                android:text="3"
+                android:layout_weight="1"
+                style="@style/btnStyleGenoa"/>
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_4"
+                android:text="4"
+                android:layout_weight="1"
+                style="@style/btnStyleGenoa"/>
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_5"
+                android:text="5"
+                android:layout_weight="1"
+                style="@style/btnStyleGenoa"/>
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_next"
+                android:text="@string/next"
+                android:layout_weight="1"
+                style="@style/btnStyleGenoa"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/bt_txt_save_sel"
+            android:id="@+id/btn_save_selected"
+            style="@style/btnStyleGenoa"
+            />
+    </LinearLayout>
+
+</LinearLayout>
