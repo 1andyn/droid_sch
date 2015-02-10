@@ -1,10 +1,8 @@
 package uhmanoa.droid_sch;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,14 +11,15 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -28,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -37,7 +37,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 import java.util.ArrayList;
 
 
-public class Search extends ActionBarActivity {
+public class Search extends ActionBarActivity implements App_const{
 
     private Drawable drw_bg;
     private Resources res_srch;
@@ -45,6 +45,12 @@ public class Search extends ActionBarActivity {
     private Spinner spinner;
     private ArrayList SelectedItems;
     private SlidingUpPanelLayout slideupl;
+    private ViewStub empty_search;
+    private ViewStub empty_star;
+    private LinearLayout starpanel;
+    private ArrayList<Star_obj> al_strobj;
+    private ArrayList<Course> al_course;
+    private ArrayAdapter<CharSequence> spinner_data;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +58,26 @@ public class Search extends ActionBarActivity {
         setContentView(R.layout.activity_search);
         pt_resolution = new Point();
         SelectedItems = new ArrayList();
+        al_strobj = new ArrayList<Star_obj>();
+        al_course = new ArrayList<Course>();
         loadImageResources();
         configureSpinner();
+        configureSlidingPanel();
+        configureViewStubs();
         handleIntent(getIntent());
+        toggle_ViewStub();
     }
 
+    protected void configureViewStubs() {
+        empty_search = (ViewStub) findViewById(R.id.empty_search);
+        empty_star = (ViewStub) findViewById(R.id.empty_star);
+    }
 
     protected void configureSlidingPanel() {
+        starpanel = (LinearLayout) findViewById(R.id.panel_view);
         slideupl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slideupl.setDragView(starpanel);
+        slideupl.setOverlayed(true);
         slideupl.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -102,8 +120,8 @@ public class Search extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        // Associate searchable configuration with the SearchView
 
+        //Config ActionBar's Search Box
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
@@ -111,15 +129,30 @@ public class Search extends ActionBarActivity {
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
+
+//        Action Bar configs
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(false);
+
         return true;
     }
 
     protected void configureSpinner(){
         spinner = (Spinner) findViewById(R.id.major_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        spinner_data = ArrayAdapter.createFromResource(this,
                 R.array.major_list, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinner_data);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                // An item was selected. You can retrieve the selected item using
+                System.out.println("Item selected: " + pos + " with Id: " + id);
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
 
     protected void loadImageResources() {
@@ -151,9 +184,7 @@ public class Search extends ActionBarActivity {
         //int id = item.getItemId();
         switch(item.getItemId()) {
             case R.id.action_gefc_fil:
-                Bundle curr_state = new Bundle();
-                super.onSaveInstanceState(curr_state);
-                Dialog dg = createFilterDialog(curr_state);
+                Dialog dg = createFilterDialog();
                 return true;
             case R.id.action_time_fil:
                 return true;
@@ -168,21 +199,10 @@ public class Search extends ActionBarActivity {
         pt_resolution.y = dsp.getHeight();
     }
 
-    public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-            // An item was selected. You can retrieve the selected item using
-            // parent.getItemAtPosition(pos)
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
-    }
-
     // Override original "back" function
     @Override
     public void onBackPressed() {
+        if(slideupl == null) System.out.println("wtf");
         if (slideupl != null &&
                 (slideupl.getPanelState() == PanelState.EXPANDED ||
                         slideupl.getPanelState() == PanelState.ANCHORED)) {
@@ -192,8 +212,25 @@ public class Search extends ActionBarActivity {
         }
     }
 
+    protected void toggle_ViewStub()
+    {
+        if(al_strobj.isEmpty() == true){
+            empty_star.setVisibility(View.VISIBLE);
+            //e_listview.setVisibility(View.GONE);
+        } else {
+            empty_star.setVisibility(View.GONE);
+            //e_listview.setVisibility(View.VISIBLE);
+        }
+        if(al_course.isEmpty() == true){
+            empty_search.setVisibility(View.VISIBLE);
+            //t_listview.setVisibility(View.GONE);
+        } else {
+            empty_search.setVisibility(View.GONE);
+            //t_listview.setVisibility(View.VISIBLE);
+        }
+    }
 
-    public Dialog createFilterDialog(Bundle savedInstanceState) {
+    public Dialog createFilterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
         builder.setTitle( Html.fromHtml("<font color='#66FFCC'>General Ed/ Focus Filter</font>"))
                 // Specify the list array, the items to be selected by default (null for none),
