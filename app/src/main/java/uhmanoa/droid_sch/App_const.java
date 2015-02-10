@@ -26,4 +26,16 @@ public interface App_const {
     static final String gefc_oc = "Oral Communication";
     static final String gefc_wi = "Writing Intensive";
 
+    static enum major {
+        None, ACM, ACC, AS, AMST, ANAT, ANSC, ANTH, ARAB, ARCH, ART, ASAN, ASTR, BIOC, BE, BIOL,
+        BIOM, BOT, BUS, BLAW, CAM, CMB, CHAM, CHEM, CHN, CEE, COM, CIS, CSD, COMG, EDCS, DNCE, DH,
+        DRB, DIS, EALL, ECON, EDEA, EDEF, EDEP, ETEC, EE, ENGR, ENG, ESL, ELI, ES, FMCH, FAMR, FDM,
+        FIL, FIN, FSHN, FR, GEOG, GG, GERI, GER, GRK, HAW, HWST, HNDI, HIST, HON, HRM, ILO, IP, IND,
+        ITM, ICS, ITE, IS, CUL, ITAL, JPN, JOUR, KRS, KOR, LLEA, LATN, LAIS, LAW, LWEV, LWJT, LWLW,
+        LWPA, LIS, LING, MGT, MAO, MBIO, MKT, MATH, ME, MDED, MEDT, MED, MET, MICR, MSL, MCB, MBBE,
+        MUS, NHH, NREM, NURS, OBGN, ORE, OCN, PACS, PATH, PACE, PED, PERS, PHRM, PHIL, PHYS, PHYL,
+        PEPS, POLS, PORT, PSTY, PSY, PUBA, PH, PPC, RE, REL, RUS, SAM, SNSK, SLS, SOCS, SW, SOC,
+        SPAN, SPED, SURG, TAHT, THAI, THEA, TONG, TI, TIM, TRMD, TPSS, PLAN, VIET, WS, ZOOL
+    }
+
 }

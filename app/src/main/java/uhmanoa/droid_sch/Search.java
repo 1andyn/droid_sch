@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,7 +49,6 @@ public class Search extends ActionBarActivity implements App_const{
     private SlidingUpPanelLayout slideupl;
     private ViewStub empty_search;
     private ViewStub empty_star;
-    private LinearLayout starpanel;
     private ArrayList<Star_obj> al_strobj;
     private ArrayList<Course> al_course;
     private ArrayAdapter<CharSequence> spinner_data;
@@ -74,7 +75,7 @@ public class Search extends ActionBarActivity implements App_const{
     }
 
     protected void configureSlidingPanel() {
-        starpanel = (LinearLayout) findViewById(R.id.panel_view);
+        LinearLayout starpanel = (LinearLayout) findViewById(R.id.panel_view);
         slideupl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slideupl.setDragView(starpanel);
         slideupl.setOverlayed(true);
@@ -128,12 +129,11 @@ public class Search extends ActionBarActivity implements App_const{
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
+        searchView.setIconifiedByDefault(true);
 
-//        Action Bar configs
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(false);
-
+        // Action Bar configs
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
     }
 
@@ -202,7 +202,6 @@ public class Search extends ActionBarActivity implements App_const{
     // Override original "back" function
     @Override
     public void onBackPressed() {
-        if(slideupl == null) System.out.println("wtf");
         if (slideupl != null &&
                 (slideupl.getPanelState() == PanelState.EXPANDED ||
                         slideupl.getPanelState() == PanelState.ANCHORED)) {
@@ -253,7 +252,7 @@ public class Search extends ActionBarActivity implements App_const{
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
