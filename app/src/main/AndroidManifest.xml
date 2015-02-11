@@ -15,12 +15,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Create_Schedules"
-            android:label="@string/title_activity_create__schedules" >
-        </activity>
-        <activity
             android:name=".Available_Schedules"
-            android:label="@string/title_activity_available__schedules" >
+            android:label="@string/title_activity_available__schedules"
+            android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
 

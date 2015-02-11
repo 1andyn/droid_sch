@@ -23,6 +23,7 @@
     <!-- Strings for Available Schedules Activity -->
     <string name="previous">&#60;</string>
     <string name="next">&#62;</string>
+    <string name="txt_num_sched">&#60;number of schedules&#62;</string>
     <string name="bt_txt_save_sel">Save Selected</string>
 
 
