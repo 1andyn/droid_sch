@@ -19,7 +19,7 @@ public class Sql_datasource {
 
     /* Enumerations for Columns */
     static enum col {
-        course, crn, start, start2, end, end2, room, room2, prof, credit, sch_id
+        course, crn, start, start2, end, end2, room, room2, prof, credit, sch_id, semester
     }
 
     final int col_id = 2; // Third column of the table is #2 (starting at 0,1...
@@ -29,11 +29,13 @@ public class Sql_datasource {
         hap, oc, wi
     }
 
-    private String[] fav_column = {Sql_helper.COLUMN_CRSNAME, Sql_helper.COLUMN_CRN};
+    private String[] fav_column = {Sql_helper.COLUMN_CRSNAME, Sql_helper.COLUMN_CRN,
+    Sql_helper.COLUMN_SEM};
     private String[] sch_column = {Sql_helper.COLUMN_CRSNAME, Sql_helper.COLUMN_CRN,
             Sql_helper.COLUMN_START, Sql_helper.COLUMN_START2, Sql_helper.COLUMN_END,
             Sql_helper.COLUMN_END2, Sql_helper.COLUMN_ROOM, Sql_helper.COLUMN_ROOM2,
-            Sql_helper.COLUMN_PROF, Sql_helper.COLUMN_CREDIT, Sql_helper.COLUMN_SCH_ID};
+            Sql_helper.COLUMN_PROF, Sql_helper.COLUMN_CREDIT, Sql_helper.COLUMN_SCH_ID,
+            Sql_helper.COLUMN_SEM};
 
     private String[] gefc_column = {Sql_helper.COLUMN_fga, Sql_helper.COLUMN_fgb,
             Sql_helper.COLUMN_fgc, Sql_helper.COLUMN_fs, Sql_helper.COLUMN_fw, Sql_helper.COLUMN_da,
@@ -58,7 +60,8 @@ public class Sql_datasource {
     private Star_obj cursorToStarObj(Cursor curs) {
         Star_obj so = new Star_obj(curs.getString(col.course.ordinal()),
                 curs.getInt(col.crn.ordinal()),
-                curs.getInt(col_id));
+                curs.getInt(col_id),
+                curs.getInt(col.semester.ordinal()));
         return so;
     }
 

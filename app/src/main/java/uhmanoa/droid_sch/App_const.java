@@ -26,6 +26,10 @@ public interface App_const {
     static final String gefc_oc = "Oral Communication";
     static final String gefc_wi = "Writing Intensive";
 
+    static enum semester {
+        fall, spring, summer
+    }
+
     static enum major {
         None, ACM, ACC, AS, AMST, ANAT, ANSC, ANTH, ARAB, ARCH, ART, ASAN, ASTR, BIOC, BE, BIOL,
         BIOM, BOT, BUS, BLAW, CAM, CMB, CHAM, CHEM, CHN, CEE, COM, CIS, CSD, COMG, EDCS, DNCE, DH,

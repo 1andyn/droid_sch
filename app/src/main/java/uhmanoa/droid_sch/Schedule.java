@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Schedule {
     private int sid;
 	private ArrayList<Course> schedule;
+    private int semester;
 	
 	/** 
 	 * Empty constructor.
@@ -63,6 +64,10 @@ public class Schedule {
     public int getID() {
         return sid;
     }
+
+    public void setSemester(int pSem) { semester = pSem; }
+
+    public int getSemester() { return semester; }
 
 	/**
 	 * Display the list of courses in the schedule.

@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textStyle="bold"
-        android:padding="40dp"
+        android:paddingBottom="80dp"
         android:textColor="@color/dark_gray"
         android:text="No starred courses or classes."
         android:textAppearance="?android:attr/textAppearanceMedium" />

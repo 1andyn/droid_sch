@@ -52,6 +52,8 @@ public class Search extends ActionBarActivity implements App_const{
     private ArrayList<Star_obj> al_strobj;
     private ArrayList<Course> al_course;
     private ArrayAdapter<CharSequence> spinner_data;
+
+    private final int sliderHeight = 175;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class Search extends ActionBarActivity implements App_const{
         slideupl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slideupl.setDragView(starpanel);
         slideupl.setOverlayed(true);
+        slideupl.setPanelHeight(sliderHeight);
         slideupl.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -131,9 +134,6 @@ public class Search extends ActionBarActivity implements App_const{
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true);
 
-        // Action Bar configs
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(true);
         return true;
     }
 

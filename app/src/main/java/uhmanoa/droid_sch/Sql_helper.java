@@ -29,6 +29,7 @@ public class Sql_helper extends SQLiteOpenHelper {
     to match a specific row on the Focus/GE Flag table */
     public static final String COLUMN_CRN = "intCRN";
     public static final String COLUMN_ID = "intID";
+    public static final String COLUMN_SEM = "intSEM";
 
     /* Columns for saved Schedules exclusively */
     public static final String COLUMN_START = "intStart";
@@ -73,7 +74,8 @@ public class Sql_helper extends SQLiteOpenHelper {
             + TABLE_NAME
             + "(" + COLUMN_CRSNAME + " TEXT NOT NULL, "
             + COLUMN_CRN + " INT NOT NULL, "
-            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " + " );";
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_SEM + " INT NOT NULL " + " );";
 
     private static final String SCH_TB_CREATE = "CREATE TABLE "
             + TABLE_NAME2
@@ -87,7 +89,8 @@ public class Sql_helper extends SQLiteOpenHelper {
             + COLUMN_ROOM2 + " TEXT NOT NULL, "
             + COLUMN_PROF + " TEXT NOT NULL, "
             + COLUMN_CREDIT + " INT NOT NULL, "
-            + COLUMN_SCH_ID + " INT NOT NULL " + " );";
+            + COLUMN_SCH_ID + " INT NOT NULL, "
+            + COLUMN_SEM + " INT NOT NULL " + " );";
 
     // For Reference Purposes
     //+ "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -109,7 +112,7 @@ public class Sql_helper extends SQLiteOpenHelper {
             + COLUMN_ni + " INT NOT NULL, "
             + COLUMN_eth + " INT NOT NULL, "
             + COLUMN_oc + " INT NOT NULL, "
-            + COLUMN_wi + " INT NOT NULL " + " );";
+            + COLUMN_wi + " INT NOT NULL, " + " );";
 
     public Sql_helper(Context context) {
         //super(context, DATABASE_NAME, null, DATABASE_VERSION);

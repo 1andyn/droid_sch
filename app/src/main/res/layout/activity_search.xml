@@ -68,16 +68,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="34dp"
                             android:gravity="center|bottom"
-                            android:text="Slide up to view Starred Items"
+                            android:text="Slide up or Tap to view Starred Items"
                             android:textSize="20sp"
                             android:textStyle="bold" />
                         <View
                             android:focusable="false"
                             android:layout_width="match_parent"
-                            android:layout_height="5dp"
+                            android:layout_height="3dp"
+                            android:padding="5dp"
                             android:background="@color/dark_aqua"/>
             </LinearLayout>
-            <!--android:padding="10dp"-->
             <RelativeLayout
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
@@ -100,7 +100,21 @@
                     android:longClickable="true"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="5sp"/>
+                <LinearLayout
+                    android:layout_alignParentBottom="true"
+                    android:gravity="bottom"
+                    android:padding="5dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        style="@style/btnStyleGenoa"
+                        android:id="@+id/star_panel_clear"
+                        android:text="@string/str_panel_clear"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
+                </LinearLayout>
             </RelativeLayout>
+
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

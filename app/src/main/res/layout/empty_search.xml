@@ -10,6 +10,6 @@
         android:text="No results."
         android:textStyle="bold"
         android:textColor="@color/dark_gray"
-        android:paddingBottom="100dp"
+        android:paddingBottom="120dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>

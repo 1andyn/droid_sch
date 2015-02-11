@@ -7,11 +7,13 @@ public class Star_obj {
     private String course_name;
     private int CRN;
     private int ID; // Incase user for some reason stars both a course and class
+    private int Semester;
 
     //Constructor
-    public Star_obj(String pCrsname, int pCRN, int pID) {
+    public Star_obj(String pCrsname, int pCRN, int pID, int pSem) {
         pID= ID;
         CRN = pCRN;
+        Semester = pSem;
         course_name = pCrsname;
     }
 
@@ -19,6 +21,7 @@ public class Star_obj {
         return CRN;
     }
     public int getID() { return ID; }
+    public int getSemester() { return Semester; }
 
     public String getCourse() {
         return course_name;
@@ -30,6 +33,5 @@ public class Star_obj {
     public boolean isClass() {
         return (CRN != -1);
     }
-
 
 }
