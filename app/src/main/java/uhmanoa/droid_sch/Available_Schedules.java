@@ -18,7 +18,7 @@ public class Available_Schedules extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_available__schedules);
+        setContentView(R.layout.activity_available_schedules);
 
         setBackground();
     }
