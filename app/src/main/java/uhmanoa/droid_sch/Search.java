@@ -24,11 +24,13 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -43,6 +45,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class Search extends ActionBarActivity implements App_const{
@@ -64,12 +67,16 @@ public class Search extends ActionBarActivity implements App_const{
     private ArrayAdapter<CharSequence> spinner_data;
     private boolean en_start_tp, en_end_tp = false;
     private int start_hr, end_hr, start_min, end_min = 0;
+    private ListView lv_results, lv_sobj;
 
     // Dialog for Timer Picker
     private CheckBox en_start;
     private CheckBox en_end;
     private TimePicker dtp_start;
     private TimePicker dtp_end;
+
+    // Container Adapter
+    private StarListAdapter sobj_adp;
 
 
     private final int sliderHeight = 175;
@@ -82,12 +89,21 @@ public class Search extends ActionBarActivity implements App_const{
         SelectedItems = new ArrayList<Integer>();
         al_strobj = new ArrayList<Star_obj>();
         al_course = new ArrayList<Course>();
+        sobj_adp = new StarListAdapter(this, al_strobj);
         loadImageResources();
         configureSpinner();
         configureSlidingPanel();
         configureViewStubs();
+        configureListeners();
+        configureListViews();
         handleIntent(getIntent());
         toggle_ViewStub();
+    }
+
+    private void configureListViews() {
+        lv_results = (ListView)findViewById(R.id.lv_result);
+        lv_sobj = (ListView)findViewById(R.id.lv_star);
+        lv_sobj.setAdapter(sobj_adp);
     }
 
     protected void configureViewStubs() {
@@ -124,6 +140,24 @@ public class Search extends ActionBarActivity implements App_const{
         });
     }
 
+    private void configureListeners() {
+        // Configures Listener for Clear Favorites List
+        final Button ClearStarButton = (Button)findViewById(R.id.star_panel_clear);
+        ClearStarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Search.this, "Cleared starred list",
+                        Toast.LENGTH_SHORT).show();
+                al_strobj.clear();
+                mandatoryDataChange();
+            }
+        });
+    }
+
+    private void mandatoryDataChange() {
+        sobj_adp.notifyDataSetChanged();
+        toggle_ViewStub();
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -195,8 +229,6 @@ public class Search extends ActionBarActivity implements App_const{
         ll_sliderlayout = (LinearLayout) findViewById(R.id.slide_ll);
         drw_bg = new BitmapDrawable(bmp_bg);
         ll_sliderlayout.setBackgroundDrawable(drw_bg);
-
-
     }
 
     @Override
@@ -208,6 +240,14 @@ public class Search extends ActionBarActivity implements App_const{
                 return true;
             case R.id.action_time_fil:
                 Dialog diag_time = createTimeDialog();
+                return true;
+            case R.id.action_debug_add:
+                Star_obj debug = new Star_obj("EEG 361", "Computers and Ish",
+                        51324, al_strobj.size(), semester.fall.ordinal());
+                al_strobj.add(debug);
+                Toast.makeText(Search.this, "Added debug star object",
+                        Toast.LENGTH_SHORT).show();
+                mandatoryDataChange();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -236,17 +276,17 @@ public class Search extends ActionBarActivity implements App_const{
     {
         if(al_strobj.isEmpty() == true){
             empty_star.setVisibility(View.VISIBLE);
-            //e_listview.setVisibility(View.GONE);
+            lv_sobj.setVisibility(View.GONE);
         } else {
             empty_star.setVisibility(View.GONE);
-            //e_listview.setVisibility(View.VISIBLE);
+            lv_sobj.setVisibility(View.VISIBLE);
         }
         if(al_course.isEmpty() == true){
             empty_search.setVisibility(View.VISIBLE);
-            //t_listview.setVisibility(View.GONE);
+            lv_results.setVisibility(View.GONE);
         } else {
             empty_search.setVisibility(View.GONE);
-            //t_listview.setVisibility(View.VISIBLE);
+            lv_results.setVisibility(View.VISIBLE);
         }
     }
 

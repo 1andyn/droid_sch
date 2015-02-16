@@ -15,9 +15,9 @@ public class StarListAdapter<T> extends BaseAdapter {
     public StarListAdapter(Context c, ArrayList<Star_obj> star_list)
     {
         app_Context = c;
-        object_list = object_list;
+        object_list = star_list;
     }
-    //returns size of eventlist
+
     @Override
     public int getCount() {
         return object_list.size();
@@ -30,7 +30,7 @@ public class StarListAdapter<T> extends BaseAdapter {
 
     @Override
     public long getItemId(int pos) {
-        return object_list.get(pos).getIndex_id();
+        return object_list.get(pos).getID();
     }
 
     @Override
@@ -41,16 +41,14 @@ public class StarListAdapter<T> extends BaseAdapter {
             sview.setObj((Star_obj)getItem(pos));
             sview.setLongClickable(true);
             sview.setFocusable(true);
-//            eventer.setBackground(app_Context.getResources().getDrawable(R.drawable.rounded_item));
-            sview.setBackgroundColor(app_Context.getResources().getColor(R.color.black));
+            sview.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
             return sview;
         }
         else
         {
             convertView.setLongClickable(true);
             convertView.setFocusable(true);
-//            convertView.setBackground(app_Context.getResources().getDrawable(R.drawable.rounded_item));
-            convertView.setBackgroundColor(app_Context.getResources().getColor(R.color.black));
+            convertView.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
             StarView sview = (StarView)convertView;
             sview.setObj((Star_obj)getItem(pos));
             return convertView;

@@ -28,9 +28,13 @@
     <string name ="menu_fil">Search without CRN or Course Name</string>
     <string name="action_anchor_enable">Enable Anchor Point</string>
     <string name="action_anchor_disable">Disable Anchor Point</string>
-    <string name="str_panel_clear">Clear All Starred Courses/Classes</string>
+    <string name="str_panel_clear">Clear List</string>
+    <string name="str_panel_delete">Delete</string>
     <string name="start_chkbox">Set Earliest Start Time</string>
     <string name="end_chkbox">Set latest End Time</string>
+    <string name="str_course"> Course: </string>
+    <string name="str_title"> Title: </string>
+    <string name="str_crn"> CRN: </string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>

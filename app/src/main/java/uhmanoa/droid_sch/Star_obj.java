@@ -12,11 +12,10 @@ public class Star_obj {
     private long index_id; //Used for List Adapter to Identify specific item in container
 
     //Constructor
-    public Star_obj(String pCrsname, String pCrsTitle, int pCRN, int pID, int pSem, long pIid) {
+    public Star_obj(String pCrsname, String pCrsTitle, int pCRN, long pID, int pSem) {
         pID = ID;
         CRN = pCRN;
         Semester = pSem;
-        index_id = pIid;
         course_name = pCrsname;
         course_title = pCrsTitle;
 
@@ -26,7 +25,7 @@ public class Star_obj {
         return CRN;
     }
 
-    public int getID() {
+    public long getID() {
         return ID;
     }
 
@@ -34,11 +33,9 @@ public class Star_obj {
         return Semester;
     }
 
-    public long getIndex_id() {
-        return index_id;
+    public String getCourseTitle() {
+        return course_title;
     }
-
-    public String getCourseTitle() { return course_title; }
 
     public String getCourse() {
         return course_name;

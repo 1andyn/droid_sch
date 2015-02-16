@@ -16,18 +16,21 @@
         android:id="@+id/action_gefc_fil"
         android:orderInCategory="100"
         android:title="@string/menu_gefc"
-        android:icon="@drawable/ic_action_view_as_list"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_time_fil"
         android:orderInCategory="100"
         android:title="@string/menu_time"
-        android:icon="@drawable/ic_action_time"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_force_fil"
         android:orderInCategory="100"
         android:title="@string/menu_fil"
-        android:icon="@drawable/ic_action_search"
+        app:showAsAction="never" />
+    <!--  DEBUG ITEM, DELETE BEFORE PRODUCTION -->
+    <item
+        android:id="@+id/action_debug_add"
+        android:orderInCategory="100"
+        android:title="Add to Starred List"
         app:showAsAction="never" />
 </menu>

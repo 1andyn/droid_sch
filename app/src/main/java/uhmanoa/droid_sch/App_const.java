@@ -8,6 +8,11 @@ public interface App_const {
         create, view, search, about, exit
     }
 
+    // Constants for
+    static final int course_max = 8;
+    static final int title_max = 30;
+    static final int crn_max = 5;
+
     static final String gefc_fga = "Foundation GMP-A";
     static final String gefc_fgb = "Foundation GMP-B";
     static final String gefc_fgc = "Foundation GMP-C";
@@ -26,10 +31,16 @@ public interface App_const {
     static final String gefc_oc = "Oral Communication";
     static final String gefc_wi = "Writing Intensive";
 
+    //View String Categories for determining what conversion to run
+    static enum ViewStringCat {
+        course, title, crn
+    }
+
     static enum semester {
         fall, spring, summer
     }
 
+    //Major enumerations
     static enum major {
         None, ACM, ACC, AS, AMST, ANAT, ANSC, ANTH, ARAB, ARCH, ART, ASAN, ASTR, BIOC, BE, BIOL,
         BIOM, BOT, BUS, BLAW, CAM, CMB, CHAM, CHEM, CHN, CEE, COM, CIS, CSD, COMG, EDCS, DNCE, DH,
