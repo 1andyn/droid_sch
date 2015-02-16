@@ -29,6 +29,8 @@
     <string name="action_anchor_enable">Enable Anchor Point</string>
     <string name="action_anchor_disable">Disable Anchor Point</string>
     <string name="str_panel_clear">Clear All Starred Courses/Classes</string>
+    <string name="start_chkbox">Set Earliest Start Time</string>
+    <string name="end_chkbox">Set latest End Time</string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>

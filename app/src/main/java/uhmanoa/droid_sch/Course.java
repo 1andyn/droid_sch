@@ -9,6 +9,7 @@ import java.util.ArrayList;
  *
  */
 public class Course {
+    private String course;
 	/** Class title */
 	private String title;
 	/** Focus Requirements the course meets */
@@ -20,21 +21,21 @@ public class Course {
 	/** Course professor */
 	private String professor;
 	/** Days for the course's first time segment */
-	ArrayList<Character> days1;
+	private ArrayList<Character> days1;
 	/** Days for the course's second time segment (if applicable) */
-	ArrayList<Character> days2;
+	private ArrayList<Character> days2;
 	/** Start time for course's first time segment */
-	int start1;
+	private int start1;
 	/** Start time for course's second time segment (if applicable) */
-	int start2;
+	private int start2;
 	/** End time for course's first time segment */
-	int end1;
+	private int end1;
 	/** End time for course's second time segment (if applicable) */
-	int end2;
+	private int end2;
 	/** Room for course's first time segment */
-	String room1;
+	private String room1;
 	/** Room for course's second time segment (if applicable) */
-	String room2;
+	private String room2;
 	
 	/**
 	 * Empty constructor
@@ -44,6 +45,7 @@ public class Course {
 	}
 	
 	public Course(Course c){
+        this.course = c.getCourse();
 		this.title = c.getTitle();
 		this.crn = c.getCrn();
 		this.credits = c.getCredits();
@@ -70,9 +72,9 @@ public class Course {
 	 * @param professor	Instructor for the course
 	 * @param fr	Focus requirements for the course, can be 'null.'
 	 */
-	public Course(String title, int crn, int credits, String professor, ArrayList<String> fr){
+	public Course(String crs, String title, int crn, int credits, String professor, ArrayList<String> fr){
 		initValues();
-		
+		this.course = crs;
 		this.title = title;
 		this.crn = crn;
 		this.credits = credits;
@@ -85,8 +87,8 @@ public class Course {
 	 * time segment.  For example, if a course is offered MWF from 10:30-11:20,
 	 * this is considered one time segment.  Use full constructor if two time segments
 	 * are used.
-	 * 
-	 * @param title	Title of the course (i.e. EE324)
+	 * @param course Course name (i.e. EE324)
+	 * @param title	Title of the course (Digital Sys and Computer Design)
 	 * @param crn	Course reference number
 	 * @param credits	Course credit hourse
 	 * @param professor	Instructor for the course
@@ -95,10 +97,10 @@ public class Course {
 	 * @param end1	End time of the course
 	 * @param room1	Room the class is held in
 	 */
-	public Course(String title, int crn, int credits, String professor, ArrayList<Character> days1, 
+	public Course(String crs, String title, int crn, int credits, String professor, ArrayList<Character> days1,
 			int start1, int end1, String room1){
 		initValues();
-		
+		this.course = crs;
 		this.title = title;
 		this.crn = crn;
 		this.credits = credits;
@@ -127,10 +129,10 @@ public class Course {
 	 * @param room1	Room the first segment of class is held in
 	 * @param room2 Room the second segment of class is held in
 	 */
-	public Course(String title, int crn, int credits, String professor, ArrayList<Character> days1, ArrayList<Character> days2,
+	public Course(String crs, String title, int crn, int credits, String professor, ArrayList<Character> days1, ArrayList<Character> days2,
 			int start1, int start2, int end1, int end2, String room1, String room2){
 		initValues();
-		
+		this.course = crs;
 		this.title = title;
 		this.crn = crn;
 		this.credits = credits;
@@ -150,6 +152,7 @@ public class Course {
 	 * the actual values have not been set
 	 */
 	private void initValues(){
+        this.course = "";
 		this.title = "";
 		this.crn = 9999;   
 		this.credits = 9999;
@@ -242,8 +245,7 @@ public class Course {
 	 * Display course info to user.
 	 */
 	public void display(){
-		
-		
+
 		System.out.print(getTitle());
 		System.out.print("\t" + getCrn());
 		System.out.print("\t" + getCredits());
@@ -352,6 +354,8 @@ public class Course {
 	}
 	
 	/*	Setters	*/
+    public void setCourse(String crs) { this.course = crs; }
+
 	public void setTitle(String title){
 		this.title = title;
 	}
@@ -632,5 +636,5 @@ public class Course {
 		return focusReqs;
 	}
 	
-	
+	public String getCourse() { return course;}
 }

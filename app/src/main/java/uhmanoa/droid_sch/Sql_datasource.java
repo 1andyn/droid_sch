@@ -56,14 +56,14 @@ public class Sql_datasource {
         dbhelper.close();
     }
 
-    /* Returns corresponding Starred Row Data */
-    private Star_obj cursorToStarObj(Cursor curs) {
-        Star_obj so = new Star_obj(curs.getString(col.course.ordinal()),
-                curs.getInt(col.crn.ordinal()),
-                curs.getInt(col_id),
-                curs.getInt(col.semester.ordinal()));
-        return so;
-    }
+//    /* Returns corresponding Starred Row Data */
+//    private Star_obj cursorToStarObj(Cursor curs) {
+//        Star_obj so = new Star_obj(curs.getString(col.course.ordinal()),
+//                curs.getInt(col.crn.ordinal()),
+//                curs.getInt(col_id),
+//                curs.getInt(col.semester.ordinal()));
+//        return so;
+//    }
 
     /* Stores Favorite Object into corresponding Table
     * It then runs a function for converting the row into a
@@ -78,9 +78,10 @@ public class Sql_datasource {
         Cursor curse = database.query(Sql_helper.TABLE_NAME, fav_column, null, null, null, null,
                 null);
         curse.moveToFirst();
-        Star_obj so = cursorToStarObj(curse);
+//        Star_obj so = cursorToStarObj(curse);
         curse.close();
-        return so;
+//        return so;
+        return null;
     }
 
     public void save_gefc() {
@@ -107,7 +108,7 @@ public class Sql_datasource {
                 Sql_helper.COLUMN_ID + " ASC,");
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
-            so = cursorToStarObj(curse);
+//            so = cursorToStarObj(curse);
             if (so.getID() == id) {
                 return so;
             }
@@ -123,8 +124,8 @@ public class Sql_datasource {
                 Sql_helper.COLUMN_CRN + " ASC");
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
-            Star_obj so = cursorToStarObj(curse);
-            all_starobj.add(so);
+//            Star_obj so = cursorToStarObj(curse);
+//            all_starobj.add(so);
             curse.moveToNext();
         }
         curse.close();

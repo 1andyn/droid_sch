@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,6 +24,8 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -37,21 +41,36 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 
 public class Search extends ActionBarActivity implements App_const{
+
+    // --------DEBUG
+    private boolean DEBUG = true;
+    // --------DEBUG
 
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
     private Spinner spinner;
-    private ArrayList SelectedItems;
+    private ArrayList<Integer> SelectedItems;
     private SlidingUpPanelLayout slideupl;
     private ViewStub empty_search;
     private ViewStub empty_star;
     private ArrayList<Star_obj> al_strobj;
     private ArrayList<Course> al_course;
     private ArrayAdapter<CharSequence> spinner_data;
+    private boolean en_start_tp, en_end_tp = false;
+    private int start_hr, end_hr, start_min, end_min = 0;
+
+    // Dialog for Timer Picker
+    private CheckBox en_start;
+    private CheckBox en_end;
+    private TimePicker dtp_start;
+    private TimePicker dtp_end;
+
 
     private final int sliderHeight = 175;
     
@@ -60,7 +79,7 @@ public class Search extends ActionBarActivity implements App_const{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         pt_resolution = new Point();
-        SelectedItems = new ArrayList();
+        SelectedItems = new ArrayList<Integer>();
         al_strobj = new ArrayList<Star_obj>();
         al_course = new ArrayList<Course>();
         loadImageResources();
@@ -147,7 +166,8 @@ public class Search extends ActionBarActivity implements App_const{
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
-                System.out.println("Item selected: " + pos + " with Id: " + id);
+                Toast.makeText(Search.this, "Item selected: " + pos + " with Id: " + id,
+                        Toast.LENGTH_SHORT).show();
             }
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
@@ -184,9 +204,10 @@ public class Search extends ActionBarActivity implements App_const{
         //int id = item.getItemId();
         switch(item.getItemId()) {
             case R.id.action_gefc_fil:
-                Dialog dg = createFilterDialog();
+                Dialog diag_fil = createFilterDialog();
                 return true;
             case R.id.action_time_fil:
+                Dialog diag_time = createTimeDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -229,12 +250,34 @@ public class Search extends ActionBarActivity implements App_const{
         }
     }
 
+    private boolean[] gefcFilterState() {
+        Resources res = getResources();
+        String[] gefc_list = res.getStringArray(R.array.gefc_list);
+        boolean[] checked = new boolean[gefc_list.length];
+
+        for(int x = 0; x < gefc_list.length; x++) {
+            if(SelectedItems.contains(x)) {
+                checked[x] = true;
+            } else {
+                checked[x] = false;
+            }
+        }
+        return checked;
+    }
+
     public Dialog createFilterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
-        builder.setTitle( Html.fromHtml("<font color='#66FFCC'>General Ed/ Focus Filter</font>"))
+        final ArrayList<Integer> SelectedOriginal = new ArrayList<Integer>();
+        //Deep Copy
+        Iterator<Integer> it = SelectedItems.iterator();
+        for(Integer i : SelectedItems) {
+            SelectedOriginal.add(i);
+        }
+
+        builder.setTitle(Html.fromHtml("<font color='#66FFCC'>General Ed/ Focus Filter</font>"))
                 // Specify the list array, the items to be selected by default (null for none),
                 // and the listener through which to receive callbacks when items are selected
-                .setMultiChoiceItems(R.array.gefc_list, null,
+                .setMultiChoiceItems(R.array.gefc_list, gefcFilterState(),
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which,
@@ -252,12 +295,21 @@ public class Search extends ActionBarActivity implements App_const{
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-
+                        for (Integer o : SelectedItems) {
+                            Toast.makeText(Search.this, String.valueOf(o),
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        //Restore Original
+                        SelectedItems.clear();
+                        Iterator<Integer> it = SelectedOriginal.iterator();
+                        for(Integer i : SelectedOriginal) {
+                            SelectedItems.add(i);
+                        }
                         dialog.cancel();
                     }
                 });
@@ -270,4 +322,81 @@ public class Search extends ActionBarActivity implements App_const{
         return builder.create();
     }
 
-}
+    // For future Changes, Dialogs Should probably be split into Classes
+    public Dialog createTimeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
+        LayoutInflater infl = Search.this.getLayoutInflater();
+        final View diag_view = infl.inflate(R.layout.time_dialog, null);
+        en_start = (CheckBox)diag_view.findViewById(R.id.start_chkbox);
+        en_end = (CheckBox)diag_view.findViewById(R.id.end_chkbox);
+        dtp_start = (TimePicker)diag_view.findViewById(R.id.start_picker);
+        dtp_end = (TimePicker)diag_view.findViewById(R.id.end_picker);
+
+        //Load previous settings
+        en_start.setChecked(en_start_tp);
+        en_end.setChecked(en_end_tp);
+        dtp_start.setCurrentHour(start_hr);
+        dtp_start.setCurrentMinute(start_min);
+        dtp_end.setCurrentHour(end_hr);
+        dtp_end.setCurrentMinute(end_min);
+
+        if(!en_start.isChecked()) {
+            dtp_start.setVisibility(View.GONE);
+        }
+
+        if(!en_end.isChecked()) {
+            dtp_end.setVisibility(View.GONE);
+        }
+
+        en_start.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (!(en_start.isChecked())) {
+                    dtp_start.setVisibility(View.GONE);
+                } else {
+                    dtp_start.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        en_end.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (!(en_end.isChecked())) {
+                    dtp_end.setVisibility(View.GONE);
+                } else {
+                    dtp_end.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+            builder.setView(diag_view)
+                    // Add action buttons
+             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                 @Override
+                 public void onClick(DialogInterface dialog, int id) {
+                     en_start_tp = en_start.isChecked();
+                     en_end_tp = en_end.isChecked();
+                     start_hr = dtp_start.getCurrentHour();
+                     start_min = dtp_start.getCurrentMinute();
+                     end_hr = dtp_end.getCurrentHour();
+                     end_min = dtp_end.getCurrentMinute();
+
+                     if (DEBUG) {
+                         System.out.println(en_start_tp);
+                         System.out.println(en_end_tp);
+                         System.out.println("START" + start_hr + ":" + start_min);
+                         System.out.println("END" + end_hr + ":" + end_min);
+                     }
+                 }
+             })
+            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel(); // Effectively don't do anything
+                }
+            });
+
+            Dialog dlg = builder.show();
+            return builder.create();
+        }
+
+
+    }
