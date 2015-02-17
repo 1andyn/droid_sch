@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/sec_ll">
         <!--Layout for Search Result List-->
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/result_layout"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
@@ -43,11 +43,36 @@
                 <ListView
                     android:layout_above="@+id/empty_search"
                     android:id="@+id/lv_result"
+                    android:clickable="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:longClickable="true"
                     android:divider="@android:color/transparent"/>
-        </RelativeLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="bottom"
+                    android:padding="5dp"
+                    android:paddingBottom="100dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        style="@style/btnStyleGenoa"
+                        android:id="@+id/results_add_CRN"
+                        android:layout_weight="1"
+                        android:text="@string/res_crn"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
+                    <Button
+                        style="@style/btnStyleGenoa"
+                        android:layout_weight="1"
+                        android:id="@+id/results_add_crs"
+                        android:text="@string/res_crs"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
+                </LinearLayout>
+        </LinearLayout>
         <!--Use this Layout for Starred Objects -->
         <LinearLayout
             android:clickable="true"
@@ -91,6 +116,7 @@
                     android:layout="@layout/empty_star" />
                     <ListView
                         android:layout_above="@+id/empty_star"
+                        android:clickable="true"
                         android:layout_weight="1"
                         android:paddingTop="5dp"
                         android:id="@+id/lv_star"
@@ -107,6 +133,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
                     <Button
+                        android:focusable="false"
                         style="@style/btnStyleGenoa"
                         android:id="@+id/star_panel_clear"
                         android:layout_weight="1"
@@ -114,6 +141,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent" />
                     <Button
+                        android:focusable="false"
                         style="@style/btnStyleGenoa"
                         android:layout_weight="1"
                         android:id="@+id/star_panel_delete"

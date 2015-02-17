@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
+    android:focusableInTouchMode="false"
+    android:focusable="false"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <LinearLayout
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:paddingLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <LinearLayout
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
             <LinearLayout
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
                 <TextView
+                    android:textColor="@color/white"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_crs_static"
                     android:textStyle="bold"
                     android:textSize="20dp"
@@ -26,6 +38,8 @@
                     android:text="@string/str_course"/>
 
                 <TextView
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_crs"
                     android:textStyle="bold"
                     android:textSize="20dp"
@@ -36,6 +50,9 @@
                     android:textColor="@color/dark_aqua"
                     android:text="XXXXXXXX"/>
                 <TextView
+                    android:textColor="@color/white"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:gravity="right"
                     android:textStyle="bold"
                     android:id="@+id/tv_crn_static"
@@ -43,6 +60,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_crn" />
                 <TextView
+                    android:textColor="@color/white"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:gravity="right"
                     android:textStyle="bold"
                     android:id="@+id/tv_crn"
@@ -54,15 +74,23 @@
                     android:text="XXXXX" />
             </LinearLayout>
             <LinearLayout
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:textColor="@color/white"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_title_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_title"/>
                 <TextView
+                    android:textColor="@color/white"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_title"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
@@ -72,6 +100,8 @@
             </LinearLayout>
         </LinearLayout>
         <View
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"

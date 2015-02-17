@@ -15,6 +15,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,6 +41,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import android.widget.AbsListView.MultiChoiceModeListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
@@ -46,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 
 public class Search extends ActionBarActivity implements App_const{
@@ -78,7 +83,6 @@ public class Search extends ActionBarActivity implements App_const{
     // Container Adapter
     private StarListAdapter sobj_adp;
 
-
     private final int sliderHeight = 175;
     
     @Override
@@ -89,7 +93,7 @@ public class Search extends ActionBarActivity implements App_const{
         SelectedItems = new ArrayList<Integer>();
         al_strobj = new ArrayList<Star_obj>();
         al_course = new ArrayList<Course>();
-        sobj_adp = new StarListAdapter(this, al_strobj);
+        sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         loadImageResources();
         configureSpinner();
         configureSlidingPanel();
@@ -152,10 +156,51 @@ public class Search extends ActionBarActivity implements App_const{
                 mandatoryDataChange();
             }
         });
+
+        final Button DeleteStarButton = (Button)findViewById(R.id.star_panel_delete);
+        DeleteStarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Search.this, "Delete selected entries",
+                        Toast.LENGTH_SHORT).show();
+
+//                for(int x = 0; x < al_strobj.size(); x++) {
+//                    if(al_strobj.get(x).isChecked()) {
+//                        System.out.println("SELECTED: " + x);
+//                    }
+//                }
+            }
+        });
+
+    }
+
+    private long uniqueStarID() {
+        long id = 0;
+        boolean unique = false; // Initialize Unique to False
+        while(!unique) {
+            boolean match = false; // Reset Match Flag to False
+            for (int x = 0; x < al_strobj.size(); x++) {
+                // Iterate al_strobj and check if there's an existing match to the ID
+                Long cmp = al_strobj.get(x).getID();
+                // If Match Exist, set match to true
+                if(cmp.equals(id)) {
+                    //Match found
+                    match = true;
+                    break; // Break out of For Loop
+                }
+            }
+            if(match) {
+                id++; //Increment ID
+            } else {
+                unique = true;
+            }
+        }
+        return id;
     }
 
     private void mandatoryDataChange() {
         sobj_adp.notifyDataSetChanged();
+        lv_sobj.invalidateViews();
         toggle_ViewStub();
     }
 
@@ -242,11 +287,14 @@ public class Search extends ActionBarActivity implements App_const{
                 Dialog diag_time = createTimeDialog();
                 return true;
             case R.id.action_debug_add:
-                Star_obj debug = new Star_obj("EEG 361", "Computers and Ish",
-                        51324, al_strobj.size(), semester.fall.ordinal());
+
+                Random r = new Random( System.currentTimeMillis() );
+                int x = 10000 + r.nextInt(20000);
+                Star_obj debug = new Star_obj("ACM 250", "Movies, Films and Stuff",
+                        x, uniqueStarID(), semester.fall.ordinal());
                 al_strobj.add(debug);
-                Toast.makeText(Search.this, "Added debug star object",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Search.this, "Added debug star object",
+//                        Toast.LENGTH_SHORT).show();
                 mandatoryDataChange();
                 return true;
             default:
@@ -437,6 +485,5 @@ public class Search extends ActionBarActivity implements App_const{
             Dialog dlg = builder.show();
             return builder.create();
         }
-
 
     }

@@ -7,13 +7,13 @@ public class Star_obj {
     private String course_name;
     private String course_title;
     private int CRN;
-    private int ID; // Incase user for some reason stars both a course and class
+    private long ID; // Incase user for some reason stars both a course and class
     private int Semester;
-    private long index_id; //Used for List Adapter to Identify specific item in container
+//    private boolean checked = false;
 
     //Constructor
     public Star_obj(String pCrsname, String pCrsTitle, int pCRN, long pID, int pSem) {
-        pID = ID;
+        ID = pID;
         CRN = pCRN;
         Semester = pSem;
         course_name = pCrsname;
@@ -47,5 +47,13 @@ public class Star_obj {
     public boolean isClass() {
         return (CRN != -1);
     }
+
+//    public boolean isChecked() {
+//        return checked;
+//    }
+//
+//    public void setChecked(boolean val) {
+//        checked = val;
+//    }
 
 }
