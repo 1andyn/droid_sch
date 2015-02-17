@@ -152,7 +152,8 @@ public class Search extends ActionBarActivity implements App_const{
             public void onClick(View v) {
                 Toast.makeText(Search.this, "Cleared starred list",
                         Toast.LENGTH_SHORT).show();
-                al_strobj.clear();
+                sobj_adp.clear();
+                sobj_adp.clearCheckedList();
                 mandatoryDataChange();
             }
         });
@@ -163,15 +164,27 @@ public class Search extends ActionBarActivity implements App_const{
             public void onClick(View v) {
                 Toast.makeText(Search.this, "Delete selected entries",
                         Toast.LENGTH_SHORT).show();
-
-//                for(int x = 0; x < al_strobj.size(); x++) {
-//                    if(al_strobj.get(x).isChecked()) {
-//                        System.out.println("SELECTED: " + x);
-//                    }
-//                }
+                ArrayList<Long> checked = sobj_adp.getChecked_list();
+                System.out.println("Outputting Selection");
+                for(Long l : checked) {
+                    if(DEBUG) System.out.println(l);
+                    deleteStarByID(l);
+                }
+                sobj_adp.clearCheckedList(); //Finished deleting so clear this list
+                mandatoryDataChange();
             }
         });
 
+    }
+
+    private void deleteStarByID(long id) {
+        for(int x = 0; x < al_strobj.size(); x++) {
+            Long temp = al_strobj.get(x).getID();
+            if(temp.equals(id)) {
+                if (DEBUG) System.out.println("Deleting " + id + " " + al_strobj.get(x).getCRN());
+                sobj_adp.remove(al_strobj.get(x));
+            }
+        }
     }
 
     private long uniqueStarID() {
@@ -201,6 +214,8 @@ public class Search extends ActionBarActivity implements App_const{
     private void mandatoryDataChange() {
         sobj_adp.notifyDataSetChanged();
         lv_sobj.invalidateViews();
+        lv_sobj.refreshDrawableState();
+        lv_sobj.setAdapter(sobj_adp);
         toggle_ViewStub();
     }
 

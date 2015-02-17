@@ -9,7 +9,7 @@ public class Star_obj {
     private int CRN;
     private long ID; // Incase user for some reason stars both a course and class
     private int Semester;
-//    private boolean checked = false;
+    private boolean checked = false;
 
     //Constructor
     public Star_obj(String pCrsname, String pCrsTitle, int pCRN, long pID, int pSem) {
@@ -48,12 +48,12 @@ public class Star_obj {
         return (CRN != -1);
     }
 
-//    public boolean isChecked() {
-//        return checked;
-//    }
-//
-//    public void setChecked(boolean val) {
-//        checked = val;
-//    }
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean val) {
+        checked = val;
+    }
 
 }
