@@ -27,6 +27,7 @@ public class Sql_helper extends SQLiteOpenHelper {
     /* Columns for Starred/Favorites & Schedules */
     public static final String COLUMN_CRSNAME = "strCourse"; /* This field will be used as a key
     to match a specific row on the Focus/GE Flag table */
+    public static final String COLUMN_TITL = "strTitle";
     public static final String COLUMN_CRN = "intCRN";
     public static final String COLUMN_ID = "intID";
     public static final String COLUMN_SEM = "intSEM";
@@ -73,6 +74,7 @@ public class Sql_helper extends SQLiteOpenHelper {
     private static final String FAV_TB_CREATE = "CREATE TABLE "
             + TABLE_NAME
             + "(" + COLUMN_CRSNAME + " TEXT NOT NULL, "
+            + COLUMN_TITL + " TEXT NOT NULL, "
             + COLUMN_CRN + " INT NOT NULL, "
             + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_SEM + " INT NOT NULL " + " );";
@@ -80,6 +82,7 @@ public class Sql_helper extends SQLiteOpenHelper {
     private static final String SCH_TB_CREATE = "CREATE TABLE "
             + TABLE_NAME2
             + "(" + COLUMN_CRSNAME + " TEXT NOT NULL, "
+            + COLUMN_TITL + " TEXT NOT NULL, "
             + COLUMN_CRN + " INT NOT NULL, "
             + COLUMN_START + " INT NOT NULL, "
             + COLUMN_START2 + " INT NOT NULL, "
