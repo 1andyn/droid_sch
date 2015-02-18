@@ -1,7 +1,5 @@
 package uhmanoa.droid_sch;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +9,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-public class StarListAdapter extends ArrayAdapter<Star_obj> {
+import java.util.ArrayList;
+
+public class ResultListAdapter extends ArrayAdapter<Course> {
 
     //Context in which eventListAdapter is being used
     private Context app_Context;
-    private ArrayList<Star_obj> object_list;
+    private ArrayList<Course> object_list;
     private ArrayList<Long> checked_list;
     private LayoutInflater inflater;
     private int layout_resrc;
 
-    public StarListAdapter(Context c, int rsrc, ArrayList<Star_obj> star_list) {
+    public ResultListAdapter(Context c, int rsrc, ArrayList<Course> star_list) {
         super(c, rsrc, star_list);
         app_Context = c;
         object_list = star_list;
@@ -36,15 +36,15 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
 
     @Override
     public View getView(final int pos, View convertView, ViewGroup parent) {
-        final Star_obj so = object_list.get(pos);
+        final Course crs = object_list.get(pos);
         final CheckBox cb;
 
         if (convertView == null) {
             convertView = inflater.inflate(layout_resrc, parent, false);
-            StarView sview = new StarView(app_Context);
-            sview.setObj((Star_obj) getItem(pos));
-            sview.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
-            convertView = sview;
+            CourseView crsview = new CourseView(app_Context);
+            crsview.setObj((Course) getItem(pos));
+            crsview.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
+            convertView = crsview;
             cb = (CheckBox) convertView.findViewById(R.id.chk_star);
             convertView.setTag(cb);
         } else {
@@ -52,19 +52,19 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
             cb = (CheckBox) convertView.getTag();
         }
 
-        cb.setChecked(so.isChecked());
+        cb.setChecked(crs.isChecked());
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 if (buttonView.isChecked()) {
-                    Toast.makeText(app_Context, "Checked " + so.getID() + " " + so.getCRN(),
+                    Toast.makeText(app_Context, "Checked " + crs.getID() + " " + crs.getCrn(),
                             Toast.LENGTH_SHORT).show();
                     checked_list.add(object_list.get(pos).getID());
-                    so.setChecked(true);
+                    crs.setChecked(true);
                 } else {
-                    Toast.makeText(app_Context, "UnChecked " + so.getID() + " " + so.getCRN(),
+                    Toast.makeText(app_Context, "UnChecked " + crs.getID() + " " + crs.getCrn(),
                             Toast.LENGTH_SHORT).show();
-                    so.setChecked(false);
+                    crs.setChecked(false);
                     checkedRemove(object_list.get(pos).getID());
                 }
             }

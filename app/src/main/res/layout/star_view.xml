@@ -80,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:textColor="@color/white"
                     android:focusable="false"
                     android:focusableInTouchMode="false"

@@ -27,7 +27,12 @@ public class StarView extends LinearLayout implements App_const{
         tvTitle = (TextView) findViewById(R.id.tv_title);
         tvCrs = (TextView) findViewById(R.id.tv_crs);
 
-        tvCrn.setText(ModifySpacingString(String.valueOf(sobj.getCRN()),ViewStringCat.crn));
+        if(sobj.isClass()) {
+            tvCrn.setText(ModifySpacingString(String.valueOf(sobj.getCRN()), ViewStringCat.crn));
+        } else {
+            tvCrn.setText(ModifySpacingString("N/A", ViewStringCat.crn));
+        }
+
         tvCrs.setText(ModifySpacingString(sobj.getCourse(),ViewStringCat.course));
         tvTitle.setText(ModifySpacingString(sobj.getCourseTitle(),ViewStringCat.title));
     }

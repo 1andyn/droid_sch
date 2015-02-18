@@ -1,156 +1,165 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/srch_rllayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="uhmanoa.droid_sch.Search">
-
     <LinearLayout
-        android:paddingBottom="5dp"
-        android:clickable="true"
-        android:orientation="horizontal"
+        android:id="@+id/sec_ll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:id="@+id/sec_ll">
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp">
         <Spinner
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
             android:id="@+id/major_spinner"
-            style="@style/btnStyleGenoa"/>
+            style="@style/btnStyleGenoa"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp" />
     </LinearLayout>
-
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
-        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/sec_ll">
+        android:layout_below="@+id/sec_ll"
+        android:gravity="bottom">
         <!--Layout for Search Result List-->
-            <LinearLayout
-                android:id="@+id/result_layout"
-                android:layout_height="match_parent"
+        <LinearLayout
+            android:id="@+id/result_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:orientation="vertical">
+            <!--android:paddingTop="50sp">-->
+            <ViewStub
+                android:id="@+id/empty_search"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:paddingTop="50sp">
-                <ViewStub
-                    android:clickable="false"
-                    android:id="@+id/empty_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout="@layout/empty_search" />
-                <ListView
-                    android:layout_above="@+id/empty_search"
-                    android:id="@+id/lv_result"
-                    android:clickable="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:longClickable="true"
-                    android:divider="@android:color/transparent"/>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="bottom"
-                    android:padding="5dp"
-                    android:paddingBottom="100dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:layout="@layout/empty_search" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+                <Button
+                    android:id="@+id/results_add_CRN"
+                    style="@style/btnStyleGenoa"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
-                    <Button
-                        style="@style/btnStyleGenoa"
-                        android:id="@+id/results_add_CRN"
-                        android:layout_weight="1"
-                        android:text="@string/res_crn"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" />
-                    <Button
-                        style="@style/btnStyleGenoa"
-                        android:layout_weight="1"
-                        android:id="@+id/results_add_crs"
-                        android:text="@string/res_crs"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" />
-                </LinearLayout>
+                    android:layout_height="fill_parent"
+                    android:height="20dp"
+                    android:layout_weight="1"
+                    android:text="@string/res_crn" />
+                <Button
+                    android:id="@+id/results_add_crs"
+                    style="@style/btnStyleGenoa"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="@string/res_crs" />
+            </LinearLayout>
+            <ListView
+                android:paddingBottom="48dp"
+                android:id="@+id/lv_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/empty_search"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="1sp"
+                android:longClickable="true" />
         </LinearLayout>
         <!--Use this Layout for Starred Objects -->
         <LinearLayout
-            android:clickable="true"
-            android:layout_height="match_parent"
+            android:id="@+id/slide_ll"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/slide_ll">
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:orientation="vertical">
+
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/panel_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/panel_view">
-                        <TextView
-                            android:focusable="false"
-                            android:textColor="@color/dark_gray"
-                            android:id="@+id/star_slider"
-                            android:layout_width="match_parent"
-                            android:layout_height="34dp"
-                            android:gravity="center|bottom"
-                            android:text="Slide up or Tap to view Starred Items"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-                        <View
-                            android:focusable="false"
-                            android:layout_width="match_parent"
-                            android:layout_height="3dp"
-                            android:padding="5dp"
-                            android:background="@color/dark_aqua"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/star_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:focusable="false"
+                    android:gravity="center|bottom"
+                    android:text="Slide up or Tap to view Starred Items"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@color/dark_aqua"
+                    android:focusable="false"
+                    android:padding="5dp" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_height="match_parent"
+                android:id="@+id/star_layout"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/star_layout">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
                 <ViewStub
-                    android:clickable="false"
                     android:id="@+id/empty_star"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:clickable="false"
                     android:layout="@layout/empty_star" />
-                    <ListView
-                        android:layout_above="@+id/empty_star"
-                        android:clickable="true"
-                        android:layout_weight="1"
-                        android:paddingTop="5dp"
-                        android:id="@+id/lv_star"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:longClickable="true"
-                        android:divider="@android:color/transparent"
-                        android:dividerHeight="1sp"/>
+
+                <ListView
+                    android:id="@+id/lv_star"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/empty_star"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="1sp"
+                    android:longClickable="true"
+                    android:paddingTop="5dp" />
+
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:gravity="bottom"
-                    android:padding="5dp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
                     <Button
-                        android:focusable="false"
-                        style="@style/btnStyleGenoa"
                         android:id="@+id/star_panel_clear"
-                        android:layout_weight="1"
-                        android:text="@string/str_panel_clear"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" />
-                    <Button
-                        android:focusable="false"
                         style="@style/btnStyleGenoa"
-                        android:layout_weight="1"
-                        android:id="@+id/star_panel_delete"
-                        android:text="@string/str_panel_delete"
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" />
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:focusable="false"
+                        android:text="@string/str_panel_clear" />
+
+                    <Button
+                        android:id="@+id/star_panel_delete"
+                        style="@style/btnStyleGenoa"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:focusable="false"
+                        android:text="@string/str_panel_delete" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-</RelativeLayout>
+</LinearLayout>

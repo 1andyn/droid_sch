@@ -31,6 +31,11 @@
     <item
         android:id="@+id/action_debug_add"
         android:orderInCategory="100"
-        android:title="Add to Starred List"
+        android:title="DEBUG: ADD to RESULTS List"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_clear_results"
+        android:orderInCategory="100"
+        android:title="@string/res_clear"
         app:showAsAction="never" />
 </menu>

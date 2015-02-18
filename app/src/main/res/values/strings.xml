@@ -36,8 +36,14 @@
     <string name="str_title"> Title: </string>
     <string name="str_crn"> CRN: </string>
     <string name="str_add"> Add Selected to Starred List </string>
-    <string name="res_crn">Add CRN</string>
-    <string name="res_crs">Add Course</string>
+    <string name="res_crn">Save CRN</string>
+    <string name="res_crs">Save Course</string>
+    <string name="res_prof">Professor: </string>
+    <string name="res_start">Start: </string>
+    <string name="res_end">End: </string>
+    <string name="res_days">Days: </string>
+    <string name="res_loc">Location: </string>
+    <string name="res_clear">Clear Results</string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>

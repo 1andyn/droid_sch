@@ -36,6 +36,9 @@ public class Course {
 	private String room1;
 	/** Room for course's second time segment (if applicable) */
 	private String room2;
+    /** These members are exclusively for Search Activity purposes */
+    private boolean checked = false;
+    private long ID;
 	
 	/**
 	 * Empty constructor
@@ -304,8 +307,21 @@ public class Course {
 		}
 		return temp;
 	}
-	
-	
+
+    /** Added functions get retrieve time strings for results easily */
+    public String getStartString(boolean sec) {
+        if(sec) {
+            return getStdTime(getStart2());
+        }
+        return getStdTime(getStart1());
+    }
+
+    public String getEndString(boolean sec) {
+        if(sec) {
+            return getStdTime(getEnd2());
+        }
+        return getStdTime(getEnd1());
+    }
 	
 	private String getStdTime(int t){
 		String theTime = "99:99";
@@ -637,4 +653,21 @@ public class Course {
 	}
 	
 	public String getCourse() { return course;}
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean val) {
+        checked = val;
+    }
+
+    public void setID(long pid) {
+        ID = pid;
+    }
+
+    public long getID() {
+        return ID;
+    }
+
 }
