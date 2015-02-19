@@ -38,6 +38,7 @@
                     android:text="@string/str_course"/>
 
                 <TextView
+                    android:typeface="monospace"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:id="@+id/tv_crs"

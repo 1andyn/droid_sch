@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_course"/>
                 <TextView
+                    android:typeface="monospace"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:id="@+id/tv_crs"
@@ -84,6 +85,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:focusable="false"
+                    android:textSize="15dp"
                     android:focusableInTouchMode="false"
                     android:id="@+id/tv_title_static"
                     android:layout_width="wrap_content"
@@ -94,6 +96,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:id="@+id/tv_title"
+
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:layout_width="fill_parent"
@@ -139,6 +142,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"
+                    android:typeface="monospace"
                     android:textColor="@color/dark_aqua"
                     android:id="@+id/tv_day"
                     android:layout_width="wrap_content"
@@ -172,6 +176,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/res_start"/>
                 <TextView
+                    android:typeface="monospace"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"
@@ -189,6 +194,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/res_end"/>
                 <TextView
+                    android:typeface="monospace"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"
@@ -210,6 +216,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/res_days"/>
                 <TextView
+                    android:typeface="monospace"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"
@@ -246,6 +253,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/res_start"/>
                 <TextView
+                    android:typeface="monospace"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"
@@ -263,6 +271,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/res_end"/>
                 <TextView
+                    android:typeface="monospace"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"

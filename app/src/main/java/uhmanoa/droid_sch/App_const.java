@@ -8,14 +8,14 @@ public interface App_const {
         create, view, search, about, exit
     }
 
-    // Constants for anticipated max size if each column (may be larger)
-    static final int course_max = 8;
-    static final int title_max = 30;
-    static final int crn_max = 5;
-    static final int prof_max = 15;
-    static final int day_max = 8;
-    static final int loc_max = 10;
-    static final int time_max = 5;
+    // Used for spacing on Views
+    final int course_max = 8;
+    final int title_max = 30;
+    final int crn_max = 5;
+    final int prof_max = 15;
+    final int day_max = 8;
+    final int loc_max = 10;
+    final int time_max = 6;
 
     static final String gefc_fga = "Foundation GMP-A";
     static final String gefc_fgb = "Foundation GMP-B";

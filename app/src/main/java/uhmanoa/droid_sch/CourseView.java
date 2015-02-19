@@ -90,28 +90,34 @@ public class CourseView extends LinearLayout implements App_const{
 
     // Basically return a string with extra spaces so the spacing in the view is consistent
     private String ModifySpacingString(String s, ViewStringCat type) {
-        int size = s.length();
-        int update = 0;
-        String temp = s;
+        String temp;
         switch (type) {
             case course:
-                update = course_max - size;
+                temp = String.format("%-"+ course_max + "s", s);
+                break;
             case crn:
-                update = crn_max - size;
+                temp = String.format("%-"+ crn_max + "s", s);
+                break;
             case title:
-                update = title_max - size;
+                temp = String.format("%-"+ title_max + "s", s);
+                break;
             case loc:
-                update = loc_max - size;
+                temp = String.format("%-"+ loc_max + "s", s);
+                break;
             case prof:
-                update = prof_max - size;
+                temp = String.format("%-"+ prof_max + "s", s);
+                break;
             case day:
-                update = day_max - size;
+                temp = String.format("%-"+ day_max + "s", s);
+                break;
             case time:
-                update = time_max - size;
+                temp = String.format("%-"+ time_max + "s", s);
+                break;
+            default:
+                temp = s;
+                break;
         }
 
-        //Only modify string if we want to increase the space count
-        if(update > 0) temp.format(s, "%" + update + "s");
         return temp;
     }
 
