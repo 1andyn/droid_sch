@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Mānoa Scheduler</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -25,13 +26,13 @@
     <string name="srch_title">Search for Courses</string>
     <string name="menu_gefc">General Education / Focus Filter</string>
     <string name="menu_time">Course Time Start and End Filter</string>
-    <string name ="menu_fil">Search without CRN or Course Name</string>
+    <string name="menu_fil">Search without CRN or Course Name</string>
     <string name="action_anchor_enable">Enable Anchor Point</string>
     <string name="action_anchor_disable">Disable Anchor Point</string>
     <string name="str_panel_clear">Clear List</string>
     <string name="str_panel_delete">Delete</string>
     <string name="start_chkbox">Set Earliest Start Time</string>
-    <string name="end_chkbox">Set latest End Time</string>
+    <string name="end_chkbox">Set Latest End Time</string>
     <string name="str_course"> Course: </string>
     <string name="str_title"> Title: </string>
     <string name="str_crn"> CRN: </string>
@@ -44,6 +45,12 @@
     <string name="res_days">Days: </string>
     <string name="res_loc">Location: </string>
     <string name="res_clear">Clear Results</string>
+    <string name="des_clear">Clear List</string>
+    <string name="des_delete">Delete</string>
+    <string name="menu_crs_min">Set Minimum Course Count</string>
+    <string name="menu_tblock">Set Time Off</string>
+    <string name="str_panel_add">Add to List</string>
+    <string name="menu_time_frame">Set Schedule Time Frames</string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>
@@ -65,8 +72,8 @@
         <item>(WI)  Writing Intensive</item>
     </string-array>
 
-
-    <!-- String Array for Majors (used with Spinner)
+    <!--
+    String Array for Majors (used with Spinner)
     This information is HARD CODED, perhaps a dynamic solution could be created (?)
     -->
 
@@ -222,5 +229,7 @@
         <item>Women\'s Studies (WS)</item>
         <item>Zoology (ZOOL)</item>
     </string-array>
+
+    <string name="title_activity_builder">Add courses to Start!</string>
 
 </resources>

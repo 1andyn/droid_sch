@@ -1,37 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="uhmanoa.droid_sch" >
+    package="uhmanoa.droid_sch">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar" >
-        <activity android:name=".Main_menu"
-                  android:screenOrientation="portrait">
+        android:theme="@android:style/Theme.NoTitleBar">
+        <activity
+            android:name=".Main_menu"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- this is the searchable activity; it performs searches -->
         <activity
             android:name=".Search"
+            android:label="@string/srch_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat"
-            android:label="@string/srch_title" >
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-
         </activity>
-        <meta-data android:name="android.app.default_searchable"
+
+        <meta-data
+            android:name="android.app.default_searchable"
             android:value=".Search" />
 
+        <activity
+            android:name=".Builder"
+            android:label="@string/title_activity_builder"
+            android:theme="@style/Theme.AppCompat">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
     </application>
 
 </manifest>

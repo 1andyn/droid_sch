@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -27,22 +28,19 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 
-public class Search extends ActionBarActivity implements App_const {
+public class Builder extends ActionBarActivity implements App_const {
 
     // --------DEBUG
     private boolean DEBUG = true;
@@ -57,11 +55,11 @@ public class Search extends ActionBarActivity implements App_const {
     private ViewStub empty_search;
     private ViewStub empty_star;
     private ArrayList<Star_obj> al_strobj;
-    private ArrayList<Course> al_course;
+    private ArrayList<Star_obj> al_desired;
     private ArrayAdapter<CharSequence> spinner_data;
     private boolean en_start_tp, en_end_tp = false;
     private int start_hr, end_hr, start_min, end_min = 0;
-    private ListView lv_results, lv_sobj;
+    private ListView lv_desd, lv_sobj;
 
     // Dialog for Timer Picker
     private CheckBox en_start;
@@ -70,23 +68,21 @@ public class Search extends ActionBarActivity implements App_const {
     private TimePicker dtp_end;
 
     // Container Adapter
-    private StarListAdapter sobj_adp;
-    private ResultListAdapter crs_adp;
+    private StarListAdapter sobj_adp, desd_adp;
 
     private final int sliderHeight = 175;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_builder);
         pt_resolution = new Point();
         SelectedItems = new ArrayList<Integer>();
         al_strobj = new ArrayList<Star_obj>();
-        al_course = new ArrayList<Course>();
+        al_desired = new ArrayList<Star_obj>();
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
-        crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
+        desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
         loadImageResources();
-        configureSpinner();
         configureSlidingPanel();
         configureViewStubs();
         configureListeners();
@@ -96,8 +92,8 @@ public class Search extends ActionBarActivity implements App_const {
     }
 
     private void configureListViews() {
-        lv_results = (ListView) findViewById(R.id.lv_result);
-        lv_results.setAdapter(crs_adp);
+        lv_desd = (ListView) findViewById(R.id.lv_desired);
+        lv_desd.setAdapter(desd_adp);
         lv_sobj = (ListView) findViewById(R.id.lv_star);
         lv_sobj.setAdapter(sobj_adp);
     }
@@ -113,7 +109,7 @@ public class Search extends ActionBarActivity implements App_const {
         slideupl.setDragView(starpanel);
         slideupl.setOverlayed(true);
         slideupl.setPanelHeight(sliderHeight);
-        slideupl.setPanelSlideListener(new PanelSlideListener() {
+        slideupl.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
             }
@@ -137,12 +133,29 @@ public class Search extends ActionBarActivity implements App_const {
     }
 
     private void configureListeners() {
-        // Configures Listener for Clear Favorites List
-        final Button ClearStarButton = (Button) findViewById(R.id.star_panel_clear);
-        ClearStarButton.setOnClickListener(new View.OnClickListener() {
+
+        //Listener for Star Panel Deletion
+        final Button DeleteItemStar = (Button) findViewById(R.id.star_panel_delete);
+        DeleteItemStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Search.this, "Cleared starred list",
+                Toast.makeText(Builder.this, "Deleting selected items on star list.",
+                        Toast.LENGTH_SHORT).show();
+                ArrayList<Long> checked = desd_adp.getChecked_list();
+                System.out.println("Outputting Selection");
+                for (Long l : checked) {
+                    //Do something
+                }
+                mandatoryDataChange();
+            }
+        });
+
+        // Listener for Add Button on Star List
+        final Button AddStarButton = (Button) findViewById(R.id.star_panel_add);
+        AddStarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Builder.this, "Added to courses desired list",
                         Toast.LENGTH_SHORT).show();
                 sobj_adp.clear();
                 sobj_adp.clearCheckedList();
@@ -150,11 +163,11 @@ public class Search extends ActionBarActivity implements App_const {
             }
         });
 
-        final Button DeleteStarButton = (Button) findViewById(R.id.star_panel_delete);
+        final Button DeleteStarButton = (Button) findViewById(R.id.des_delete);
         DeleteStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Search.this, "Delete selected entries",
+                Toast.makeText(Builder.this, "Delete selected entries",
                         Toast.LENGTH_SHORT).show();
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
                 System.out.println("Outputting Selection");
@@ -167,88 +180,42 @@ public class Search extends ActionBarActivity implements App_const {
             }
         });
 
-        final Button AddCourseStar = (Button) findViewById(R.id.results_add_crs);
-        AddCourseStar.setOnClickListener(new View.OnClickListener() {
+        final Button DeleteListItem = (Button) findViewById(R.id.des_clear);
+        DeleteListItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Search.this, "Add Selected Courses",
+                Toast.makeText(Builder.this, "Deleting Selected Items",
                         Toast.LENGTH_SHORT).show();
-                ArrayList<Long> checked = crs_adp.getChecked_list();
+                ArrayList<Long> checked = desd_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
-                    Course temp = getResultById(l);
-                    addStarFromResults(temp, false);
+                    //Do something
                 }
                 mandatoryDataChange();
             }
         });
 
-        final Button AddCRNStar = (Button) findViewById(R.id.results_add_CRN);
-        AddCRNStar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(Search.this, "Add Selected CRN's",
-                        Toast.LENGTH_SHORT).show();
-                ArrayList<Long> checked = crs_adp.getChecked_list();
-                System.out.println("Outputting Selection");
-                for (Long l : checked) {
-                    Course temp = getResultById(l);
-                    addStarFromResults(temp, true);
-                }
-                mandatoryDataChange();
-            }
-        });
     }
 
-    private boolean crnExists(int crn) {
+    private Star_obj getResultById(long id) {
         for (int x = 0; x < al_strobj.size(); x++) {
-            if (al_strobj.get(x).getCRN() == crn) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean crsExists(String crs) {
-        for (int x = 0; x < al_strobj.size(); x++) {
-            if (al_strobj.get(x).getCourse().equals(crs) &&
-                    al_strobj.get(x).getCRN() == -1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Course getResultById(long id) {
-        for (int x = 0; x < al_course.size(); x++) {
-            Long temp = al_course.get(x).getID();
+            Long temp = al_strobj.get(x).getID();
             if(temp.equals(id)) {
-                return al_course.get(x);
+                return al_strobj.get(x);
             }
         }
         return null;
     }
 
-    private void addStarFromResults(Course crs, boolean isclass){
+    private void addDesiredFromStar(Star_obj star, boolean isclass){
         if(isclass) {
-            if(!crnExists(crs.getCrn())) {
-                Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), crs.getCrn(),
-                        uniqueID(false), semester.fall.ordinal());
-                sobj_adp.add(so);
-            } else {
-                Toast.makeText(Search.this,
-                        "A course with the CRN already exists in the Starred List",
-                        Toast.LENGTH_SHORT).show();
-            }
+            Star_obj so = new Star_obj(star.getCourse(), star.getCourseTitle(), star.getCRN(),
+                    uniqueStarID(true), semester.fall.ordinal());
+            desd_adp.add(so);
         } else {
-            if(!crsExists(crs.getCourse())) {
-                Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), -1,
-                        uniqueID(false), semester.fall.ordinal());
-                sobj_adp.add(so);
-            } else {
-                Toast.makeText(Search.this, "Course already exists in Starred List",
-                        Toast.LENGTH_SHORT).show();
-            }
+            Star_obj so = new Star_obj(star.getCourse(), star.getCourseTitle(), -1,
+                    uniqueStarID(true), semester.fall.ordinal());
+            desd_adp.add(so);
         }
         mandatoryDataChange();
     }
@@ -263,14 +230,14 @@ public class Search extends ActionBarActivity implements App_const {
         }
     }
 
-    private long uniqueID(boolean main_list) {
+    private long uniqueStarID(boolean main_list) {
         long id = 0;
         boolean unique = false; // Initialize Unique to False
         while (!unique) {
             boolean match = false; // Reset Match Flag to False
             int size = 0;
             if(main_list) {
-                size = al_course.size();
+                size = al_desired.size();
             } else {
                 size = al_strobj.size();
             }
@@ -278,7 +245,7 @@ public class Search extends ActionBarActivity implements App_const {
                 // Iterate al_strobj and check if there's an existing match to the ID
                 Long cmp;
                 if(main_list) {
-                    cmp = al_course.get(x).getID();
+                    cmp = al_desired.get(x).getID();
                 } else {
                     cmp = al_strobj.get(x).getID();
                 }
@@ -300,13 +267,13 @@ public class Search extends ActionBarActivity implements App_const {
 
     private void mandatoryDataChange() {
         sobj_adp.notifyDataSetChanged();
-        crs_adp.notifyDataSetChanged();
+        desd_adp.notifyDataSetChanged();
         lv_sobj.invalidateViews();
-        lv_results.invalidateViews();
+        lv_desd.invalidateViews();
         lv_sobj.refreshDrawableState();
         lv_sobj.setAdapter(sobj_adp);
-        lv_results.refreshDrawableState();
-        lv_results.setAdapter(crs_adp);
+        lv_desd.refreshDrawableState();
+        lv_desd.setAdapter(desd_adp);
         toggle_ViewStub();
     }
 
@@ -318,7 +285,7 @@ public class Search extends ActionBarActivity implements App_const {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(Search.this, "Search for: " + query,
+            Toast.makeText(Builder.this, "Search for: " + query,
                     Toast.LENGTH_SHORT).show();
             //search();
         }
@@ -327,7 +294,7 @@ public class Search extends ActionBarActivity implements App_const {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+        getMenuInflater().inflate(R.menu.menu_builder, menu);
 
         //Config ActionBar's Search Box
         SearchManager searchManager =
@@ -339,26 +306,6 @@ public class Search extends ActionBarActivity implements App_const {
         searchView.setIconifiedByDefault(true);
 
         return true;
-    }
-
-    protected void configureSpinner() {
-        spinner = (Spinner) findViewById(R.id.major_spinner);
-        spinner_data = ArrayAdapter.createFromResource(this,
-                R.array.major_list, android.R.layout.simple_spinner_item);
-        spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinner_data);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                // An item was selected. You can retrieve the selected item using
-                Toast.makeText(Search.this, "Item selected: " + pos + " with Id: " + id,
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback
-            }
-        });
     }
 
     protected void loadImageResources() {
@@ -395,60 +342,16 @@ public class Search extends ActionBarActivity implements App_const {
     public boolean onOptionsItemSelected(MenuItem item) {
         //int id = item.getItemId();
         switch (item.getItemId()) {
-            case R.id.action_gefc_fil:
-                Dialog diag_fil = createFilterDialog();
-                return true;
-            case R.id.action_time_fil:
+            case R.id.action_time_frame:
                 Dialog diag_time = createTimeDialog();
                 return true;
-            case R.id.action_debug_add:
-                addDebugResults();
+            case R.id.action_timeblock:
                 return true;
-            case R.id.action_clear_results:
-                crs_adp.clear();
-                crs_adp.clearCheckedList();
-                mandatoryDataChange();
+            case R.id.action_min:
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    //DEBUG
-    private void addDebugResults() {
-        Random r = new Random(System.currentTimeMillis());
-        int crn = 10000 + r.nextInt(20000); //Randon CRN Number
-        ArrayList<Character> days1 = new ArrayList<Character>();
-        days1.add('M');
-        days1.add('W');
-        days1.add('F');
-
-        ArrayList<Character> days2 = new ArrayList<Character>();
-        days2.add('T');
-        days2.add('R');
-
-        Course debug;
-
-        int rand = randValue();
-        switch (rand) {
-            case 1:
-                debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, 920, 1030, "SAKAM D101");
-                break;
-            case 0:
-                debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
-                        "HOLM 243");
-
-                break;
-            default:
-                debug = new Course("ICS 314", "Software Engineering I", crn, 3,
-                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
-                        "HOLM 243");
-                break;
-        }
-        debug.setID(uniqueID(true));
-        al_course.add(debug);
-        mandatoryDataChange();
     }
 
     protected void acquireResolution() {
@@ -461,9 +364,9 @@ public class Search extends ActionBarActivity implements App_const {
     @Override
     public void onBackPressed() {
         if (slideupl != null &&
-                (slideupl.getPanelState() == PanelState.EXPANDED ||
-                        slideupl.getPanelState() == PanelState.ANCHORED)) {
-            slideupl.setPanelState(PanelState.COLLAPSED);
+                (slideupl.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ||
+                        slideupl.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
+            slideupl.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         } else {
             super.onBackPressed();
         }
@@ -477,12 +380,12 @@ public class Search extends ActionBarActivity implements App_const {
             empty_star.setVisibility(View.GONE);
             lv_sobj.setVisibility(View.VISIBLE);
         }
-        if (al_course.isEmpty() == true) {
+        if (al_desired.isEmpty() == true) {
             empty_search.setVisibility(View.VISIBLE);
-            lv_results.setVisibility(View.GONE);
+            lv_desd.setVisibility(View.GONE);
         } else {
             empty_search.setVisibility(View.GONE);
-            lv_results.setVisibility(View.VISIBLE);
+            lv_desd.setVisibility(View.VISIBLE);
         }
     }
 
@@ -501,67 +404,10 @@ public class Search extends ActionBarActivity implements App_const {
         return checked;
     }
 
-    public Dialog createFilterDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
-        final ArrayList<Integer> SelectedOriginal = new ArrayList<Integer>();
-        //Deep Copy
-        Iterator<Integer> it = SelectedItems.iterator();
-        for (Integer i : SelectedItems) {
-            SelectedOriginal.add(i);
-        }
-
-        builder.setTitle(Html.fromHtml("<font color='#66FFCC'>General Ed/ Focus Filter</font>"))
-                // Specify the list array, the items to be selected by default (null for none),
-                // and the listener through which to receive callbacks when items are selected
-                .setMultiChoiceItems(R.array.gefc_list, gefcFilterState(),
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which,
-                                                boolean isChecked) {
-                                if (isChecked) {
-                                    // If the user checked the item, add it to the selected items
-                                    SelectedItems.add(which);
-                                } else if (SelectedItems.contains(which)) {
-                                    // Else, if the item is already in the array, remove it
-                                    SelectedItems.remove(Integer.valueOf(which));
-                                }
-                            }
-                        })
-                        // Set the action buttons
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        for (Integer o : SelectedItems) {
-                            Toast.makeText(Search.this, String.valueOf(o),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Restore Original
-                        SelectedItems.clear();
-                        Iterator<Integer> it = SelectedOriginal.iterator();
-                        for (Integer i : SelectedOriginal) {
-                            SelectedItems.add(i);
-                        }
-                        dialog.cancel();
-                    }
-                });
-        //This is a bit hackish, maybe Google will create an easier way to change divider color?
-        Dialog dlg = builder.show();
-        int dividerId = dlg.getContext().getResources().getIdentifier("android:id/titleDivider",
-                null, null);
-        View dv = dlg.findViewById(dividerId);
-        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
-        return builder.create();
-    }
-
     // For future Changes, Dialogs Should probably be split into Classes
     public Dialog createTimeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
-        LayoutInflater infl = Search.this.getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(Builder.this);
+        LayoutInflater infl = Builder.this.getLayoutInflater();
         final View diag_view = infl.inflate(R.layout.time_dialog, null);
         en_start = (CheckBox) diag_view.findViewById(R.id.start_chkbox);
         en_end = (CheckBox) diag_view.findViewById(R.id.end_chkbox);
