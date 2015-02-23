@@ -1,6 +1,5 @@
 package uhmanoa.droid_sch;
 
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -43,7 +41,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
         setBackground();
         initLayout();
-        //adjustListView();
     }
 
     private void initLayout(){
@@ -92,13 +89,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         adapter = new Sched_Adapter(this, t1, s1);
         lv_item.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-    }
-
-    private void adjustListView(){
-        View v = LayoutInflater.from(this).inflate(R.layout.item_available_schedules, null);
-        int h = v.getHeight();
-        Log.e("SCHED", "Height: " + h + "\n");
-        //lv_item.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (h * 5)));
     }
 
     private void setBackground(){
