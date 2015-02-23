@@ -1,19 +1,40 @@
 package uhmanoa.droid_sch;
 
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import uhmanoa.droid_sch.uhmanoa.adapters.Sched_Adapter;
 
 
-public class Available_Schedules extends ActionBarActivity {
+public class Available_Schedules extends ActionBarActivity implements View.OnClickListener{
 
+    public static final String LOGTAG = "SCHED";
+    public static final int ITEMS_PER_PAGE = 5;
+
+    ArrayList<String> titles, t1;
+    ArrayList<String> subtitles, s1;
+    ListView lv_item;
+    Button btnPrev, btnNext;
+    Sched_Adapter adapter;
+
+    int totalPages, currentPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +42,63 @@ public class Available_Schedules extends ActionBarActivity {
         setContentView(R.layout.activity_available_schedules);
 
         setBackground();
+        initLayout();
+        //adjustListView();
+    }
+
+    private void initLayout(){
+        lv_item = (ListView) findViewById(R.id.lvScheds);
+        btnPrev = (Button) findViewById(R.id.btn_prev);
+        btnNext = (Button) findViewById(R.id.btn_next);
+
+        btnPrev.setOnClickListener(this);
+        btnNext.setOnClickListener(this);
+
+        titles = new ArrayList<String>();
+        subtitles = new ArrayList<String>();
+
+        for (int i = 0; i < 17; i++){
+            titles.add("Sched" + i);
+            subtitles.add("Num classes in sched " + i);
+
+        }
+
+        totalPages = 0;
+        currentPage = 0;
+
+        // find out how many pages we have
+        totalPages = titles.size() / ITEMS_PER_PAGE;
+        if ((titles.size() % ITEMS_PER_PAGE) != 0)
+            totalPages ++;
+
+        populateNextPage();
+
+        Log.w(LOGTAG, "Set items in adapter");
+    }
+
+    private void populateNextPage(){
+        t1 = new ArrayList<String>(ITEMS_PER_PAGE);
+        s1 = new ArrayList<String>(ITEMS_PER_PAGE);
+
+        int itemsOnPage = ITEMS_PER_PAGE;
+        if (currentPage == totalPages - 1)
+            itemsOnPage = titles.size() % ITEMS_PER_PAGE;
+
+        for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) + itemsOnPage); i++){
+            t1.add(titles.get(i).toString());
+            s1.add(subtitles.get(i).toString());
+        }
+
+        adapter = new Sched_Adapter(this, t1, s1);
+        lv_item.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void adjustListView(){
+        View v = LayoutInflater.from(this).inflate(R.layout.item_available_schedules, null);
+        int h = v.getHeight();
+        Log.e("SCHED", "Height: " + h + "\n");
+        //lv_item.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (h * 5)));
     }
 
     private void setBackground(){
@@ -58,5 +136,29 @@ public class Available_Schedules extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.btn_prev:
+                if (currentPage > 0)
+                    currentPage--;
+                populateNextPage();
+                if (currentPage == 0)
+                    btnPrev.setEnabled(false);
+                if (currentPage < totalPages - 1)
+                    btnNext.setEnabled(true);
+                break;
+            case R.id.btn_next:
+                if (currentPage < totalPages - 1)
+                    currentPage++;
+                populateNextPage();
+                if (currentPage == totalPages - 1)
+                    btnNext.setEnabled(false);
+                if (currentPage > 0)
+                    btnPrev.setEnabled(true);
+                break;
+        }
     }
 }
