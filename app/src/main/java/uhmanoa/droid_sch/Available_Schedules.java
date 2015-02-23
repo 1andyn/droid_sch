@@ -29,7 +29,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     ArrayList<String> titles, t1;
     ArrayList<String> subtitles, s1;
     ListView lv_item;
-    Button btnPrev, btnNext;
+    Button btnPrev, btnNext, btnGoto;
     Sched_Adapter adapter;
 
     int totalPages, currentPage;
@@ -41,16 +41,22 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
         setBackground();
         initLayout();
+        populateList();
     }
 
     private void initLayout(){
         lv_item = (ListView) findViewById(R.id.lvScheds);
         btnPrev = (Button) findViewById(R.id.btn_prev);
         btnNext = (Button) findViewById(R.id.btn_next);
+        btnGoto = (Button) findViewById(R.id.btn_goto);
 
         btnPrev.setOnClickListener(this);
         btnNext.setOnClickListener(this);
+        btnGoto.setOnClickListener(this);
 
+    }
+
+    private void populateList(){
         titles = new ArrayList<String>();
         subtitles = new ArrayList<String>();
 
@@ -69,8 +75,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             totalPages ++;
 
         populateNextPage();
-
-        Log.w(LOGTAG, "Set items in adapter");
     }
 
     private void populateNextPage(){
@@ -148,6 +152,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                     btnNext.setEnabled(false);
                 if (currentPage > 0)
                     btnPrev.setEnabled(true);
+                break;
+            case R.id.btn_goto:
+
                 break;
         }
     }

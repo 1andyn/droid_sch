@@ -58,37 +58,8 @@
         <Button
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/btn_1"
-            android:text="1"
-            android:layout_weight="1"
-            style="@style/btnStyleGenoa"/>
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/btn_2"
-            android:text="2"
-            android:layout_weight="1"
-            style="@style/btnStyleGenoa"/>
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/btn_3"
-            android:text="3"
-            android:layout_weight="1"
-            style="@style/btnStyleGenoa"/>
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/btn_4"
-            android:text="4"
-            android:layout_weight="1"
-            style="@style/btnStyleGenoa"/>
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/btn_5"
-            android:text="5"
-            android:layout_weight="1"
+            android:id="@+id/btn_goto"
+            android:layout_weight="8"
             style="@style/btnStyleGenoa"/>
 
         <Button
