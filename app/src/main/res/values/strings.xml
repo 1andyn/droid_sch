@@ -18,13 +18,15 @@
     <string name="dsc_mm_logo">Main Menu Logo Image</string>
     <string name="title_activity_create__schedules">Create_Schedules</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_available__schedules">Available_Schedules</string>
+    <string name="title_activity_available__schedules">Available Schedules</string>
 
     <!-- Strings for Available Schedules Activity -->
+
     <string name="previous">&#60;</string>
     <string name="next">&#62;</string>
     <string name="txt_num_sched">&#60;number of schedules&#62;</string>
     <string name="bt_txt_save_sel">Save Selected</string>
+    <string name="txt_avail_sched_subtitle">Select the schedule(s) you would like to save.</string>
 
 
 </resources>

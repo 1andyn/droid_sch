@@ -23,7 +23,6 @@ public class Sched_Adapter extends BaseAdapter {
     public Context context;
 
     public Sched_Adapter(Context c, ArrayList<String> t, ArrayList<String> s){
-        Log.e("ADAPTER", "Created Adapter");
         this.context = c;
         this.titles = t;
         this.subtitles = s;
@@ -64,7 +63,6 @@ public class Sched_Adapter extends BaseAdapter {
         }
 
         holder.title.setText(titles.get(position).toString());
-        //Log.e("ADAPTER", "item: " + titles.get(position).toString());
         holder.subtitle.setText(subtitles.get(position).toString());
 
         return convertView;

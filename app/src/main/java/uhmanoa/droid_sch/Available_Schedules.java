@@ -1,11 +1,16 @@
 package uhmanoa.droid_sch;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -13,8 +18,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,6 +38,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     ArrayList<String> subtitles, s1;
     ListView lv_item;
     Button btnPrev, btnNext, btnGoto;
+    TextView tvTitle;
     Sched_Adapter adapter;
 
     int totalPages, currentPage;
@@ -40,8 +49,25 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_available_schedules);
 
         setBackground();
-        initLayout();
         populateList();
+        initLayout();
+        populateNextPage();
+
+    }
+
+    private void setBackground(){
+        Resources res_main = getResources();
+        Point pt_resolution = new Point();
+        Display dsp = getWindowManager().getDefaultDisplay();
+        pt_resolution.x = dsp.getWidth();
+        pt_resolution.y = dsp.getHeight();
+
+        LinearLayout avail_sched = (LinearLayout) findViewById(R.id.ll_avail_sched);
+
+        Bitmap bmp_mmbg = ImgLoader.decodedSampledBitmapResource(res_main, R.drawable.o_bg,
+                pt_resolution.x / 8, pt_resolution.y / 8);
+        BitmapDrawable drw_bg = new BitmapDrawable(bmp_mmbg);
+        avail_sched.setBackgroundDrawable(drw_bg);
     }
 
     private void initLayout(){
@@ -49,11 +75,14 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         btnPrev = (Button) findViewById(R.id.btn_prev);
         btnNext = (Button) findViewById(R.id.btn_next);
         btnGoto = (Button) findViewById(R.id.btn_goto);
+        tvTitle = (TextView) findViewById(R.id.tvNumSchedules);
 
         btnPrev.setOnClickListener(this);
         btnNext.setOnClickListener(this);
         btnGoto.setOnClickListener(this);
 
+        tvTitle.setText("Your search generated " + titles.size() + " schedules.");
+        updateGotoButton();
     }
 
     private void populateList(){
@@ -73,8 +102,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         totalPages = titles.size() / ITEMS_PER_PAGE;
         if ((titles.size() % ITEMS_PER_PAGE) != 0)
             totalPages ++;
-
-        populateNextPage();
     }
 
     private void populateNextPage(){
@@ -90,24 +117,11 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             s1.add(subtitles.get(i).toString());
         }
 
-        adapter = new Sched_Adapter(this, t1, s1);
+        adapter = new Sched_Adapter((Activity)this, t1, s1);
         lv_item.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-    }
 
-    private void setBackground(){
-        Resources res_main = getResources();
-        Point pt_resolution = new Point();
-        Display dsp = getWindowManager().getDefaultDisplay();
-        pt_resolution.x = dsp.getWidth();
-        pt_resolution.y = dsp.getHeight();
-
-        LinearLayout avail_sched = (LinearLayout) findViewById(R.id.ll_avail_sched);
-
-        Bitmap bmp_mmbg = ImgLoader.decodedSampledBitmapResource(res_main, R.drawable.mm_bg,
-                pt_resolution.x / 8, pt_resolution.y / 8);
-        BitmapDrawable drw_bg = new BitmapDrawable(bmp_mmbg);
-        avail_sched.setBackgroundDrawable(drw_bg);
+        updateGotoButton();
     }
 
     @Override
@@ -143,6 +157,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                     btnPrev.setEnabled(false);
                 if (currentPage < totalPages - 1)
                     btnNext.setEnabled(true);
+
                 break;
             case R.id.btn_next:
                 if (currentPage < totalPages - 1)
@@ -152,10 +167,41 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                     btnNext.setEnabled(false);
                 if (currentPage > 0)
                     btnPrev.setEnabled(true);
+
                 break;
             case R.id.btn_goto:
+                final EditText input = new EditText(this);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                AlertDialog.Builder pagenum = new AlertDialog.Builder(this)
+                        .setTitle("Go To...")
+                        .setMessage("Enter page number between 1-" + totalPages)
+                        .setView(input)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                int page = Integer.parseInt(input.getText().toString());
+                                if (page > 0 && page <= totalPages) {
+                                    currentPage = page - 1;  // subtract one for startint at zero
+                                    populateNextPage();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "You must enter a page number in the valid range from 1 to " + totalPages , Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+                pagenum.show();
 
                 break;
         }
+    }
+
+    private void updateGotoButton(){
+        btnGoto.setText("Page \t" + (currentPage + 1) + " / " + totalPages);
     }
 }

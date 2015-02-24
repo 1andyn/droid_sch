@@ -2,20 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/ll_item_avail_sched">
+    android:id="@+id/ll_item_avail_sched"
+    android:background="#000"
+    android:padding="5dp"
+    >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/tv_sched_title"
-        android:textSize="15dp"
-        android:textColor="#000"/>
+        style="@style/itemHeading"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/tv_sched_subtitle"
-        android:textSize="12dp"
-        android:textColor="#000"/>
+        style="@style/itemSubheadingValue"/>
 
 </LinearLayout>
