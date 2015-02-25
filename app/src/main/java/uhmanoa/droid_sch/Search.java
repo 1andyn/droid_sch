@@ -351,7 +351,7 @@ public class Search extends ActionBarActivity implements App_const {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
-                Toast.makeText(Search.this, "Item selected: " + pos + " with Id: " + id,
+                Toast.makeText(Search.this, "Major selected: " + pos + " with Id: " + id,
                         Toast.LENGTH_SHORT).show();
             }
 

@@ -58,10 +58,10 @@ public class Main_menu extends Activity {
 
         arraylst_btn.get(App_const.buttons.view.ordinal()).setOnClickListener(
                 new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(Main_menu.this, "View Button Pressed",
-                                Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onClick(View view) {
+                                Intent switchSearch = new Intent(Main_menu.this, Viewer.class);
+                                startActivity(switchSearch);
                     }
                 });
 

@@ -56,7 +56,8 @@ public class Builder extends ActionBarActivity implements App_const {
     private ViewStub empty_star;
     private ArrayList<Star_obj> al_strobj;
     private ArrayList<Star_obj> al_desired;
-    private ArrayAdapter<CharSequence> spinner_data;
+    private ArrayList<String> al_profiles;
+    private ArrayAdapter<String> spinner_data;
     private boolean en_start_tp, en_end_tp = false;
     private int start_hr, end_hr, start_min, end_min = 0;
     private ListView lv_desd, lv_sobj;
@@ -83,12 +84,39 @@ public class Builder extends ActionBarActivity implements App_const {
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
         loadImageResources();
+        loadProfiles();
+        configureSpinner();
         configureSlidingPanel();
         configureViewStubs();
         configureListeners();
         configureListViews();
         handleIntent(getIntent());
-        toggle_ViewStub();
+//        toggle_ViewStub();
+    }
+
+    private void loadProfiles() {
+        al_profiles = new ArrayList<String>();
+        al_profiles.add("Default Profile");
+    }
+
+    private void configureSpinner() {
+            spinner = (Spinner) findViewById(R.id.major_spinner);
+            spinner_data = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,
+                    al_profiles);
+            spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(spinner_data);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int pos, long id) {
+                    // An item was selected. You can retrieve the selected item using
+                    Toast.makeText(Builder.this, "Profile selected: " + pos + " with Id: " + id,
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Another interface callback
+                }
+            });
     }
 
     private void configureListViews() {
@@ -180,18 +208,13 @@ public class Builder extends ActionBarActivity implements App_const {
             }
         });
 
-        final Button DeleteListItem = (Button) findViewById(R.id.des_clear);
-        DeleteListItem.setOnClickListener(new View.OnClickListener() {
+        final Button BuildScheduleButton = (Button) findViewById(R.id.des_build);
+        BuildScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Builder.this, "Deleting Selected Items",
+                Toast.makeText(Builder.this, "Building Schedules",
                         Toast.LENGTH_SHORT).show();
-                ArrayList<Long> checked = desd_adp.getChecked_list();
-                System.out.println("Outputting Selection");
-                for (Long l : checked) {
-                    //Do something
-                }
-                mandatoryDataChange();
+
             }
         });
 

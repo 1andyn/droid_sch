@@ -97,6 +97,12 @@ public class Course {
      * Special use for summer bases courses (start and end dates to indicate session)
      */
 
+    private boolean checkboxhide = false;
+    /*
+    Used to hide Checkbox for Schedule Item Purposes
+    * */
+
+
     /**
      * Empty constructor
      */
@@ -799,5 +805,14 @@ public class Course {
     public void setSection(int sec) {
         section = sec;
     }
+
+    public void setCheckboxHide(boolean val) {
+        checkboxhide = val;
+    }
+
+    public boolean getCheckboxHide() {
+        return checkboxhide;
+    }
+
 
 }

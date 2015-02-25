@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="uhmanoa.droid_sch.Search">
+    <LinearLayout
+        android:id="@+id/sec_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp">
+        <Spinner
+            android:id="@+id/major_spinner"
+            style="@style/btnStyleGenoa"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp" />
+    </LinearLayout>
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
@@ -37,15 +51,15 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:height="20dp"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="@string/des_delete" />
                 <Button
-                    android:id="@+id/des_clear"
+                    android:id="@+id/des_build"
                     style="@style/btnStyleGenoa"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:text="@string/des_clear" />
+                    android:text="@string/des_build" />
             </LinearLayout>
             <ListView
                 android:paddingBottom="48dp"
