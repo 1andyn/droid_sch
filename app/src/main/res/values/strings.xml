@@ -10,7 +10,7 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="bt_txt_exit">Exit Application</string>
-    <string name="bt_txt_pref">Preferences</string>
+    <string name="bt_txt_pref">Schedule Preferences</string>
     <string name="bt_txt_create">Create Schedules</string>
     <string name="bt_txt_view">View Schedules</string>
     <string name="bt_txt_search">Search for Courses</string>
@@ -51,6 +51,13 @@
     <string name="menu_tblock">Set Time Off</string>
     <string name="str_panel_add">Add to List</string>
     <string name="menu_time_frame">Set Schedule Time Frames</string>
+    <string name="res_credit">Credits: </string>
+    <string name="res_sect">Section: </string>
+    <string name="res_seats">Seats Avail: </string>
+    <string name="res_wl">Waitlisted: </string>
+    <string name="res_wla">Waitlisted Avail: </string>
+    <string name="res_dates">Dates: </string>
+    <string name="res_preq">Prequsites: </string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>

@@ -1,298 +1,481 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:descendantFocusability="blocksDescendants"
-    android:focusableInTouchMode="false"
-    android:focusable="false"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
     android:orientation="vertical">
+
     <LinearLayout
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:paddingLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
             <!-- -Contains Course Name and CRN -->
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:orientation="horizontal">
+
                 <TextView
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_crs_static"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_course"/>
-                <TextView
-                    android:typeface="monospace"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:id="@+id/tv_crs"
-                    android:textStyle="bold"
+                    android:text="@string/str_course"
+                    android:textColor="@color/white"
                     android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_crs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:text="XXXXXXXX"
                     android:textColor="@color/dark_aqua"
-                    android:text="XXXXXXXX"/>
-                <TextView
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:gravity="right"
+                    android:textSize="20dp"
                     android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <TextView
                     android:id="@+id/tv_crn_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_crn" />
-                <TextView
-                    android:textColor="@color/white"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:gravity="right"
-                    android:textStyle="bold"
+                    android:text="@string/str_crn"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tv_crn"
-                    android:textSize="15dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XXXXX" />
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="right"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXX"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </LinearLayout>
             <!-- -Contains Title -->
             <LinearLayout
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:textSize="15dp"
-                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_title_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_title"/>
-                <TextView
-                    android:textColor="@color/white"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:id="@+id/tv_title"
+                    android:text="@string/str_title"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
+                <TextView
+                    android:id="@+id/tv_title"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+                    android:focusable="false"
+
+                    android:focusableInTouchMode="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                    android:textColor="@color/white" />
             </LinearLayout>
             <!-- -Contains Professor-->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_prof_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_prof"/>
-                <TextView
-                    android:textColor="@color/white"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:text="@string/res_prof"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tv_prof"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXXXXXXXXX"/>
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXXXXXXXXX"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <!-- show credits and sections -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_sect_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/res_sect"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_sect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXX"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <TextView
+                    android:id="@+id/tv_cred_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="23dp"
+                    android:text="@string/res_credit"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_credits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="X"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
             </LinearLayout>
             <!-- -Contains Date Array and Location  -->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:id="@+id/tv_day_static"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/res_days"/>
+                    android:id="@+id/tv_day_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/res_days"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
                 <TextView
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:textStyle="bold"
-                    android:typeface="monospace"
-                    android:textColor="@color/dark_aqua"
                     android:id="@+id/tv_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXX"/>
-                <TextView
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXX"
+                    android:textColor="@color/dark_aqua"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:typeface="monospace" />
+
+                <TextView
                     android:id="@+id/tv_loc_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_loc"/>
-                <TextView
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
+                    android:text="@string/res_loc"
                     android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tv_loc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXXXX"/>
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXXXX"
+                    android:textColor="@color/white" />
             </LinearLayout>
             <!-- -Contains Start Time, End Time -->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
                     android:id="@+id/tv_start_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_start"/>
+                    android:text="@string/res_start"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
                 <TextView
-                    android:typeface="monospace"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_aqua"
                     android:id="@+id/tv_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XX:XX"/>
-                <TextView
-                    android:paddingLeft="32dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XX:XX"
+                    android:textColor="@color/dark_aqua"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:typeface="monospace" />
+
+                <TextView
                     android:id="@+id/tv_end_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_end"/>
+                    android:paddingLeft="16dp"
+                    android:text="@string/res_end"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
                 <TextView
-                    android:typeface="monospace"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_aqua"
                     android:id="@+id/tv_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XX:XX"/>
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XX:XX"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
             </LinearLayout>
             <!-- -Contains Date Array2 and Location2  -->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
                     android:id="@+id/tv_day2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_days"/>
+                    android:text="@string/res_days"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
                 <TextView
-                    android:typeface="monospace"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_aqua"
                     android:id="@+id/tv_day2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXX"/>
-                <TextView
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXX"
+                    android:textColor="@color/dark_aqua"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:typeface="monospace" />
+
+                <TextView
                     android:id="@+id/tv_loc2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_loc"/>
-                <TextView
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
+                    android:text="@string/res_loc"
                     android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tv_loc2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXXXX"/>
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXXXX"
+                    android:textColor="@color/white" />
             </LinearLayout>
             <!-- -Contains Start Time2, End Time2 -->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
                     android:id="@+id/tv_start2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_start"/>
+                    android:text="@string/res_start"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
                 <TextView
-                    android:typeface="monospace"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_aqua"
                     android:id="@+id/tv_start2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XX:XX"/>
-                <TextView
-                    android:paddingLeft="32dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XX:XX"
+                    android:textColor="@color/dark_aqua"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:typeface="monospace" />
+
+                <TextView
                     android:id="@+id/tv_end2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/res_end"/>
+                    android:paddingLeft="16dp"
+                    android:text="@string/res_end"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
                 <TextView
-                    android:typeface="monospace"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_aqua"
                     android:id="@+id/tv_end2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="XX:XX"/>
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XX:XX"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+            </LinearLayout>
+            <!-- Course Seats detail -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_seats_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/res_seats"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_seats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="X"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <TextView
+                    android:id="@+id/tv_wl_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="11dp"
+                    android:text="@string/res_wl"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_wl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="X"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <TextView
+                    android:id="@+id/tv_wla_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:text="@string/res_wla"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_wla"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="X"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+            </LinearLayout>
+            <!-- DATE -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_date_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/res_dates"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XX/XX to XX/XX"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+            </LinearLayout>
+            <!-- PREQ -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_preq_static"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/res_preq"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_preq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="250sp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXXXXXXXXXXXXXXXXXXX"
+                    android:textColor="@color/dark_aqua"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
             </LinearLayout>
         </LinearLayout>
+
         <View
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            />
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+
         <CheckBox
-            android:paddingRight="10dp"
+            android:id="@+id/chk_star"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/chk_star"/>
+            android:paddingRight="10dp" />
     </LinearLayout>
 </LinearLayout>

@@ -423,7 +423,6 @@ public class Search extends ActionBarActivity implements App_const {
         days1.add('F');
 
         ArrayList<Character> days2 = new ArrayList<Character>();
-        days2.add('T');
         days2.add('R');
 
         Course debug;
@@ -432,18 +431,21 @@ public class Search extends ActionBarActivity implements App_const {
         switch (rand) {
             case 1:
                 debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, 920, 1030, "SAKAM D101");
+                        "B Auernheimer", days1, 920, 1030, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                        "MATH CLASS ");
                 break;
             case 0:
                 debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
                         "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
-                        "HOLM 243");
+                        "HOLM 243", 2, 20, 0, 10, "1/3 to 4/27",
+                        "MATH CLASS ");
 
                 break;
             default:
                 debug = new Course("ICS 314", "Software Engineering I", crn, 3,
                         "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
-                        "HOLM 243");
+                        "HOLM 243", 3, 0, 3, 7, "4/3 to 5/27",
+                        "MATH CLASS ");
                 break;
         }
         debug.setID(uniqueID(true));

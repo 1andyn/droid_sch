@@ -16,6 +16,7 @@ public interface App_const {
     final int day_max = 8;
     final int loc_max = 10;
     final int time_max = 6;
+    final int sec_max = 3;
 
     static final String gefc_fga = "Foundation GMP-A";
     static final String gefc_fgb = "Foundation GMP-B";
@@ -37,7 +38,7 @@ public interface App_const {
 
     //View String Categories for determining what conversion to run
     static enum ViewStringCat {
-        course, title, crn, prof, day, loc, time
+        course, title, crn, prof, day, loc, time, sect
     }
 
     static enum semester {

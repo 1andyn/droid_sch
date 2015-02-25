@@ -16,7 +16,7 @@ public class CourseView extends LinearLayout implements App_const{
     private Course crs;
     private Context context;
     private TextView tvCrn, tvTitle, tvCrs, tvProf, tvLoc, tvDay, tvStart, tvEnd, tvLoc2, tvDay2,
-            tvStart2, tvEnd2;
+            tvStart2, tvEnd2, tvSec, tvCred, tvSeats, tvWait, tvWaita, tvDates, tvPreq;
 
     public CourseView(Context con) {
         super(con);
@@ -48,6 +48,15 @@ public class CourseView extends LinearLayout implements App_const{
         tvEnd2 = (TextView) findViewById(R.id.tv_end2);
         tvDay2 = (TextView) findViewById(R.id.tv_day2);
 
+        tvSec = (TextView) findViewById(R.id.tv_sect);
+        tvCred = (TextView) findViewById(R.id.tv_credits);
+
+        tvSeats = (TextView) findViewById(R.id.tv_seats);
+        tvWait = (TextView) findViewById(R.id.tv_wl);
+        tvWaita = (TextView) findViewById(R.id.tv_wla);
+        tvDates = (TextView) findViewById(R.id.tv_date);
+        tvPreq = (TextView) findViewById(R.id.tv_preq);
+
         tvProf.setText(ModifySpacingString(String.valueOf(crs.getProfessor()), ViewStringCat.prof));
         tvDay.setText(ModifySpacingString(String.valueOf(crs.getDayString(false)),
                 ViewStringCat.day));
@@ -57,6 +66,17 @@ public class CourseView extends LinearLayout implements App_const{
         tvEnd.setText(ModifySpacingString(String.valueOf(crs.getEndString(false)),
                 ViewStringCat.time));
 
+        tvCred.setText(String.valueOf(crs.getCredits()));
+        tvSec.setText(ModifySpacingString(String.valueOf(crs.getSection()),
+                ViewStringCat.sect));
+
+        tvSeats.setText(String.valueOf(crs.getSeats_avail()));
+        tvWait.setText(String.valueOf(crs.getWaitlisted()));
+        tvWaita.setText(String.valueOf(crs.getWait_avail()));
+        tvDates.setText(crs.getDates());
+        tvPreq.setText(crs.getPrereq());
+
+        /* This check sees if there is a second day, if not it hides it */
         if(crs.getStart2() == 9999) {
             TextView tvStartStatic = (TextView)findViewById(R.id.tv_start2_static);
             TextView tvEndStatic = (TextView)findViewById(R.id.tv_end2_static);
@@ -112,6 +132,9 @@ public class CourseView extends LinearLayout implements App_const{
                 break;
             case time:
                 temp = String.format("%-"+ time_max + "s", s);
+                break;
+            case sect:
+                temp = String.format("%-"+ sec_max + "s", s);
                 break;
             default:
                 temp = s;
