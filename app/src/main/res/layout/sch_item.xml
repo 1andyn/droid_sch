@@ -4,6 +4,7 @@
     android:layout_height="wrap_content">
     <TextView
         android:background="@color/dark_gray"
+        android:textColor="@color/white"
         android:id="@+id/expandedListItem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

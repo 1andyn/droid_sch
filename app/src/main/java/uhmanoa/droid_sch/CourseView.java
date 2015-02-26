@@ -16,7 +16,7 @@ public class CourseView extends LinearLayout implements App_const{
     private Course crs;
     private Context context;
     private TextView tvCrn, tvTitle, tvCrs, tvProf, tvLoc, tvDay, tvStart, tvEnd, tvLoc2, tvDay2,
-            tvStart2, tvEnd2, tvSec, tvCred, tvSeats, tvWait, tvWaita, tvDates, tvPreq;
+            tvStart2, tvEnd2, tvSec, tvCred, tvSeats, tvWait, tvWaita, tvDates, tvPreq, tvFoc;
 
     public CourseView(Context con) {
         super(con);
@@ -57,6 +57,8 @@ public class CourseView extends LinearLayout implements App_const{
         tvDates = (TextView) findViewById(R.id.tv_date);
         tvPreq = (TextView) findViewById(R.id.tv_preq);
 
+        tvFoc = (TextView) findViewById(R.id.tv_foc);
+
         tvProf.setText(ModifySpacingString(String.valueOf(crs.getProfessor()), ViewStringCat.prof));
         tvDay.setText(ModifySpacingString(String.valueOf(crs.getDayString(false)),
                 ViewStringCat.day));
@@ -75,6 +77,7 @@ public class CourseView extends LinearLayout implements App_const{
         tvWaita.setText(String.valueOf(crs.getWait_avail()));
         tvDates.setText(crs.getDates());
         tvPreq.setText(crs.getPrereq());
+        tvFoc.setText(crs.getFocusReqString());
 
         /* This check sees if there is a second day, if not it hides it */
         if(crs.getStart2() == 9999) {
@@ -82,7 +85,9 @@ public class CourseView extends LinearLayout implements App_const{
             TextView tvEndStatic = (TextView)findViewById(R.id.tv_end2_static);
             TextView tvLocStatic = (TextView)findViewById(R.id.tv_loc2_static);
             TextView tvDayStatic = (TextView)findViewById(R.id.tv_day2_static);
+            final View viewDivider = (View) findViewById(R.id.day2_divider);
 
+            viewDivider.setVisibility(View.GONE);
             tvStartStatic.setVisibility(View.GONE);
             tvEndStatic.setVisibility(View.GONE);
             tvLocStatic.setVisibility(View.GONE);

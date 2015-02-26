@@ -425,6 +425,10 @@ public class Search extends ActionBarActivity implements App_const {
         ArrayList<Character> days2 = new ArrayList<Character>();
         days2.add('R');
 
+        ArrayList<String> fr = new ArrayList<String>();
+        fr.add("WI");
+        fr.add("NI");
+
         Course debug;
 
         int rand = randValue();
@@ -446,6 +450,7 @@ public class Search extends ActionBarActivity implements App_const {
                         "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
                         "HOLM 243", 3, 0, 3, 7, "4/3 to 5/27",
                         "MATH CLASS ");
+                debug.setFocusReqs(fr);
                 break;
         }
         debug.setID(uniqueID(true));

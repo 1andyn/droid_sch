@@ -59,6 +59,7 @@
     <string name="res_wla">Waitlisted Avail: </string>
     <string name="res_dates">Dates: </string>
     <string name="res_preq">Prequsites: </string>
+    <string name="res_foc">Focus/GE: </string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>

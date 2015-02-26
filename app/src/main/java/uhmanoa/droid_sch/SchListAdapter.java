@@ -9,6 +9,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +53,7 @@ public class SchListAdapter extends BaseExpandableListAdapter {
         }
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.expandedListItem);
-        expandedListTextView.setText(expandedListText);
+        expandedListTextView.setText(Html.fromHtml(expandedListText));
         return convertView;
     }
 
@@ -87,7 +90,7 @@ public class SchListAdapter extends BaseExpandableListAdapter {
         TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
-        listTitleTextView.setText(listTitle);
+        listTitleTextView.setText(Html.fromHtml(listTitle));
         return convertView;
     }
 

@@ -38,6 +38,7 @@ public class Viewer extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         al_sched = new ArrayList<Schedule>();
+        setupDebugSchedules();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
         pt_resolution = new Point();
@@ -46,6 +47,41 @@ public class Viewer extends ActionBarActivity {
         configureViewStubs();
         configureListView();
 //        toggle_ViewStub();
+    }
+
+    private void setupDebugSchedules() {
+        Schedule sch = new Schedule();
+
+        ArrayList<Character> days1 = new ArrayList<Character>();
+        days1.add('M');
+        days1.add('W');
+        days1.add('F');
+
+        ArrayList<Character> days2 = new ArrayList<Character>();
+        days2.add('T');
+
+        ArrayList<Character> days4 = new ArrayList<Character>();
+        days4.add('T');
+
+        ArrayList<String> fr = new ArrayList<String>();
+        fr.add("NI");
+
+        Course crt = new Course ("EE 160", "Programming for Engineers", 82496, 4,
+                "T Dobry", days1, days2, 830,730, 920, 1015, "PHYSCI 217", "POST 214", 1, 20, 0,
+                5, "01/12-05/15", "MAJOR");
+        sch.addCourse(crt);
+
+        ArrayList<Character> days3 = new ArrayList<Character>();
+        days3.add('M');
+        days3.add('W');
+        Course crt2 = new Course ("EE 205", "Object Oriented Programming", 85518, 3,
+                "R Zhang", days3, days4, 1130, 300, 1220, 545, "POST 214", "POST 214", 1, 20, 0,
+                5, "01/12-05/15", "MAJOR");
+        crt2.setFocusReqs(fr);
+
+
+        sch.addCourse(crt2);
+        al_sched.add(sch);
     }
 
     private void configureListView() {

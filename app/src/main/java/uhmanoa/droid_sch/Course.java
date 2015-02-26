@@ -68,36 +68,36 @@ public class Course {
     /**
      * Used to identify when the view's checkbox ix checked
      */
-    private long ID = 0;
+    private long ID;
     /**
      * Unique identifier for modifying lists contaning courses
      */
-    private int section = 0;
+    private int section;
     /**
      * Course section number e.g. 001
      */
-    private int waitlisted = 0;
+    private int waitlisted;
     /**
      * Number of students waitlisted in a course
      */
-    private int seats_avail = 0;
+    private int seats_avail;
     /**
      * Number of seats available in course
      */
-    private int wait_avail = 0;
+    private int wait_avail;
     /**
      * Number of waitlist spots available
      */
-    private String prereq = "";
+    private String prereq;
     /**
      * Course prerequsities
      */
-    private String dates = "";
+    private String dates;
     /**
      * Special use for summer bases courses (start and end dates to indicate session)
      */
 
-    private boolean checkboxhide = false;
+    private boolean checkboxhide;
     /*
     Used to hide Checkbox for Schedule Item Purposes
     * */
@@ -125,6 +125,15 @@ public class Course {
         this.room1 = c.getRoom1();
         this.room2 = c.getRoom2();
         this.focusReqs = c.getFocusReqs();
+        this.prereq = c.getPrereq();
+        this.section = c.getSection();
+        this.waitlisted = c.getWaitlisted();
+        this.seats_avail = c.getSeats_avail();
+        this.wait_avail = c.getWait_avail();
+        this.dates = c.getDates();
+        this.checkboxhide = c.getCheckboxHide();
+        this.ID = c.getID();
+        this.checked = c.isChecked();
     }
 
     /**
@@ -248,6 +257,13 @@ public class Course {
         this.room1 = "";
         this.room2 = "";
         this.focusReqs = null;
+        this.checkboxhide = false;
+        this.dates = "";
+        this.section = 9999;
+        this.wait_avail = 9999;
+        this.seats_avail = 9999;
+        this.waitlisted = 9999;
+        this.prereq = "";
     }
 
     /**
@@ -369,6 +385,15 @@ public class Course {
         return temp;
     }
 
+    public String getTimeString(boolean sec) {
+        if(sec) {
+            return (getStdTime(getStart2()) + "-" + getStdTime(getEnd2()));
+        } else {
+            return (getStdTime(getStart1()) + "-" + getStdTime(getEnd1()));
+        }
+    }
+
+
     /**
      * @param sec is a boolean used to flag when we want to retrieve day string
      *            for the main set of days or the secondary set of days
@@ -482,6 +507,21 @@ public class Course {
 
         for (String req : f)
             focusReqs.add(req.toUpperCase());
+    }
+
+    public String getFocusReqString () {
+        if(focusReqs == null) {
+            return "N/A";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for(int x = 0; x < focusReqs.size(); x++) {
+                sb.append(focusReqs.get(x));
+                if(!(x == focusReqs.size() - 1)) {
+                    sb.append(", ");
+                }
+            }
+            return sb.toString();
+        }
     }
 
     public void setProfessor(String professor) {
@@ -814,5 +854,8 @@ public class Course {
         return checkboxhide;
     }
 
+    public boolean hasLab() {
+        return !(this.getStart2() == 9999);
+    }
 
 }
