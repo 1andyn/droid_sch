@@ -32,14 +32,18 @@ import uhmanoa.droid_sch.uhmanoa.adapters.Sched_Adapter;
 public class Available_Schedules extends ActionBarActivity implements View.OnClickListener{
 
     public static final String LOGTAG = "SCHED";
+    public static final String CONFIRM_SAVE = "Warning: By clicking ok you will save the selected " +
+            "schedules and discard all other schedules.  Are you sure you want to continue?";
     public static final int ITEMS_PER_PAGE = 5;
 
     ArrayList<String> titles, t1;
     ArrayList<String> subtitles, s1;
     ListView lv_item;
-    Button btnPrev, btnNext, btnGoto;
+    Button btnPrev, btnNext, btnGoto, btnSave;
     TextView tvTitle;
     Sched_Adapter adapter;
+
+    ArrayList<Schedule> schedules, schedPage;
 
     int totalPages, currentPage;
 
@@ -75,11 +79,13 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         btnPrev = (Button) findViewById(R.id.btn_prev);
         btnNext = (Button) findViewById(R.id.btn_next);
         btnGoto = (Button) findViewById(R.id.btn_goto);
+        btnSave = (Button) findViewById(R.id.btn_save_selected);
         tvTitle = (TextView) findViewById(R.id.tvNumSchedules);
 
         btnPrev.setOnClickListener(this);
         btnNext.setOnClickListener(this);
         btnGoto.setOnClickListener(this);
+        btnSave.setOnClickListener(this);
 
         tvTitle.setText("Your search generated " + titles.size() + " schedules.");
         updateGotoButton();
@@ -89,24 +95,41 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         titles = new ArrayList<String>();
         subtitles = new ArrayList<String>();
 
+        schedules = new ArrayList<Schedule>();
+
         for (int i = 0; i < 17; i++){
             titles.add("Sched" + i);
             subtitles.add("Num classes in sched " + i);
-
+            Schedule s = new Schedule();
+            for (int j = 0; j < 4; j++) {
+                ArrayList<Character> days = new ArrayList<Character>();
+                days.add('M');
+                days.add('W');
+                days.add('F');
+                Course c = new Course("EE" + j, 39390 + j, 3, "Professor " + j,
+                        days, 1230 + j, 1320+ j, "POST" + j);
+                s.addCourse(c);
+            }
+            schedules.add(s);
         }
 
         totalPages = 0;
         currentPage = 0;
 
         // find out how many pages we have
-        totalPages = titles.size() / ITEMS_PER_PAGE;
-        if ((titles.size() % ITEMS_PER_PAGE) != 0)
+        //totalPages = titles.size() / ITEMS_PER_PAGE;
+        totalPages = schedules.size() / ITEMS_PER_PAGE;
+        if ((schedules.size() % ITEMS_PER_PAGE) != 0)
             totalPages ++;
+        //if ((titles.size() % ITEMS_PER_PAGE) != 0)
+        //    totalPages ++;
     }
 
     private void populateNextPage(){
         t1 = new ArrayList<String>(ITEMS_PER_PAGE);
         s1 = new ArrayList<String>(ITEMS_PER_PAGE);
+
+        schedPage = new ArrayList<Schedule>(ITEMS_PER_PAGE);
 
         int itemsOnPage = ITEMS_PER_PAGE;
         if (currentPage == totalPages - 1)
@@ -115,9 +138,12 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) + itemsOnPage); i++){
             t1.add(titles.get(i).toString());
             s1.add(subtitles.get(i).toString());
+            schedPage.add(schedules.get(i));
         }
 
-        adapter = new Sched_Adapter((Activity)this, t1, s1);
+        //adapter = new Sched_Adapter((Activity)this, t1, s1);
+        Log.e(LOGTAG, "Size! " + schedules.size());
+        adapter = new Sched_Adapter((Activity) this, schedPage);
         lv_item.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -196,6 +222,25 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                             }
                         });
                 pagenum.show();
+
+                break;
+            case R.id.btn_save_selected:
+                AlertDialog.Builder confirm = new AlertDialog.Builder(this)
+                        .setTitle("Confirm?")
+                        .setMessage(CONFIRM_SAVE)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+                confirm.show();
 
                 break;
         }

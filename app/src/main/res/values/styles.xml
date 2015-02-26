@@ -31,17 +31,20 @@
 
     <!-- Styles for ListView Contents -->
     <style name="itemHeading" parent="@android:style/Widget.TextView">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">#4c898e</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">3dp</item>
     </style>
+
     <style name="itemHeadingValue" parent="itemHeading">
         <item name="android:textColor">#FFF</item>
     </style>
+
     <style name="itemSubheading" parent="itemHeading">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
+
     <style name="itemSubheadingValue" parent="itemSubheading">
         <item name="android:textColor">#FFF</item>
     </style>

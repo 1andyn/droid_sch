@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import uhmanoa.droid_sch.Course;
 import uhmanoa.droid_sch.R;
+import uhmanoa.droid_sch.Schedule;
 
 /**
  * Created by LENOVO on 2/11/2015.
@@ -20,6 +22,7 @@ public class Sched_Adapter extends BaseAdapter {
 
     public ArrayList<String> titles;
     public ArrayList<String> subtitles;
+    public ArrayList<Schedule> schedules;
     public Context context;
 
     public Sched_Adapter(Context c, ArrayList<String> t, ArrayList<String> s){
@@ -29,9 +32,14 @@ public class Sched_Adapter extends BaseAdapter {
 
     }
 
+    public Sched_Adapter(Context c, ArrayList<Schedule> s){
+        this.context = c;
+        this.schedules = s;
+    }
+
     @Override
     public int getCount() {
-        return titles.size();
+        return schedules.size();
     }
 
     @Override
@@ -62,8 +70,15 @@ public class Sched_Adapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.title.setText(titles.get(position).toString());
-        holder.subtitle.setText(subtitles.get(position).toString());
+        //holder.title.setText(titles.get(position).toString());
+        //holder.subtitle.setText(subtitles.get(position).toString());
+        holder.title.setText("Schedule " + (position + 1));
+        String classes = "";
+        Schedule current = schedules.get(position);
+        for (Course c : current.getCourses()){
+            classes += c.getTitle() + " ";
+        }
+        holder.subtitle.setText(classes);
 
         return convertView;
     }
