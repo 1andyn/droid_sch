@@ -1,13 +1,19 @@
 package uhmanoa.droid_sch;
 
+import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -27,6 +33,8 @@ public class Visualize extends ActionBarActivity {
     final int hours_day = 24;
     final static int first_hour = 0;
     final int days_week = 7;
+
+    int pxWidth;
 
     private void initializeTimeValues() {
         time_values = new ArrayList<String>();
@@ -68,10 +76,17 @@ public class Visualize extends ActionBarActivity {
         day_values.add("S");
     }
 
+    private void configureDisplay() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        pxWidth = metrics.widthPixels;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualize);
+        configureDisplay();
         initializeTimeValues();
         initializeDayValues();
         table_layout = (TableLayout) findViewById(R.id.tableLayout1);
@@ -80,12 +95,23 @@ public class Visualize extends ActionBarActivity {
     }
 
     private void BuildTable(Schedule sch) {
+        //Time is in military format e.g. 2400 for 12am
+//        int start_time = getStartHour(sch.earliestStart());
+//        int end_time = getEndHour(sch.latestEnd());
+
+        int start_time = getStartHour(630);
+        int end_time = getEndHour(1430);
+
+
         // Row Loop
         for (int row = 0; row < hours_day + 1; row++) {
 
             TableRow table_row = new TableRow(this);
             table_row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
+            if(!(row >= start_time && row < end_time || row == hours_day)) {
+                table_row.setVisibility(TableRow.GONE);
+            }
 
             // Column Loop
             for (int col = 0; col <= days_week; col++) {
@@ -112,9 +138,30 @@ public class Visualize extends ActionBarActivity {
                         table_row.addView(tv);
                     } else {
                         //Configure what it should look like
-                        TextView tv = timeTextView();
-                        tv.setText("XXXX");
-                        table_row.addView(tv);
+                        View vis_box = getLayoutInflater().inflate(R.layout.vis_layout, null);
+
+                        View start = vis_box.findViewById(R.id.vis_top);
+                        View middle = vis_box.findViewById(R.id.vis_mid);
+                        View end = vis_box.findViewById(R.id.vis_bot);
+
+                        start.setLayoutParams(new TableRow.LayoutParams());
+                        start.getLayoutParams().height = 100;
+                        start.getLayoutParams().width = getColumnWidth();
+                        start.setBackgroundColor(getResources().getColor(R.color.dark_aqua));
+
+
+                        middle.setLayoutParams(new TableRow.LayoutParams());
+                        middle.getLayoutParams().height = 100;
+                        middle.getLayoutParams().width = getColumnWidth();
+                        middle.setBackgroundColor(getResources().getColor(R.color.dark_gray));
+
+
+                        end.setLayoutParams(new TableRow.LayoutParams());
+                        end.getLayoutParams().height = 100;
+                        end.getLayoutParams().width = getColumnWidth();
+                        end.setBackgroundColor(getResources().getColor(R.color.aqua));
+
+                        table_row.addView(vis_box);
                     }
                 }
 
@@ -125,14 +172,24 @@ public class Visualize extends ActionBarActivity {
         }
     }
 
+    private int getStartHour(int input) {
+        return input/100;
+    }
+    private int getEndHour(int input) {
+        return(int) Math.ceil((double)input/100);
+    }
+
+    private int getColumnWidth() {
+        //return Math.round(dpWidth/(8));
+        return pxWidth/(days_week + 1);
+    }
+
     private TextView timeTextView() {
         TextView tv = new TextView(this);
         tv.setTextColor(getResources().getColor(R.color.black));
-        tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+        tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
         tv.setGravity(Gravity.CENTER);
-        tv.setBackgroundResource(R.drawable.vis_cell);
-        tv.setPadding(5, 5, 5, 5);
         return tv;
     }
 

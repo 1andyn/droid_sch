@@ -440,7 +440,7 @@ public class Search extends ActionBarActivity implements App_const {
                 break;
             case 0:
                 debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
+                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1320, "SAKAM D101",
                         "HOLM 243", 2, 20, 0, 10, "1/3 to 4/27",
                         "MATH CLASS ");
 
