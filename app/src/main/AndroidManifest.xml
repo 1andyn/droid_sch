@@ -50,8 +50,13 @@
         </activity>
         <activity
             android:name=".Viewer"
-            android:theme="@style/Theme.AppCompat"
-            android:label="@string/title_activity_viewer" >
+            android:label="@string/title_activity_viewer"
+            android:theme="@style/Theme.AppCompat" >
+        </activity>
+        <activity
+            android:name=".Visualize"
+            android:label="@string/title_activity_visualize"
+            android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
 
