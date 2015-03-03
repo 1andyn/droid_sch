@@ -51,12 +51,12 @@
     <string name="menu_crs_min">Set Minimum Course Count</string>
     <string name="menu_tblock">Set Time Off</string>
     <string name="str_panel_add">Add to List</string>
-    <string name="menu_time_frame">Set Schedule Time Frames</string>
-    <string name="res_credit">Credits: </string>
-    <string name="res_sect">Section: </string>
+    <string name="menu_time_frame">Schedule Start/End Times</string>
+    <string name="res_credit">Cred: </string>
+    <string name="res_sect">Sec: </string>
     <string name="res_seats">Seats Avail: </string>
     <string name="res_wl">Waitlisted: </string>
-    <string name="res_wla">Waitlisted Avail: </string>
+    <string name="res_wla">Wait Avail: </string>
     <string name="res_dates">Dates: </string>
     <string name="res_preq">Prequsites: </string>
     <string name="res_foc">Focus/GE: </string>
@@ -241,5 +241,6 @@
 
     <string name="title_activity_builder">Add courses to Start!</string>
     <string name="title_activity_viewer">View Schedules</string>
+    <string name="title_activity_visualize">Visualize</string>
 
 </resources>
