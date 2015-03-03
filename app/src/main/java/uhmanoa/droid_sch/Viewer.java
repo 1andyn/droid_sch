@@ -1,5 +1,6 @@
 package uhmanoa.droid_sch;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -46,8 +47,17 @@ public class Viewer extends ActionBarActivity {
         loadImageResources();
         configureViewStubs();
         configureListView();
+        debugVisualize();
 //        toggle_ViewStub();
     }
+
+    //DEBUG
+    private void debugVisualize() {
+        Intent i;
+        i = new Intent(this, Visualize.class);
+        startActivity(i);
+    }
+
 
     private void setupDebugSchedules() {
         Schedule sch = new Schedule();
