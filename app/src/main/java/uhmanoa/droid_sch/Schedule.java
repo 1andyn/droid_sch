@@ -76,4 +76,27 @@ public class Schedule {
 		for (Course c : getCourses())
 			c.display();
 	}
+
+    public int earliestStart() {
+        int time = 0;
+        for(Course c: getCourses()) {
+            int temp = c.getStart1();
+            int temp2 = c.getStart2();
+            temp = Math.min(temp, temp2);
+            time = Math.min(time, temp);
+        }
+        return time;
+    }
+
+    public int latestEnd() {
+        int time = 0;
+        for(Course c: getCourses()) {
+            int temp = c.getEnd1();
+            int temp2 = c.getEnd2();
+            temp = Math.max(temp, temp2);
+            time = Math.max(time, temp);
+        }
+        return time;
+    }
+
 }
