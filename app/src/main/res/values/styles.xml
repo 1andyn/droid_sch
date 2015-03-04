@@ -18,4 +18,9 @@
         <item name="android:padding">10dip</item>
     </style>
 
+    //<!-- Hack for Robolectric to run with appcompat.v7 -->
+    <style name="RoboAppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        //<!-- Customize your theme here. -->
+    </style>
+
 </resources>
