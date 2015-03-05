@@ -11,9 +11,14 @@ import org.robolectric.res.Fs;
 
 import java.util.ArrayList;
 
+import uhmanoa.droid_sch.Course;
+import uhmanoa.droid_sch.Schedule;
+import uhmanoa.droid_sch.Vis_Cell;
+import uhmanoa.droid_sch.Vis_CellRow;
 import uhmanoa.droid_sch.Visualize;
 
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -55,5 +60,57 @@ public class VisualizeTest {
         assertThat(hours.get(23), equalTo("11:00p"));
     }
 
+
+    @Test
+    public void testWeightCalculation() {
+        Activity activity = Robolectric.setupActivity(Visualize.class);
+        Visualize vs = (Visualize)activity;
+
+        ArrayList<Character> days1 = new ArrayList<Character>();
+        days1.add('M');
+        days1.add('W');
+        days1.add('F');
+
+        Schedule sch = new Schedule();
+        Course crs = new Course("ICS 314", "Software Engineering I", 51804, 3,
+                "B Auernheimer", days1, 830, 920, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                "MATH CLASS ");
+        sch.addCourse(crs);
+        vs.setSchedule(sch);
+
+        ArrayList<Vis_CellRow> visual_weights = vs.DEBUG_getHeights();
+        Vis_CellRow vcr1 = visual_weights.get(8);
+        Vis_CellRow vcr2 = visual_weights.get(9);
+        Vis_Cell mon = vcr1.getVisCell(1);
+        Vis_Cell mon2 = vcr2.getVisCell(1);
+        assertEquals(2,mon.getTimeCase()); // one course starts in time block
+        assertEquals(1,mon2.getTimeCase()); // one course ends in time block
+        assertEquals(150, mon.getBot()); // Since 30 minutes is half hour, half max height is 150
+        assertEquals(150, mon.getMid()); // remaining space is 150
+        assertEquals(0, mon.getTop()); // remaining space is 150
+        assertEquals(100, mon2.getTop()); // Since 20 minutes is 2/3 hr, 300(2/3) = 100
+        assertEquals(200, mon2.getMid()); // remaining space is 200
+        assertEquals(0, mon2.getBot()); // bottom is empty
+        mon = vcr1.getVisCell(3);
+        mon2 = vcr2.getVisCell(3);
+        assertEquals(2,mon.getTimeCase()); // one course starts in time block
+        assertEquals(1,mon2.getTimeCase()); // one course ends in time block
+        assertEquals(150, mon.getBot()); // Since 30 minutes is half hour, half max height is 150
+        assertEquals(150, mon.getMid()); // remaining space is 150
+        assertEquals(0, mon.getTop()); // remaining space is 150
+        assertEquals(100, mon2.getTop()); // Since 20 minutes is 2/3 hr, 300(2/3) = 100
+        assertEquals(200, mon2.getMid()); // remaining space is 200
+        assertEquals(0, mon2.getBot()); // bottom is empty
+        mon = vcr1.getVisCell(5);
+        mon2 = vcr2.getVisCell(5);
+        assertEquals(2,mon.getTimeCase()); // one course starts in time block
+        assertEquals(1,mon2.getTimeCase()); // one course ends in time block
+        assertEquals(150, mon.getBot()); // Since 30 minutes is half hour, half max height is 150
+        assertEquals(150, mon.getMid()); // remaining space is 150
+        assertEquals(0, mon.getTop()); // remaining space is 150
+        assertEquals(100, mon2.getTop()); // Since 20 minutes is 2/3 hr, 300(2/3) = 100
+        assertEquals(200, mon2.getMid()); // remaining space is 200
+        assertEquals(0, mon2.getBot()); // bottom is empty
+    }
 
 }
