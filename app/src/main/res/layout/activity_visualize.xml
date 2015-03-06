@@ -13,5 +13,13 @@
             android:layout_height="match_parent"
             android:shrinkColumns="*"
             android:stretchColumns="*"></TableLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/vis_LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            </LinearLayout>
     </LinearLayout>
 </ScrollView>
+
+

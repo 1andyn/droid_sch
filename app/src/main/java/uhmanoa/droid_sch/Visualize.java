@@ -1,26 +1,17 @@
 package uhmanoa.droid_sch;
 
 import android.app.Activity;
-import android.content.res.Configuration;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -46,7 +37,7 @@ public class Visualize extends Activity {
     int pxWidth;
 
     private void initializeTimeValues() {
-        time_values = new ArrayList<String>();
+        time_values = new ArrayList<>();
         int counter = 1;
         boolean start_PM = false;
         for (int x = 0; x < hours_day; x++) {
@@ -88,7 +79,7 @@ public class Visualize extends Activity {
     }
 
     private void initializeColorValues() {
-        color_values = new ArrayList<Integer>();
+        color_values = new ArrayList<>();
         color_values.add(R.color.light_red);
         color_values.add(R.color.light_blue);
         color_values.add(R.color.light_green);
@@ -100,7 +91,7 @@ public class Visualize extends Activity {
     }
 
     private void initializeDayValues() {
-        day_values = new ArrayList<String>();
+        day_values = new ArrayList<>();
         day_values.add("U");
         day_values.add("M");
         day_values.add("T");
@@ -129,6 +120,44 @@ public class Visualize extends Activity {
         table_layout = (TableLayout) findViewById(R.id.tableLayout1);
         populateHeights();
         BuildTable(sch);
+        config_ListDisplay();
+    }
+
+    private void config_ListDisplay() {
+        LinearLayout ll = (LinearLayout) findViewById(R.id.vis_LinearLayout1);
+
+        for(Course c: sch.getCourses()) {
+            View vw = getLayoutInflater().inflate(R.layout.vis_list_item, null);
+            vw.setBackgroundColor(getResources().getColor(color_values.get((int)c.getID())));
+            LinearLayout top = (LinearLayout) vw.findViewById(R.id.vis_frs_crs);
+            LinearLayout bot = (LinearLayout) vw.findViewById(R.id.vis_sec_crs);
+            if(c.getStart2() == 9999) {
+                bot.setVisibility(View.GONE);
+            } else {
+                TextView crs2 = (TextView) vw.findViewById(R.id.vis_crs2);
+                TextView time2 = (TextView) vw.findViewById(R.id.vis_time2);
+                TextView room2 = (TextView) vw.findViewById(R.id.vis_room2);
+                TextView day2 = (TextView) vw.findViewById(R.id.vis_days2);
+
+                crs2.setText(c.getCourse());
+                time2.setText(c.getTimeString(true));
+                room2.setText(c.getRoom2());
+                day2.setText(c.getDayString(true));
+            }
+
+            TextView crs1 = (TextView) vw.findViewById(R.id.vis_crs);
+            TextView time1 = (TextView) vw.findViewById(R.id.vis_time);
+            TextView room1 = (TextView) vw.findViewById(R.id.vis_room);
+            TextView day = (TextView) vw.findViewById(R.id.vis_days);
+
+            crs1.setText(c.getCourse());
+            time1.setText(c.getTimeString(false));
+            room1.setText(c.getRoom1());
+            day.setText(c.getDayString(false));
+
+            ll.addView(vw);
+        }
+
     }
 
     private void DEBUG_schedules() {
@@ -149,11 +178,11 @@ public class Visualize extends Activity {
         sch.addCourse(crs);
         sch.addCourse(crs2);
         sch.addCourse(crs3);
-        ArrayList<Character> days2 = new ArrayList<Character>();
+        ArrayList<Character> days2 = new ArrayList<>();
         days2.add('T');
         days2.add('R');
 
-        ArrayList<Character> days3 = new ArrayList<Character>();
+        ArrayList<Character> days3 = new ArrayList<>();
         days3.add('S');
         Course crs4 = new Course("ICS 314", "Software Engineering I", 51804, 3,
                 "B Auernheimer", days2, 855, 1145, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
@@ -326,8 +355,6 @@ public class Visualize extends Activity {
         // TRUE = second course e.g. getStart2
         // Sel is for keeping track of which start/end time we are looking at
 
-//        System.out.println("START: " + start + " END: " + end +  " SIZE: " + matches.size());
-
         //CASE 4 CHECKER
         for (Course c : matches) {
             if ((courseTimeToMinutes(c.getStart1()) <= start) &&
@@ -382,7 +409,6 @@ public class Visualize extends Activity {
                 start_end.add(true); //Looking at START TIME
                 sec_sel.add(false); //Looking at START1/END1
             }
-
             if(c.getStart2() != 9999) {
                 bot = courseTimeToMinutes(c.getStart2());
                 if (bot >= start && bot <= end) {
@@ -392,7 +418,6 @@ public class Visualize extends Activity {
                 }
             }
             // ----------------
-
             // CASE 3 -> Multiple Courses  inside ACTUAL_MATCHES
 
         }
@@ -454,7 +479,7 @@ public class Visualize extends Activity {
 
                 if (first_course_time > second_course_time) {
                     //this means first course is BOT so it needs to be SECOND element
-                    ArrayList<Course> corrected_list = new ArrayList<Course>();
+                    ArrayList<Course> corrected_list = new ArrayList<>();
                     corrected_list.add(special_matches.get(1));
                     corrected_list.add(special_matches.get(0));
                     secondary_crs.add(sec_sel.get(1));
@@ -487,7 +512,6 @@ public class Visualize extends Activity {
                 // Iterate al_strobj and check if there's an existing match to the ID
                 Long cmp;
                 cmp = crs.get(x).getID();
-
                 // If Match Exist, set match to true
                 if (cmp.equals(id)) {
                     //Match found
@@ -505,7 +529,7 @@ public class Visualize extends Activity {
     }
 
     private ArrayList<Course> getDayMatches(int day, Schedule s) {
-        ArrayList<Course> matches = new ArrayList<Course>();
+        ArrayList<Course> matches = new ArrayList<>();
         if(s.getCourses().size() == 0 || s.getCourses() == null) {
             return matches;
         }
@@ -620,7 +644,6 @@ public class Visualize extends Activity {
 
     private int getTopHeight(int EndTime) {
         if (EndTime == -1) {
-//            System.out.println("getTopHeight call: EndTime is empty");
             return 0;
         }
         final int max_height = 300;
@@ -634,7 +657,6 @@ public class Visualize extends Activity {
 
     private int getBotHeight(int StartTime) {
         if (StartTime == -1) {
-//            System.out.println("getBotHeight call: StartTime is empty");
             return 0;
         }
         final int max_height = 300;
@@ -651,7 +673,6 @@ public class Visualize extends Activity {
     }
 
     private int getColumnWidth() {
-        //return Math.round(dpWidth/(8));
         return pxWidth / (days_week + 1);
     }
 
