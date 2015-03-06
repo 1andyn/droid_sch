@@ -79,7 +79,7 @@ public class Visualize extends Activity {
         return time_values;
     }
 
-    public ArrayList<Vis_CellRow> DEBUG_getHeights() {
+    public ArrayList<Vis_CellRow> DEBUG_getHeights(Schedule sce) {
         return height_values;
     }
 
@@ -89,14 +89,14 @@ public class Visualize extends Activity {
 
     private void initializeColorValues() {
         color_values = new ArrayList<Integer>();
-        color_values.add(getResources().getColor(R.color.light_red));
-        color_values.add(getResources().getColor(R.color.light_blue));
-        color_values.add(getResources().getColor(R.color.light_green));
-        color_values.add(getResources().getColor(R.color.light_orange));
-        color_values.add(getResources().getColor(R.color.light_magenta));
-        color_values.add(getResources().getColor(R.color.navy));
-        color_values.add(getResources().getColor(R.color.mauve));
-
+        color_values.add(R.color.light_red);
+        color_values.add(R.color.light_blue);
+        color_values.add(R.color.light_green);
+        color_values.add(R.color.light_orange);
+        color_values.add(R.color.light_magenta);
+        color_values.add(R.color.navy);
+        color_values.add(R.color.mauve);
+        color_values.add(R.color.dark_aqua);
     }
 
     private void initializeDayValues() {
@@ -108,10 +108,6 @@ public class Visualize extends Activity {
         day_values.add("R");
         day_values.add("F");
         day_values.add("S");
-    }
-
-    public void setSchedule(Schedule s) {
-        sch = s;
     }
 
     private void configureDisplay() {
@@ -127,10 +123,51 @@ public class Visualize extends Activity {
         configureDisplay();
         initializeTimeValues();
         initializeDayValues();
+        initializeColorValues();
+        loadSchedule();
         height_values = new ArrayList<Vis_CellRow>();
         table_layout = (TableLayout) findViewById(R.id.tableLayout1);
-        Schedule test = new Schedule();
-        BuildTable(test);
+        populateHeights();
+        BuildTable(sch);
+    }
+
+    private void DEBUG_schedules() {
+        ArrayList<Character> days1 = new ArrayList<Character>();
+        days1.add('M');
+        days1.add('W');
+        days1.add('F');
+        sch = new Schedule();
+        Course crs = new Course("ICS 314", "Software Engineering I", 51804, 3,
+                "B Auernheimer", days1, 830, 920, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                "MATH CLASS ");
+        Course crs2 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+                "B Auernheimer", days1, 930, 1020, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                "MATH CLASS ");
+        Course crs3 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+                "B Auernheimer", days1, 1030, 1120, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                "MATH CLASS ");
+        sch.addCourse(crs);
+        sch.addCourse(crs2);
+        sch.addCourse(crs3);
+        ArrayList<Character> days2 = new ArrayList<Character>();
+        days2.add('T');
+        days2.add('R');
+
+        ArrayList<Character> days3 = new ArrayList<Character>();
+        days3.add('S');
+        Course crs4 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+                "B Auernheimer", days2, 855, 1145, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                "MATH CLASS ");
+        Course crs5 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+                "B Auernheimer", days3, 1130, 1245, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                "MATH CLASS ");
+        sch.addCourse(crs4);
+        sch.addCourse(crs5);
+    }
+
+    private void loadSchedule() {
+        //stub for now, needs to load schedule from SQLite database
+        DEBUG_schedules();
     }
 
     private void BuildTable(Schedule sch) {
@@ -148,7 +185,11 @@ public class Visualize extends Activity {
                 table_row.setVisibility(TableRow.GONE);
             }
 
-            Vis_CellRow vis_row = height_values.get(row);
+            Vis_CellRow vis_row = null;
+            if(row != hours_day) {
+                vis_row = height_values.get(row);
+            }
+
             // Column Loop
             for (int col = 0; col <= days_week; col++) {
 
@@ -171,31 +212,43 @@ public class Visualize extends Activity {
                         table_row.addView(vw);
                     } else {
                         //Configure what it should look like
+
                         View vis_box = getLayoutInflater().inflate(R.layout.vis_layout, null);
 
                         View start = vis_box.findViewById(R.id.vis_top);
                         View middle = vis_box.findViewById(R.id.vis_mid);
                         View end = vis_box.findViewById(R.id.vis_bot);
 
-                        Vis_Cell vc = vis_row.getVisCell(0);
+                        Vis_Cell vc = vis_row.getVisCell(col - 1);
 
                         start.setLayoutParams(new TableRow.LayoutParams());
                         start.getLayoutParams().height = vc.getTop();
                         start.getLayoutParams().width = getColumnWidth();
-                        start.setBackgroundColor(getResources().getColor(color_values.get(
-                                (int)vc.getTopColor())));
-
+                        if((int)vc.getTopColor() == white) {
+                            start.setBackgroundColor(getResources().getColor(R.color.white));
+                        } else {
+                            start.setBackgroundColor(getResources().getColor(color_values.get(
+                                    (int) vc.getTopColor())));
+                        }
                         middle.setLayoutParams(new TableRow.LayoutParams());
                         middle.getLayoutParams().height = vc.getMid();
                         middle.getLayoutParams().width = getColumnWidth();
-                        middle.setBackgroundColor(getResources().getColor(color_values.get(
-                                (int)vc.getMidColor())));
+                        if((int)vc.getMidColor() == white) {
+                            middle.setBackgroundColor(getResources().getColor(R.color.white));
+                        } else {
+                            middle.setBackgroundColor(getResources().getColor(color_values.get(
+                                    (int) vc.getMidColor())));
+                        }
 
                         end.setLayoutParams(new TableRow.LayoutParams());
                         end.getLayoutParams().height = vc.getBot();
                         end.getLayoutParams().width = getColumnWidth();
-                        end.setBackgroundColor(getResources().getColor(color_values.get(
-                                (int)vc.getBotColor())));;
+                        if((int)vc.getBotColor() == white) {
+                            end.setBackgroundColor(getResources().getColor(R.color.white));
+                        } else {
+                            end.setBackgroundColor(getResources().getColor(color_values.get(
+                                    (int) vc.getBotColor())));
+                        }
 
                         table_row.addView(vis_box);
                     }
@@ -211,7 +264,7 @@ public class Visualize extends Activity {
 
         int start = 0;
         int end = 59;
-        for (int x = 0; x < 23; x++) {
+        for (int x = 0; x < hours_day; x++) {
             //row logic
 
             Vis_CellRow vcr = new Vis_CellRow();
@@ -223,9 +276,11 @@ public class Visualize extends Activity {
                     vcr.addVisCell(getVisCell(null, null, false, false, 5));
                 } else {
                     int vis_case = 5;
-                    ArrayList<Boolean> course_selector = new ArrayList<Boolean>();
-                    ArrayList<Course> actual_matches = getCoursesWithin(start, end, vis_case,
-                            course_selector, matches);
+
+                    Vis_Package vp = getCoursesWithin(start, end,matches);
+                    ArrayList<Course> actual_matches = vp.getMatches();
+                    ArrayList<Boolean> course_selector = vp.getSec();
+                    vis_case = vp.getCase();
                     matches = null; //dereference
 
                     if (actual_matches.size() == 0) {
@@ -252,37 +307,42 @@ public class Visualize extends Activity {
                                     course_selector.get(0), false, 4));
                             continue;
                     }
-
+                    //CASE 5 FOUND NOTHING
+                    vcr.addVisCell(getVisCell(null, null, false, false, 5));
+                    continue;
                 }
             }
+            height_values.add(vcr);
             start = end + 1;
             end = end + 60;
         }
     }
 
-    private ArrayList<Course> getCoursesWithin(int start, int end, int vcase,
-                                               ArrayList<Boolean> sel, ArrayList<Course> matches) {
+    private Vis_Package getCoursesWithin(int start, int end, ArrayList<Course> matches) {
 
         ArrayList<Course> actual_matches = new ArrayList<Course>();
+        ArrayList<Boolean> secondary_crs = new ArrayList<Boolean>();
         //boolean values of sel, FALSE = first course e.g. getStart1
         // TRUE = second course e.g. getStart2
         // Sel is for keeping track of which start/end time we are looking at
 
+//        System.out.println("START: " + start + " END: " + end +  " SIZE: " + matches.size());
+
         //CASE 4 CHECKER
         for (Course c : matches) {
-            if ((c.getStart1() <= start) && (c.getEnd1() >= end)) {
+            if ((courseTimeToMinutes(c.getStart1()) <= start) &&
+                    (courseTimeToMinutes(c.getEnd1()) >= end)) {
                 //this course goes through this block of time
                 actual_matches.add(c);
-                sel.add(false);
-                vcase = 4;
-                return actual_matches;
+                secondary_crs.add(false);
+                return new Vis_Package(actual_matches, secondary_crs, 4);
             }
 
-            if ((c.getStart2() <= start) && (c.getEnd2() >= end)) {
+            if ((courseTimeToMinutes(c.getStart2()) <= start) &&
+                    (courseTimeToMinutes(c.getEnd2()) >= end)) {
                 actual_matches.add(c);
-                vcase = 4;
-                sel.add(true);
-                return actual_matches;
+                secondary_crs.add(true);
+                return new Vis_Package(actual_matches, secondary_crs, 4);
             }
         }
 
@@ -294,6 +354,7 @@ public class Visualize extends Activity {
         // sec_sel is same as sel ArrayList, except since we may rearrange it, use temp for now
 
         for (Course c : matches) {
+
             //  CASE 1 CHECKS
             int top = courseTimeToMinutes(c.getEnd1());
             if (top >= start && top <= end) {
@@ -302,13 +363,17 @@ public class Visualize extends Activity {
                 sec_sel.add(false); //Looking at START1/END1
             }
 
-            top = courseTimeToMinutes(c.getEnd2());
-            if (top >= start && top <= end) {
-                special_matches.add(c);
-                start_end.add(false);//Looking at END TIME
-                sec_sel.add(true);//Looking at START2/END2
+            if(c.getEnd2() != 9999) {
+                top = courseTimeToMinutes(c.getEnd2());
+                if (top >= start && top <= end) {
+                    special_matches.add(c);
+                    start_end.add(false);//Looking at END TIME
+                    sec_sel.add(true);//Looking at START2/END2
+                }
             }
             // ----------------
+
+
 
             //  CASE 2 CHECKS
             int bot = courseTimeToMinutes(c.getStart1());
@@ -318,11 +383,13 @@ public class Visualize extends Activity {
                 sec_sel.add(false); //Looking at START1/END1
             }
 
-            bot = courseTimeToMinutes(c.getStart2());
-            if (bot >= start && bot <= end) {
-                special_matches.add(c);
-                start_end.add(true); //Looking at START TIME
-                sec_sel.add(true);//Looking at START2/END2
+            if(c.getStart2() != 9999) {
+                bot = courseTimeToMinutes(c.getStart2());
+                if (bot >= start && bot <= end) {
+                    special_matches.add(c);
+                    start_end.add(true); //Looking at START TIME
+                    sec_sel.add(true);//Looking at START2/END2
+                }
             }
             // ----------------
 
@@ -330,10 +397,10 @@ public class Visualize extends Activity {
 
         }
 
+        int vcase = 5;
         switch (special_matches.size()) {
             case 1:
                 //if theres size 1, theres only one course; either case 1 or 2
-                sel = sec_sel;
                 if (start_end.get(0)) {
                     //looking at starting time
                     vcase = 2; //CASE 2
@@ -341,7 +408,7 @@ public class Visualize extends Activity {
                     //looking at ending time
                     vcase = 1; //CASE 1
                 }
-                return special_matches;
+                return new Vis_Package(special_matches, sec_sel, vcase);
 
             case 2:
                 //first element need of actual matches and sel arraylist need to be TOP
@@ -388,24 +455,23 @@ public class Visualize extends Activity {
                 if (first_course_time > second_course_time) {
                     //this means first course is BOT so it needs to be SECOND element
                     ArrayList<Course> corrected_list = new ArrayList<Course>();
-                    sel.clear();
                     corrected_list.add(special_matches.get(1));
                     corrected_list.add(special_matches.get(0));
-                    sel.add(sec_sel.get(1));
-                    sel.add(sec_sel.get(0));
-                    return corrected_list;
+                    secondary_crs.add(sec_sel.get(1));
+                    secondary_crs.add(sec_sel.get(0));
+                    return new Vis_Package(corrected_list, secondary_crs, vcase);
                 } else {
                     //original order is correct
-                    sel = sec_sel;
-                    return special_matches;
+                    return new Vis_Package(special_matches, sec_sel, vcase);
                 }
         }
 
         //CASE 5
-        return actual_matches;
+        return new Vis_Package(actual_matches, secondary_crs, 5);
     }
 
     public void assignUniqueID(ArrayList<Course> crs) {
+        if(crs == null || crs.size() == 0) return;
         for (Course c : crs) {
             c.setID(uniqueCourseID(crs));
         }
@@ -440,17 +506,21 @@ public class Visualize extends Activity {
 
     private ArrayList<Course> getDayMatches(int day, Schedule s) {
         ArrayList<Course> matches = new ArrayList<Course>();
+        if(s.getCourses().size() == 0 || s.getCourses() == null) {
+            return matches;
+        }
+
         char firstLetter = day_values.get(day).charAt(0);
         for (Course c : s.getCourses()) {
             ArrayList<Character> days = c.getDays1();
             if (days.contains(firstLetter)) {
                 matches.add(c);
-                break; //already added to list so remove
+                continue; //already added to list so remove
             }
             if (c.getStart2() != 9999) {
                 if (c.getDays2().contains(firstLetter)) {
                     matches.add(c);
-                    break;
+                    continue;
                 }
             }
         }
@@ -506,22 +576,22 @@ public class Visualize extends Activity {
         switch (vcase) {
             case 1:
                 return new Vis_Cell(top_height, (max_height - top_height), 0, top.getID(), white,
-                        white);
+                        white, vcase);
             case 2:
                 return new Vis_Cell(0, (max_height - bot_height), bot_height, white, white,
-                        bot.getID());
+                        bot.getID(), vcase);
             case 3:
                 return new Vis_Cell(top_height, (max_height - top_height - bot_height), bot_height,
-                        top.getID(), white, bot.getID());
+                        top.getID(), white, bot.getID(),vcase);
             case 4:
                 // Assumes that if a time entire hour is taken by a course then it the course is
                 // passed through the TOP course parameter
-                return new Vis_Cell(0, max_height, 0, white, top.getID(), white);
+                return new Vis_Cell(0, max_height, 0, white, top.getID(), white, vcase);
             case 5:
-                return new Vis_Cell(0, max_height, 0, white, white, white);
+                return new Vis_Cell(0, max_height, 0, white, white, white, vcase);
             default:
                 //just leave it empty
-                return new Vis_Cell(0, max_height, 0, white, white, white);
+                return new Vis_Cell(0, max_height, 0, white, white, white, vcase);
         }
     }
 
@@ -540,24 +610,40 @@ public class Visualize extends Activity {
         return crstime % 100;
     }
 
+    public int DEBUG_getTopHeight(int EndTime) {
+        return getTopHeight(EndTime);
+    }
+
+    public int DEBUG_getBotHeight(int StartTime) {
+        return getBotHeight(StartTime);
+    }
+
     private int getTopHeight(int EndTime) {
         if (EndTime == -1) {
-            System.out.println("getTopHeight call: EndTime is empty");
+//            System.out.println("getTopHeight call: EndTime is empty");
             return 0;
         }
         final int max_height = 300;
         final int min_hour = 60;
-        return (getTimeMinutes(EndTime) / 60) * max_height;
+
+        double et = (double) getTimeMinutes(EndTime);
+        double height = (et/60) * max_height;
+
+        return (int) height;
     }
 
     private int getBotHeight(int StartTime) {
         if (StartTime == -1) {
-            System.out.println("getBotHeight call: StartTime is empty");
+//            System.out.println("getBotHeight call: StartTime is empty");
             return 0;
         }
         final int max_height = 300;
         final int min_hour = 60;
-        return ((min_hour - getTimeMinutes(StartTime)) / 60) * max_height;
+
+        double st= (double) getTimeMinutes(StartTime);
+        double height = ((min_hour - st)/60) * max_height;
+
+        return (int) height;
     }
 
     private int getEndHour(int input) {

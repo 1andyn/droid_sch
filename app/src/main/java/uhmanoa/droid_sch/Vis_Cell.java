@@ -14,7 +14,7 @@ public class Vis_Cell {
     private ArrayList<Long> color_container;
     private int time_case = 0;
 
-    public Vis_Cell(int t, int m, int b, long x, long y, long z) {
+    public Vis_Cell(int t, int m, int b, long x, long y, long z, int vcase) {
         height_container = new ArrayList<Integer>();
         color_container = new ArrayList<Long>();
         height_container.add(t);
@@ -23,6 +23,7 @@ public class Vis_Cell {
         color_container.add(x);
         color_container.add(y);
         color_container.add(z);
+        setTimeCase(vcase);
     }
 
     public void setTimeCase(int timecase) {

@@ -60,6 +60,22 @@ public class VisualizeTest {
         assertThat(hours.get(23), equalTo("11:00p"));
     }
 
+    @Test
+    public void testHeightCalculations() throws Exception {
+        Activity activity = Robolectric.setupActivity(Visualize.class);
+        Visualize vs = (Visualize)activity;
+        int test_end = 910;
+        assertEquals(50, vs.DEBUG_getTopHeight(test_end));
+        int test_start = 950;
+        assertEquals(50, vs.DEBUG_getBotHeight(test_start));
+
+        test_end = 830;
+        assertEquals(150, vs.DEBUG_getTopHeight(test_end));
+        test_start = 1045;
+        assertEquals(75, vs.DEBUG_getBotHeight(test_start));
+    }
+
+
 
     @Test
     public void testWeightCalculation() {
@@ -76,15 +92,16 @@ public class VisualizeTest {
                 "B Auernheimer", days1, 830, 920, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
         sch.addCourse(crs);
-        vs.setSchedule(sch);
 
-        ArrayList<Vis_CellRow> visual_weights = vs.DEBUG_getHeights();
+        ArrayList<Vis_CellRow> visual_weights = vs.DEBUG_getHeights(sch);
         Vis_CellRow vcr1 = visual_weights.get(8);
         Vis_CellRow vcr2 = visual_weights.get(9);
         Vis_Cell mon = vcr1.getVisCell(1);
         Vis_Cell mon2 = vcr2.getVisCell(1);
+        System.out.println("Checking Case Values");
         assertEquals(2,mon.getTimeCase()); // one course starts in time block
         assertEquals(1,mon2.getTimeCase()); // one course ends in time block
+        System.out.println("Checking Height Values");
         assertEquals(150, mon.getBot()); // Since 30 minutes is half hour, half max height is 150
         assertEquals(150, mon.getMid()); // remaining space is 150
         assertEquals(0, mon.getTop()); // remaining space is 150
@@ -93,8 +110,10 @@ public class VisualizeTest {
         assertEquals(0, mon2.getBot()); // bottom is empty
         mon = vcr1.getVisCell(3);
         mon2 = vcr2.getVisCell(3);
+        System.out.println("Checking Case Values");
         assertEquals(2,mon.getTimeCase()); // one course starts in time block
         assertEquals(1,mon2.getTimeCase()); // one course ends in time block
+        System.out.println("Checking Height Values");
         assertEquals(150, mon.getBot()); // Since 30 minutes is half hour, half max height is 150
         assertEquals(150, mon.getMid()); // remaining space is 150
         assertEquals(0, mon.getTop()); // remaining space is 150
@@ -103,8 +122,10 @@ public class VisualizeTest {
         assertEquals(0, mon2.getBot()); // bottom is empty
         mon = vcr1.getVisCell(5);
         mon2 = vcr2.getVisCell(5);
+        System.out.println("Checking Case Values");
         assertEquals(2,mon.getTimeCase()); // one course starts in time block
         assertEquals(1,mon2.getTimeCase()); // one course ends in time block
+        System.out.println("Checking Height Values");
         assertEquals(150, mon.getBot()); // Since 30 minutes is half hour, half max height is 150
         assertEquals(150, mon.getMid()); // remaining space is 150
         assertEquals(0, mon.getTop()); // remaining space is 150
