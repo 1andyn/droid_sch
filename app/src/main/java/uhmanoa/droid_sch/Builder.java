@@ -91,7 +91,7 @@ public class Builder extends ActionBarActivity implements App_const {
         configureListeners();
         configureListViews();
         handleIntent(getIntent());
-//        toggle_ViewStub();
+        toggle_ViewStub();
     }
 
     private void loadProfiles() {
