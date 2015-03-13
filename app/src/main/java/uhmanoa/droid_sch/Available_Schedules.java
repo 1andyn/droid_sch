@@ -87,6 +87,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         btnGoto.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
+        btnPrev.setEnabled(false);
+
         tvTitle.setText("Your search generated " + titles.size() + " schedules.");
         updateGotoButton();
     }
@@ -208,7 +210,15 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 int page = Integer.parseInt(input.getText().toString());
                                 if (page > 0 && page <= totalPages) {
-                                    currentPage = page - 1;  // subtract one for startint at zero
+                                    currentPage = page - 1;  // subtract one for starting at zero
+                                    if (currentPage == 0)
+                                        btnPrev.setEnabled(false);
+                                    if (currentPage == totalPages - 1)
+                                        btnNext.setEnabled(false);
+                                    if (currentPage < totalPages - 1)
+                                        btnNext.setEnabled(true);
+                                    if (currentPage > 0)
+                                        btnPrev.setEnabled(true);
                                     populateNextPage();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "You must enter a page number in the valid range from 1 to " + totalPages , Toast.LENGTH_SHORT).show();
