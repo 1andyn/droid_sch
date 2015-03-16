@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.text.Html;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-
 
 public class SchHashMap {
 

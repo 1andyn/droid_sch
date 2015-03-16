@@ -11,10 +11,8 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,7 +34,6 @@ import android.widget.Toast;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 

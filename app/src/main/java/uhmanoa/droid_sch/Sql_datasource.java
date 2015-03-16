@@ -1,12 +1,12 @@
 package uhmanoa.droid_sch;
 
-import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
 
 /* This is a helper class for interacting with the database such as retrieving, inserting
 * or deleting data. Functionality for this class will have to be implemented as more functionality
