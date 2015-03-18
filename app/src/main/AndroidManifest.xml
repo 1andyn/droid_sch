@@ -55,7 +55,8 @@
         </activity>
         <activity
             android:name=".Visualize"
-            android:label="@string/title_activity_visualize"
+            android:label="@string/title_activity_visualize">
+        </activity>
         <activity
             android:name=".Available_Schedules"
             android:label="@string/title_activity_available__schedules"
