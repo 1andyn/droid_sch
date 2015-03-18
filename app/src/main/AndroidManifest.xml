@@ -56,6 +56,9 @@
         <activity
             android:name=".Visualize"
             android:label="@string/title_activity_visualize"
+        <activity
+            android:name=".Available_Schedules"
+            android:label="@string/title_activity_available__schedules"
             android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
