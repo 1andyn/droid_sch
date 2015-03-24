@@ -34,19 +34,19 @@
             android:orientation="vertical">
             <!--android:paddingTop="50sp">-->
             <ViewStub
-                android:id="@+id/empty_search"
+                android:id="@+id/empty_desired"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:clickable="false"
-                android:layout="@layout/empty_search" />
+                android:layout="@layout/empty_desired" />
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="1dp">
                 <Button
-                    android:id="@+id/des_delete"
+                    android:id="@+id/main_delete"
                     style="@style/btnStyleGenoa"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -54,7 +54,7 @@
                     android:layout_weight="3"
                     android:text="@string/des_delete" />
                 <Button
-                    android:id="@+id/des_build"
+                    android:id="@+id/main_build"
                     style="@style/btnStyleGenoa"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"

@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Starting Time / Ending Time"
+        android:text="Minimum Course Count"
         android:id="@+id/textView" />
     <View
         android:focusable="false"
@@ -26,15 +26,12 @@
                 <CheckBox
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/start_chkbox"
-                    android:id="@+id/start_chkbox" />
-                <!--android:scaleX="0.9"-->
-                <!--android:scaleY="0.9"-->
-                <TimePicker
+                    android:text="Use Custom Min Course Count"
+                    android:id="@+id/enable_chkbox" />
+                <NumberPicker
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/start_picker" />
-
+                    android:id="@+id/num_picker" />
             </LinearLayout>
     </ScrollView>
 </LinearLayout>
