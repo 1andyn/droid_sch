@@ -49,15 +49,14 @@
                     android:id="@+id/results_add_CRN"
                     style="@style/btnStyleGenoa"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:height="20dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/res_crn" />
                 <Button
                     android:id="@+id/results_add_crs"
                     style="@style/btnStyleGenoa"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/res_crs" />
             </LinearLayout>

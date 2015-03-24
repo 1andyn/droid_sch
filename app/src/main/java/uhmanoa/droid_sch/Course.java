@@ -68,7 +68,7 @@ public class Course {
     /**
      * Used to identify when the view's checkbox ix checked
      */
-    private long ID;
+    private long ID = -1;
     /**
      * Unique identifier for modifying lists contaning courses
      */

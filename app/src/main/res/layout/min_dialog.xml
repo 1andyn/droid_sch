@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Minimum Course Count"
+        android:id="@+id/textView" />
+    <View
+        android:focusable="false"
+        android:layout_width="280dp"
+        android:layout_height="3dp"
+        android:padding="5dp"
+        android:background="@color/dark_aqua"/>
+    <ScrollView
+        android:id="@+id/filename_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <CheckBox
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Use Custom Min Course Count"
+                    android:id="@+id/enable_chkbox" />
+                <NumberPicker
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/num_picker" />
+            </LinearLayout>
+    </ScrollView>
+</LinearLayout>
