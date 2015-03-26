@@ -104,12 +104,12 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             subtitles.add("Num classes in sched " + i);
             Schedule s = new Schedule();
             for (int j = 0; j < 4; j++) {
-                ArrayList<Character> days = new ArrayList<Character>();
-                days.add('M');
-                days.add('W');
-                days.add('F');
-                Course c = new Course("EE" + j, 39390 + j, 3, "Professor " + j,
-                        days, 1230 + j, 1320+ j, "POST" + j);
+                ArrayList<String> days = new ArrayList<String>();
+                days.add("M");
+                days.add("W");
+                days.add("F");
+                Course c = new Course("EE" + j, "Stuff", 39390 + j, 3, "Professor " + j,
+                        days);// 1230 + j, 1320+ j, "POST" + j);
                 s.addCourse(c);
             }
             schedules.add(s);
@@ -119,12 +119,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         currentPage = 0;
 
         // find out how many pages we have
-        //totalPages = titles.size() / ITEMS_PER_PAGE;
         totalPages = schedules.size() / ITEMS_PER_PAGE;
         if ((schedules.size() % ITEMS_PER_PAGE) != 0)
             totalPages ++;
-        //if ((titles.size() % ITEMS_PER_PAGE) != 0)
-        //    totalPages ++;
     }
 
     private void populateNextPage(){
@@ -143,7 +140,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             schedPage.add(schedules.get(i));
         }
 
-        //adapter = new Sched_Adapter((Activity)this, t1, s1);
         Log.e(LOGTAG, "Size! " + schedules.size());
         adapter = new Sched_Adapter((Activity) this, schedPage);
         lv_item.setAdapter(adapter);
