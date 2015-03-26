@@ -16,7 +16,6 @@
     <string name="bt_txt_search">Search for Courses</string>
     <string name="dsc_mm_title">Main Menu Title Image</string>
     <string name="dsc_mm_logo">Main Menu Logo Image</string>
-    <string name="hello_world">Hello world!</string>
     <string name="bt_search">Search</string>
     <string name="txt_srch_hnt">Enter CRN or Course Name</string>
     <string name="bt_gefoc"> GE / Focus</string>
@@ -242,5 +241,17 @@
     <string name="title_activity_builder">Add courses to Start!</string>
     <string name="title_activity_viewer">View Schedules</string>
     <string name="title_activity_visualize">Visualize</string>
+    <string name="title_activity_create__schedules">Create_Schedules</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_available__schedules">Available Schedules</string>
+
+    <!-- Strings for Available Schedules Activity -->
+
+    <string name="previous">&lt;</string>
+    <string name="next">></string>
+    <string name="txt_num_sched">&lt;number of schedules></string>
+    <string name="bt_txt_save_sel">Save Selected</string>
+    <string name="txt_avail_sched_subtitle">Select the schedule(s) you would like to save.</string>
+    <string name="title_activity_preferences">Preferences</string>
 
 </resources>
