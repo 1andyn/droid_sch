@@ -165,7 +165,7 @@ public class Course {
      * this is considered one time segment.  Use full constructor if two time segments
      * are used.
      *
-     * @param course    Course name (i.e. EE324)
+     * @param crs    Course name (i.e. EE324)
      * @param title     Title of the course (Digital Sys and Computer Design)
      * @param crn       Course reference number
      * @param credits   Course credit hourse
