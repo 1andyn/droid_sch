@@ -103,6 +103,8 @@ public class Course {
     * */
 
 
+    private int semester;
+
     /**
      * Empty constructor
      */
@@ -857,5 +859,11 @@ public class Course {
     public boolean hasLab() {
         return !(this.getStart2() == 9999);
     }
+
+    public void setSemester(int sem) {
+        semester = sem;
+    }
+
+    public int getSemester() {return semester;}
 
 }

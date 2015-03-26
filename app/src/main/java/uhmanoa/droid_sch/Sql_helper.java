@@ -114,6 +114,7 @@ public class Sql_helper extends SQLiteOpenHelper {
             + COLUMN_hsl + " INT NOT NULL, "
             + COLUMN_ni + " INT NOT NULL, "
             + COLUMN_eth + " INT NOT NULL, "
+            + COLUMN_hap + " INT NOT NULL, "
             + COLUMN_oc + " INT NOT NULL, "
             + COLUMN_wi + " INT NOT NULL, " + " );";
 
