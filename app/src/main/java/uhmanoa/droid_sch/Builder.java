@@ -11,10 +11,8 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
@@ -36,7 +35,6 @@ import android.widget.Toast;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 
@@ -50,21 +48,20 @@ public class Builder extends ActionBarActivity implements App_const {
     private Resources res_srch;
     private Point pt_resolution;
     private Spinner spinner;
-    private ArrayList<Integer> SelectedItems;
     private SlidingUpPanelLayout slideupl;
-    private ViewStub empty_search;
+    private ViewStub empty_desire;
     private ViewStub empty_star;
     private ArrayList<Star_obj> al_strobj;
     private ArrayList<Star_obj> al_desired;
     private ArrayList<String> al_profiles;
     private ArrayAdapter<String> spinner_data;
-    private boolean en_start_tp, en_end_tp = false;
+    private boolean en_start_tp, en_end_tp, en_min_np = false;
     private int start_hr, end_hr, start_min, end_min = 0;
     private ListView lv_desd, lv_sobj;
 
     // Dialog for Timer Picker
-    private CheckBox en_start;
-    private CheckBox en_end;
+    private CheckBox en_start, en_end, en_min;
+    private NumberPicker min_pick;
     private TimePicker dtp_start;
     private TimePicker dtp_end;
 
@@ -72,15 +69,16 @@ public class Builder extends ActionBarActivity implements App_const {
     private StarListAdapter sobj_adp, desd_adp;
 
     private final int sliderHeight = 175;
+    private int min_course = -1; //if -1, then use size equal to desired list
+    private int semsester = -1; //this should not be -1, if it is something went wrong
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_builder);
         pt_resolution = new Point();
-        SelectedItems = new ArrayList<Integer>();
-        al_strobj = new ArrayList<Star_obj>();
-        al_desired = new ArrayList<Star_obj>();
+        al_strobj = new ArrayList<>();
+        al_desired = new ArrayList<>();
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
         loadImageResources();
@@ -91,12 +89,19 @@ public class Builder extends ActionBarActivity implements App_const {
         configureListeners();
         configureListViews();
         handleIntent(getIntent());
-//        toggle_ViewStub();
+        toggle_ViewStub();
     }
 
     private void loadProfiles() {
         al_profiles = new ArrayList<String>();
         al_profiles.add("Default Profile");
+        cfg_settings_from_profile();
+    }
+
+    private void cfg_settings_from_profile() {
+        //Set up Dialog settings from Profile settings
+        en_start_tp = false; //stub
+        en_end_tp = false; //stub
     }
 
     private void configureSpinner() {
@@ -127,7 +132,7 @@ public class Builder extends ActionBarActivity implements App_const {
     }
 
     protected void configureViewStubs() {
-        empty_search = (ViewStub) findViewById(R.id.empty_search);
+        empty_desire = (ViewStub) findViewById(R.id.empty_desired);
         empty_star = (ViewStub) findViewById(R.id.empty_star);
     }
 
@@ -169,11 +174,13 @@ public class Builder extends ActionBarActivity implements App_const {
             public void onClick(View v) {
                 Toast.makeText(Builder.this, "Deleting selected items on star list.",
                         Toast.LENGTH_SHORT).show();
-                ArrayList<Long> checked = desd_adp.getChecked_list();
+                ArrayList<Long> checked = sobj_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
-                    //Do something
+                    if (DEBUG) System.out.println(l);
+                    deleteStarByID(l);
                 }
+                sobj_adp.clearCheckedList();
                 mandatoryDataChange();
             }
         });
@@ -185,36 +192,46 @@ public class Builder extends ActionBarActivity implements App_const {
             public void onClick(View v) {
                 Toast.makeText(Builder.this, "Added to courses desired list",
                         Toast.LENGTH_SHORT).show();
-                sobj_adp.clear();
-                sobj_adp.clearCheckedList();
+                ArrayList<Long> checked = sobj_adp.getChecked_list();
+                System.out.println("Outputting Selection");
+                for (Long l : checked) {
+                    if (DEBUG) System.out.println(l);
+                    addDesiredFromStar(l);
+                }
                 mandatoryDataChange();
             }
         });
 
-        final Button DeleteStarButton = (Button) findViewById(R.id.des_delete);
+        final Button DeleteStarButton = (Button) findViewById(R.id.main_delete);
         DeleteStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(Builder.this, "Delete selected entries",
                         Toast.LENGTH_SHORT).show();
-                ArrayList<Long> checked = sobj_adp.getChecked_list();
+                ArrayList<Long> checked = desd_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
                     if (DEBUG) System.out.println(l);
-                    deleteStarByID(l);
+                    deleteItemByID(l);
                 }
-                sobj_adp.clearCheckedList(); //Finished deleting so clear this list
+                desd_adp.clearCheckedList(); //Finished deleting so clear this list
                 mandatoryDataChange();
             }
         });
 
-        final Button BuildScheduleButton = (Button) findViewById(R.id.des_build);
+        final Button BuildScheduleButton = (Button) findViewById(R.id.main_build);
         BuildScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Builder.this, "Building Schedules",
-                        Toast.LENGTH_SHORT).show();
 
+                if(desd_adp.getCount() < 2) {
+                    Toast.makeText(Builder.this, "Please add atleast two courses.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Builder.this, "Building Schedules",
+                            Toast.LENGTH_SHORT).show();
+                    //do nothing else for now
+                }
             }
         });
 
@@ -230,15 +247,45 @@ public class Builder extends ActionBarActivity implements App_const {
         return null;
     }
 
-    private void addDesiredFromStar(Star_obj star, boolean isclass){
-        if(isclass) {
-            Star_obj so = new Star_obj(star.getCourse(), star.getCourseTitle(), star.getCRN(),
-                    uniqueStarID(true), semester.fall.ordinal());
-            desd_adp.add(so);
+    private boolean crnExists(int crn) {
+        for (int x = 0; x < al_desired.size(); x++) {
+            if (al_desired.get(x).getCRN() == crn) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean crsExists(String crs) {
+        for (int x = 0; x < al_desired.size(); x++) {
+            if (al_desired.get(x).getCourse().equals(crs) &&
+                    al_desired.get(x).getCRN() == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void addDesiredFromStar(long id){
+        Star_obj resd =  getResultById(id);
+        Star_obj so = new Star_obj(resd.getCourse(), resd.getCourseTitle(), resd.getCRN(), id,
+                resd.getSemester());
+
+        if(so.isClass()) {
+            if(!crnExists(so.getCRN())) {
+                desd_adp.add(so);
+            } else {
+                Toast.makeText(Builder.this,
+                        "A course with the CRN already exists in the Course List",
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Star_obj so = new Star_obj(star.getCourse(), star.getCourseTitle(), -1,
-                    uniqueStarID(true), semester.fall.ordinal());
-            desd_adp.add(so);
+            if(!crsExists(so.getCourse())) {
+                desd_adp.add(so);
+            } else {
+                Toast.makeText(Builder.this, "Course already exists in Course List",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
         mandatoryDataChange();
     }
@@ -253,39 +300,14 @@ public class Builder extends ActionBarActivity implements App_const {
         }
     }
 
-    private long uniqueStarID(boolean main_list) {
-        long id = 0;
-        boolean unique = false; // Initialize Unique to False
-        while (!unique) {
-            boolean match = false; // Reset Match Flag to False
-            int size = 0;
-            if(main_list) {
-                size = al_desired.size();
-            } else {
-                size = al_strobj.size();
-            }
-            for (int x = 0; x < size; x++) {
-                // Iterate al_strobj and check if there's an existing match to the ID
-                Long cmp;
-                if(main_list) {
-                    cmp = al_desired.get(x).getID();
-                } else {
-                    cmp = al_strobj.get(x).getID();
-                }
-                // If Match Exist, set match to true
-                if (cmp.equals(id)) {
-                    //Match found
-                    match = true;
-                    break; // Break out of For Loop
-                }
-            }
-            if (match) {
-                id++; //Increment ID
-            } else {
-                unique = true;
+    private void deleteItemByID(long id) {
+        for (int x = 0; x < al_desired.size(); x++) {
+            Long temp = al_desired.get(x).getID();
+            if (temp.equals(id)) {
+                if (DEBUG) System.out.println("Deleting " + id + " " + al_desired.get(x).getCRN());
+                desd_adp.remove(al_desired.get(x));
             }
         }
-        return id;
     }
 
     private void mandatoryDataChange() {
@@ -318,7 +340,6 @@ public class Builder extends ActionBarActivity implements App_const {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_builder, menu);
-
         //Config ActionBar's Search Box
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -335,7 +356,6 @@ public class Builder extends ActionBarActivity implements App_const {
         acquireResolution();
         res_srch = getResources();
 
-        ImageView iv_mmlogo, iv_mmtitle;
         LinearLayout ll_mainlayout;
         LinearLayout ll_sliderlayout;
 
@@ -352,18 +372,8 @@ public class Builder extends ActionBarActivity implements App_const {
         ll_sliderlayout.setBackgroundDrawable(drw_bg);
     }
 
-    // DEBUG
-    private int randValue() {
-        // for 0 to 1         return (1 == (r.nextInt(2) + 0));
-        int count = 3;
-        int offset = 0;
-        Random r = new Random(System.currentTimeMillis());
-        return (r.nextInt(count) + offset);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //int id = item.getItemId();
         switch (item.getItemId()) {
             case R.id.action_time_frame:
                 Dialog diag_time = createTimeDialog();
@@ -371,10 +381,55 @@ public class Builder extends ActionBarActivity implements App_const {
             case R.id.action_timeblock:
                 return true;
             case R.id.action_min:
+                if(desd_adp.getCount() >= 2) {
+                    Dialog diag_min = createMinDialog();
+                } else {
+                    Toast.makeText(Builder.this, "Please add atleast two courses before" +
+                                    "attempting to configure this option.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.action_DEBUG_ADD_STAR:
+                DEBUG_add_star();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void DEBUG_add_star() {
+        Random r = new Random(System.currentTimeMillis());
+        int crn = 10000 + r.nextInt(20000); //Randon CRN Number
+        Star_obj so = new Star_obj("TEST COURSE", "THIS IS A TEST COURSE", crn, uniqueID(), 1);
+
+        al_strobj.add(so);
+        mandatoryDataChange();
+    }
+
+    private long uniqueID() {
+        long id = 0;
+        boolean unique = false; // Initialize Unique to False
+        while (!unique) {
+            boolean match = false; // Reset Match Flag to False
+            int size = al_strobj.size();
+            for (int x = 0; x < size; x++) {
+                // Iterate al_strobj and check if there's an existing match to the ID
+                Long cmp;
+                 cmp = al_strobj.get(x).getID();
+                // If Match Exist, set match to true
+                if (cmp.equals(id)) {
+                    //Match found
+                    match = true;
+                    break; // Break out of For Loop
+                }
+            }
+            if (match) {
+                id++; //Increment ID
+            } else {
+                unique = true;
+            }
+        }
+        return id;
     }
 
     protected void acquireResolution() {
@@ -404,31 +459,16 @@ public class Builder extends ActionBarActivity implements App_const {
             lv_sobj.setVisibility(View.VISIBLE);
         }
         if (al_desired.isEmpty() == true) {
-            empty_search.setVisibility(View.VISIBLE);
+            empty_desire.setVisibility(View.VISIBLE);
             lv_desd.setVisibility(View.GONE);
         } else {
-            empty_search.setVisibility(View.GONE);
+            empty_desire.setVisibility(View.GONE);
             lv_desd.setVisibility(View.VISIBLE);
         }
     }
 
-    private boolean[] gefcFilterState() {
-        Resources res = getResources();
-        String[] gefc_list = res.getStringArray(R.array.gefc_list);
-        boolean[] checked = new boolean[gefc_list.length];
-
-        for (int x = 0; x < gefc_list.length; x++) {
-            if (SelectedItems.contains(x)) {
-                checked[x] = true;
-            } else {
-                checked[x] = false;
-            }
-        }
-        return checked;
-    }
-
     // For future Changes, Dialogs Should probably be split into Classes
-    public Dialog createTimeDialog() {
+    private Dialog createTimeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Builder.this);
         LayoutInflater infl = Builder.this.getLayoutInflater();
         final View diag_view = infl.inflate(R.layout.time_dialog, null);
@@ -503,4 +543,58 @@ public class Builder extends ActionBarActivity implements App_const {
         return builder.create();
     }
 
+
+    private Dialog createMinDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Builder.this);
+        LayoutInflater infl = Builder.this.getLayoutInflater();
+        final View diag_view = infl.inflate(R.layout.min_dialog, null);
+        en_min = (CheckBox) diag_view.findViewById(R.id.enable_chkbox);
+        min_pick = (NumberPicker) diag_view.findViewById(R.id.num_picker);
+        min_pick.setMinValue(2);
+        min_pick.setMaxValue(desd_adp.getCount());
+
+        //Load previous settings
+        en_min.setChecked(en_min_np);
+        if(min_course == -1) {
+            min_pick.setValue(desd_adp.getCount());
+        } else {
+            min_pick.setValue(min_course);
+        }
+
+        if (!en_min.isChecked()) {
+            min_pick.setVisibility(View.GONE);
+        }
+
+        en_min.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (!(en_min.isChecked())) {
+                    min_pick.setVisibility(View.GONE);
+                } else {
+                    min_pick.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        builder.setView(diag_view)
+                // Add action buttons
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        en_min_np = en_min.isChecked();
+                        if (en_min_np) {
+                            min_course = min_pick.getValue();
+                        } else {
+                            min_course = -1; //should still use default max
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel(); // Effectively don't do anything
+                    }
+                });
+
+        Dialog dlg = builder.show();
+        return builder.create();
+    }
 }

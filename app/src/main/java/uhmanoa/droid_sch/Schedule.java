@@ -78,22 +78,28 @@ public class Schedule {
 	}
 
     public int earliestStart() {
-        int time = 0;
+        int time = getCourses().get(0).getStart1(); //initialize to very first start possible
+        if(getCourses().size() == 0) return 0;
         for(Course c: getCourses()) {
             int temp = c.getStart1();
-            int temp2 = c.getStart2();
-            temp = Math.min(temp, temp2);
+            if(c.getStart2() != 9999) {
+                int temp2 = c.getStart2();
+                temp = Math.min(temp, temp2);
+            }
             time = Math.min(time, temp);
         }
         return time;
     }
 
     public int latestEnd() {
-        int time = 0;
+        int time = getCourses().get(0).getEnd1(); //initialize end to very first end possible
+        if(getCourses().size() == 0) return 0;
         for(Course c: getCourses()) {
             int temp = c.getEnd1();
-            int temp2 = c.getEnd2();
-            temp = Math.max(temp, temp2);
+            if(c.getEnd2() != 9999) {
+                int temp2 = c.getEnd2();
+                temp = Math.max(temp, temp2);
+            }
             time = Math.max(time, temp);
         }
         return time;

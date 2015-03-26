@@ -1,7 +1,5 @@
 package uhmanoa.droid_sch;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class StarListAdapter extends ArrayAdapter<Star_obj> {
 
