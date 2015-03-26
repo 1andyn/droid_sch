@@ -67,7 +67,8 @@
         </activity>
         <activity
             android:name=".Preferences"
-            android:label="@string/title_activity_preferences" >
+            android:label="@string/title_activity_preferences"
+            android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
 
