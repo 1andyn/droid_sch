@@ -10,6 +10,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 
@@ -137,7 +139,7 @@ public class Visualize extends Activity {
                 TextView room2 = (TextView) vw.findViewById(R.id.vis_room2);
                 TextView day2 = (TextView) vw.findViewById(R.id.vis_days2);
 
-                crs2.setText(c.getCourse());
+                crs2.setText(""); //doesn't need to be populated since its the same course
                 time2.setText(c.getTimeString(true));
                 room2.setText(c.getRoom2());
                 day2.setText(c.getDayString(true));
@@ -152,6 +154,8 @@ public class Visualize extends Activity {
             TextView sect = (TextView) vw.findViewById(R.id.vis_sect);
             TextView creds = (TextView) vw.findViewById(R.id.vis_cred);
 
+            TextView crn = (TextView) vw.findViewById(R.id.vis_CRN);
+
             seatdta.setVisibility(View.GONE);
 
 //            TextView seats = (TextView) vw.findViewById(R.id.vis_seats);
@@ -160,8 +164,8 @@ public class Visualize extends Activity {
 
             TextView dates = (TextView) vw.findViewById(R.id.vis_dates);
             TextView focus = (TextView) vw.findViewById(R.id.vis_focus);
-            
 
+            crn.setText("CRN: " + String.valueOf(c.getCrn()));
 
             prof.setText("Prof: " + c.getProfessor());
             sect.setText("Section: " + String.valueOf(c.getSection()));
@@ -221,6 +225,19 @@ public class Visualize extends Activity {
                 "MATH CLASS ");
         sch.addCourse(crs4);
         sch.addCourse(crs5);
+
+        ArrayList<Character> days4 = new ArrayList<Character>();
+        days4.add('M');
+        days4.add('W');
+        days4.add('F');
+        ArrayList<Character> days5 = new ArrayList<Character>();
+        days5.add('S');
+
+        Course crs6 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+                "B Auernheimer", days4, days5, 1230, 900, 1330, 1000, "SAKAM D101", "SAKAM D202",
+                1, 10, 0, 10, "3/3 to 4/27",
+                "MATH CLASS ");
+        sch.addCourse(crs6);
     }
 
     private void loadSchedule() {
