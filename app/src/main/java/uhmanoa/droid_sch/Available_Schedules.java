@@ -2,18 +2,16 @@ package uhmanoa.droid_sch;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -134,7 +132,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         if (currentPage == totalPages - 1)
             itemsOnPage = titles.size() % ITEMS_PER_PAGE;
 
-        for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) + itemsOnPage); i++){
+        for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) +
+                itemsOnPage); i++){
             t1.add(titles.get(i).toString());
             s1.add(subtitles.get(i).toString());
             schedPage.add(schedules.get(i));
@@ -217,7 +216,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                         btnPrev.setEnabled(true);
                                     populateNextPage();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "You must enter a page number in the valid range from 1 to " + totalPages , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "You must enter a " +
+                                            "page number in the valid range from 1 to " +
+                                            totalPages , Toast.LENGTH_SHORT).show();
                                 }
                             }
                         })
