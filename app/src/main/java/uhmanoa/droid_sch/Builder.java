@@ -44,6 +44,7 @@ public class Builder extends ActionBarActivity implements App_const {
     private boolean DEBUG = true;
     // --------DEBUG
 
+    private int sem; //semester value
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
@@ -76,6 +77,8 @@ public class Builder extends ActionBarActivity implements App_const {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_builder);
+        Bundle extras = getIntent().getExtras();
+        sem = extras.getInt("SEMESTER");
         pt_resolution = new Point();
         al_strobj = new ArrayList<>();
         al_desired = new ArrayList<>();
@@ -230,7 +233,8 @@ public class Builder extends ActionBarActivity implements App_const {
                 } else {
                     Toast.makeText(Builder.this, "Building Schedules",
                             Toast.LENGTH_SHORT).show();
-                    //do nothing else for now
+                    Intent i = new Intent(Builder.this, Available_Schedules.class);
+                    startActivity(i);
                 }
             }
         });

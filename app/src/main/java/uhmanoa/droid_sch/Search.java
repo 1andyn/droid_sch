@@ -47,6 +47,7 @@ public class Search extends ActionBarActivity implements App_const {
     private boolean DEBUG = true;
     // --------DEBUG
 
+    private int sem;
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
@@ -78,6 +79,8 @@ public class Search extends ActionBarActivity implements App_const {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        Bundle extras = getIntent().getExtras();
+        sem = extras.getInt("SEMESTER");
         pt_resolution = new Point();
         SelectedItems = new ArrayList<Integer>();
         al_strobj = new ArrayList<Star_obj>();
