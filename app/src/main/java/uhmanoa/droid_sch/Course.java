@@ -149,13 +149,15 @@ public class Course {
      * @param professor Instructor for the course
      * @param fr        Focus requirements for the course, can be 'null.'
      */
-    public Course(String crs, String title, int crn, int credits, String professor, ArrayList<String> fr) {
+    public Course(String crs, String title, int crn, int credits, String professor,
+                  ArrayList<Character> d1, ArrayList<String> fr) {
         initValues();
         this.course = crs;
         this.title = title;
         this.crn = crn;
         this.credits = credits;
         this.professor = professor;
+        this.days1 = d1;
         this.focusReqs = fr;
     }
 

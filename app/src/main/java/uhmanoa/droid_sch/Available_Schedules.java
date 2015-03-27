@@ -89,7 +89,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
         btnPrev.setEnabled(false);
 
-        tvTitle.setText("Your search generated " + titles.size() + " schedules.");
+        tvTitle.setText("Your courses generated " + titles.size() + " schedules.");
         updateGotoButton();
     }
 
@@ -104,12 +104,12 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             subtitles.add("Num classes in sched " + i);
             Schedule s = new Schedule();
             for (int j = 0; j < 4; j++) {
-                ArrayList<String> days = new ArrayList<String>();
-                days.add("M");
-                days.add("W");
-                days.add("F");
+                ArrayList<Character> days = new ArrayList<>();
+                days.add('M');
+                days.add('W');
+                days.add('F');
                 Course c = new Course("EE" + j, "Stuff", 39390 + j, 3, "Professor " + j,
-                        days);// 1230 + j, 1320+ j, "POST" + j);
+                        days, null);// 1230 + j, 1320+ j, "POST" + j);
                 s.addCourse(c);
             }
             schedules.add(s);
