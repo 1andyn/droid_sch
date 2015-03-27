@@ -84,13 +84,13 @@ public class SchListAdapter extends ArrayAdapter<Schedule> {
                 public void onCheckedChanged(CompoundButton buttonView,
                                              boolean isChecked) {
                     if (buttonView.isChecked()) {
-                        Toast.makeText(app_Context, "Checked " + sch.getID(),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(app_Context, "Checked " + sch.getID(),
+//                                Toast.LENGTH_SHORT).show();
                         checked_list.add(object_list.get(pos).getID());
                         sch.setChecked(true);
                     } else {
-                        Toast.makeText(app_Context, "UnChecked " + sch.getID(),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(app_Context, "UnChecked " + sch.getID(),
+//                                Toast.LENGTH_SHORT).show();
                         sch.setChecked(false);
                         checkedRemove(object_list.get(pos).getID());
                     }

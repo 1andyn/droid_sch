@@ -13,10 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Viewer extends ActionBarActivity implements OnViewButtonPress {
@@ -39,6 +42,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
         loadImageResources();
         configureListView();
         configureViewStubs();
+        configureButtons();
         toggle_ViewStub();
         setupDebugSchedules();
     }
@@ -51,43 +55,77 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
     }
 
 
+    private void configureButtons() {
+        final Button DeleteItemStar = (Button) findViewById(R.id.delete_button);
+        DeleteItemStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Viewer.this, "Deleting selected items",
+                        Toast.LENGTH_SHORT).show();
+                ArrayList<Long> checked = sch_adp.getChecked_list();
+                System.out.println("Outputting Selection");
+                for (Long l : checked) {
+                    deleteSchedByID(l);
+                }
+                sch_adp.clearCheckedList();
+                mandatoryDataChange();
+            }
+        });
+    }
+
+    private void deleteSchedByID(long id) {
+        for (int x = 0; x < al_sched.size(); x++) {
+            Long temp = al_sched.get(x).getID();
+            if(temp == id) {
+                sch_adp.remove(al_sched.get(x));
+            }
+        }
+    }
+
     private void setupDebugSchedules() {
-        Schedule sch = new Schedule();
-        sch.setID(0);
-        ArrayList<Character> days1 = new ArrayList<Character>();
-        days1.add('M');
-        days1.add('W');
-        days1.add('F');
 
-        ArrayList<Character> days2 = new ArrayList<Character>();
-        days2.add('T');
+        for (int x = 0; x < 6; x++) {
 
-        ArrayList<Character> days4 = new ArrayList<Character>();
-        days4.add('T');
+            Random r = new Random(System.currentTimeMillis());
+            int rcrn = 10000 + r.nextInt(20000); //Randon CRN Number
 
-        ArrayList<String> fr = new ArrayList<String>();
-        fr.add("NI");
+            Schedule sch = new Schedule();
+            sch.setID(x);
+            ArrayList<Character> days1 = new ArrayList<Character>();
+            days1.add('M');
+            days1.add('W');
+            days1.add('F');
 
-        Course crt = new Course ("EE 160", "Programming for Engineers", 82496, 4,
-                "T Dobry", days1, days2, 830,730, 920, 1015, "PHYSCI 217", "POST 214", 1, 20, 0,
-                5, "01/12-05/15", "MAJOR");
-        crt.setID(0);
-        sch.addCourse(crt);
+            ArrayList<Character> days2 = new ArrayList<Character>();
+            days2.add('T');
 
-        ArrayList<Character> days3 = new ArrayList<Character>();
-        days3.add('M');
-        days3.add('W');
-        Course crt2 = new Course ("EE 205", "Object Oriented Programming", 85518, 3,
-                "R Zhang", days3, days4, 1130, 300, 1220, 545, "POST 214", "POST 214", 1, 20, 0,
-                5, "01/12-05/15", "MAJOR");
-        crt2.setID(1);
-        crt2.setFocusReqs(fr);
+            ArrayList<Character> days4 = new ArrayList<Character>();
+            days4.add('T');
+
+            ArrayList<String> fr = new ArrayList<String>();
+            fr.add("NI");
+
+            Course crt = new Course("EE 160", "Programming for Engineers", rcrn, 4,
+                    "T Dobry", days1, days2, 830, 730, 920, 1015, "PHYSCI 217", "POST 214", 1, 20, 0,
+                    5, "01/12-05/15", "MAJOR");
+            crt.setID(0);
+            sch.addCourse(crt);
+
+            ArrayList<Character> days3 = new ArrayList<Character>();
+            days3.add('M');
+            days3.add('W');
+            Course crt2 = new Course("EE 205", "Object Oriented Programming", rcrn, 3,
+                    "R Zhang", days3, days4, 1130, 300, 1220, 545, "POST 214", "POST 214", 1, 20, 0,
+                    5, "01/12-05/15", "MAJOR");
+            crt2.setID(1);
+            crt2.setFocusReqs(fr);
 
 
-        sch.addCourse(crt2);
-        al_sched.add(sch);
+            sch.addCourse(crt2);
+            al_sched.add(sch);
 
-        mandatoryDataChange();
+            mandatoryDataChange();
+        }
     }
 
     private void configureListView() {
