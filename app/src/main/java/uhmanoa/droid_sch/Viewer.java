@@ -13,42 +13,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
-public class Viewer extends ActionBarActivity {
+public class Viewer extends ActionBarActivity implements OnViewButtonPress {
 
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
     private ArrayList<Schedule> al_sched;
     private ViewStub empty_sched;
-    private ExpandableListView exlv_sched;
+    private ListView lv_sched;
     private SchListAdapter sch_adp;
-    private SchHashMap sch_map;
-    private List sch_group;
-    private HashMap sch_detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         al_sched = new ArrayList<Schedule>();
-        setupDebugSchedules();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
+        sch_adp = new SchListAdapter(this, R.layout.sch_view, al_sched, this);
         pt_resolution = new Point();
-        sch_map = new SchHashMap(al_sched);
         loadImageResources();
-        configureViewStubs();
         configureListView();
-        debugVisualize();
-//        toggle_ViewStub();
+        configureViewStubs();
+        toggle_ViewStub();
+        setupDebugSchedules();
     }
 
     //DEBUG
@@ -61,7 +53,7 @@ public class Viewer extends ActionBarActivity {
 
     private void setupDebugSchedules() {
         Schedule sch = new Schedule();
-
+        sch.setID(0);
         ArrayList<Character> days1 = new ArrayList<Character>();
         days1.add('M');
         days1.add('W');
@@ -79,6 +71,7 @@ public class Viewer extends ActionBarActivity {
         Course crt = new Course ("EE 160", "Programming for Engineers", 82496, 4,
                 "T Dobry", days1, days2, 830,730, 920, 1015, "PHYSCI 217", "POST 214", 1, 20, 0,
                 5, "01/12-05/15", "MAJOR");
+        crt.setID(0);
         sch.addCourse(crt);
 
         ArrayList<Character> days3 = new ArrayList<Character>();
@@ -87,52 +80,19 @@ public class Viewer extends ActionBarActivity {
         Course crt2 = new Course ("EE 205", "Object Oriented Programming", 85518, 3,
                 "R Zhang", days3, days4, 1130, 300, 1220, 545, "POST 214", "POST 214", 1, 20, 0,
                 5, "01/12-05/15", "MAJOR");
+        crt2.setID(1);
         crt2.setFocusReqs(fr);
 
 
         sch.addCourse(crt2);
         al_sched.add(sch);
+
+        mandatoryDataChange();
     }
 
     private void configureListView() {
-        exlv_sched = (ExpandableListView) findViewById(R.id.elv_sched);
-        sch_detail = sch_map.getData();
-        sch_group = new ArrayList(sch_detail.keySet());
-        sch_adp = new SchListAdapter(this, sch_group, sch_detail);
-        exlv_sched.setAdapter(sch_adp);
-        exlv_sched.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        sch_group.get(groupPosition) + " List Expanded.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        exlv_sched.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        sch_group.get(groupPosition) + " List Collapsed.",
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        exlv_sched.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        "woooo", Toast.LENGTH_SHORT
-                )
-                        .show();
-                return false;
-            }
-        });
+        lv_sched = (ListView) findViewById(R.id.lv_sched);
+        lv_sched.setAdapter(sch_adp);
     }
 
     private void configureViewStubs() {
@@ -149,9 +109,7 @@ public class Viewer extends ActionBarActivity {
         acquireResolution();
         res_srch = getResources();
 
-        ImageView iv_mmlogo, iv_mmtitle;
         LinearLayout ll_mainlayout;
-        LinearLayout ll_sliderlayout;
 
         Bitmap bmp_bg = ImgLoader.decodedSampledBitmapResource(res_srch, R.drawable.o_bg,
                 pt_resolution.x / 8, pt_resolution.y / 8); //reduces size of file by factor of 8
@@ -185,11 +143,26 @@ public class Viewer extends ActionBarActivity {
     protected void toggle_ViewStub() {
         if (al_sched.isEmpty() == true) {
             empty_sched.setVisibility(View.VISIBLE);
-            exlv_sched.setVisibility(View.GONE);
+            lv_sched.setVisibility(View.GONE);
         } else {
             empty_sched.setVisibility(View.GONE);
-            exlv_sched.setVisibility(View.VISIBLE);
+            lv_sched.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    public void onViewButtonPress(long id) {
+        //needs to be modified to draw a specific schedule
+        debugVisualize();
+    }
+
+    private void mandatoryDataChange() {
+        sch_adp.notifyDataSetChanged();
+        lv_sched.invalidateViews();
+        lv_sched.refreshDrawableState();
+        lv_sched.setAdapter(sch_adp);
+        toggle_ViewStub();
+    }
+
 
 }
