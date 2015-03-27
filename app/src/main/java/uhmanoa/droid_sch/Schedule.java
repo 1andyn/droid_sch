@@ -11,9 +11,10 @@ import java.util.ArrayList;
  *
  */
 public class Schedule {
-    private int sid;
+    private long sid;
 	private ArrayList<Course> schedule;
     private int semester;
+    private boolean checked = false;
 	
 	/** 
 	 * Empty constructor.
@@ -57,11 +58,11 @@ public class Schedule {
 			}
 	}
 
-    public void setID(int pId) {
+    public void setID(long pId) {
         sid = pId;
     }
 
-    public int getID() {
+    public long getID() {
         return sid;
     }
 
@@ -103,6 +104,14 @@ public class Schedule {
             time = Math.max(time, temp);
         }
         return time;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean chk) {
+        checked = chk;
     }
 
 }
