@@ -5,100 +5,116 @@ package uhmanoa.droid_sch;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SchListAdapter extends BaseExpandableListAdapter {
+public class SchListAdapter extends ArrayAdapter<Schedule> {
 
-    private Context context;
-    private List<String> expandableListTitle;
-    private HashMap<String, List<String>> expandableListDetail;
+        //Context in which eventListAdapter is being used
+        private Context app_Context;
+        private ArrayList<Schedule> object_list;
+        private ArrayList<Long> checked_list;
+        private LayoutInflater inflater;
+        private int layout_resrc;
+        private OnViewButtonPress listen;
 
-    public SchListAdapter(Context context, List<String> expandableListTitle,
-                                 HashMap<String, List<String>> expandableListDetail) {
-        this.context = context;
-        this.expandableListTitle = expandableListTitle;
-        this.expandableListDetail = expandableListDetail;
-    }
-
-    @Override
-    public Object getChild(int listPosition, int expandedListPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
-                .get(expandedListPosition);
-    }
-
-    @Override
-    public long getChildId(int listPosition, int expandedListPosition) {
-        return expandedListPosition;
-    }
-
-    @Override
-    public View getChildView(int listPosition, final int expandedListPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
-        final String expandedListText = (String) getChild(listPosition, expandedListPosition);
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.sch_item, null);
+        public SchListAdapter(Context c, int rsrc, ArrayList<Schedule> sch, OnViewButtonPress bp) {
+            super(c, rsrc, sch);
+            app_Context = c;
+            object_list = sch;
+            layout_resrc = rsrc;
+            this.listen = bp;
+            inflater = LayoutInflater.from(c);
+            checked_list = new ArrayList<>();
         }
-        TextView expandedListTextView = (TextView) convertView
-                .findViewById(R.id.expandedListItem);
-        expandedListTextView.setText(Html.fromHtml(expandedListText));
-        return convertView;
-    }
 
-    @Override
-    public int getChildrenCount(int listPosition) {
-        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition))
-                .size();
-    }
-
-    @Override
-    public Object getGroup(int listPosition) {
-        return this.expandableListTitle.get(listPosition);
-    }
-
-    @Override
-    public int getGroupCount() {
-        return this.expandableListTitle.size();
-    }
-
-    @Override
-    public long getGroupId(int listPosition) {
-        return listPosition;
-    }
-
-    @Override
-    public View getGroupView(int listPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
-        String listTitle = (String) getGroup(listPosition);
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.sch_group, null);
+        @Override
+        public long getItemId(int pos) {
+            return object_list.get(pos).getID();
         }
-        TextView listTitleTextView = (TextView) convertView
-                .findViewById(R.id.listTitle);
-        listTitleTextView.setTypeface(null, Typeface.BOLD);
-        listTitleTextView.setText(Html.fromHtml(listTitle));
-        return convertView;
-    }
 
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
+        @Override
+        public View getView(final int pos, View convertView, ViewGroup parent) {
+            final Schedule sch = object_list.get(pos);
+            final CheckBox cb;
+            final Button bt;
 
-    @Override
-    public boolean isChildSelectable(int listPosition, int expandedListPosition) {
-        return true;
-    }
+            if (convertView == null) {
+                convertView = inflater.inflate(layout_resrc, parent, false);
+                ScheduleView schview = new ScheduleView(app_Context);
+                schview.setObj((Schedule) getItem(pos));
+                schview.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
+                convertView = schview;
+                cb = (CheckBox) convertView.findViewById(R.id.check_box);
+                convertView.setTag(R.id.check_box, cb);
+                bt = (Button) convertView.findViewById(R.id.view_button);
+                convertView.setTag(R.id.view_button, bt);
+            } else {
+                convertView.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
+                cb = (CheckBox) convertView.getTag(R.id.check_box);
+                bt = (Button) convertView.getTag(R.id.view_button);
+            }
+
+            bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //This needs to be rewritten to display the specific schedule
+                    listen.onViewButtonPress(getItemId(pos));
+                }
+            });
+
+            //checkbox listener
+            cb.setChecked(sch.isChecked());
+            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView,
+                                             boolean isChecked) {
+                    if (buttonView.isChecked()) {
+                        Toast.makeText(app_Context, "Checked " + sch.getID(),
+                                Toast.LENGTH_SHORT).show();
+                        checked_list.add(object_list.get(pos).getID());
+                        sch.setChecked(true);
+                    } else {
+                        Toast.makeText(app_Context, "UnChecked " + sch.getID(),
+                                Toast.LENGTH_SHORT).show();
+                        sch.setChecked(false);
+                        checkedRemove(object_list.get(pos).getID());
+                    }
+                }
+            });
+
+            return convertView;
+        }
+
+        public ArrayList<Long> getChecked_list() {
+            return checked_list;
+        }
+
+        public void checkedRemove(long id) {
+            for(int x = 0; x < checked_list.size(); x++) {
+                Long temp = checked_list.get(x);
+                if(temp.equals(id)) {
+                    checked_list.remove(x);
+                }
+            }
+        }
+
+        public void clearCheckedList() {
+            checked_list.clear();
+        }
+
 }
