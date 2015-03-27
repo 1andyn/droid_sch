@@ -3,6 +3,7 @@ package uhmanoa.droid_sch;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -19,24 +20,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import org.jsoup.HttpStatusException;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.MissingFormatArgumentException;
 
-public class Main_menu extends Activity {
+public class Main_menu extends Activity implements OnCheckTaskComplete{
 
     private Drawable drw_bg;
     private Resources res_main;
     private Point pt_resolution;
     private ArrayList<Button> arraylst_btn;
     private ArrayList<Boolean> available;
-    private int curr_year;
+    private int curr_year, curr_year2;
     final int FALL = 0;
     final int SPRING = 1;
     final int SUMMER = 2;
+    private ProgressDialog pg;
+    ParserDataCheck prs;
+    Dialog d;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,15 @@ public class Main_menu extends Activity {
         pt_resolution = new Point();
         loadImageResources();
         populate_btncontainer();
+        pg = new ProgressDialog(Main_menu.this);
+        pg.setMessage("Checking course data availability...");
+        pg.setCancelable(false);
+        Calendar curr_time = Calendar.getInstance();
+        curr_year = curr_time.get(Calendar.YEAR);
     }
 
     protected void populate_btncontainer() {
+
         arraylst_btn = new ArrayList<Button>();
         available = new ArrayList<>();
         arraylst_btn.add((Button) findViewById(R.id.bt_create));
@@ -55,8 +62,7 @@ public class Main_menu extends Activity {
         arraylst_btn.add((Button) findViewById(R.id.bt_search));
         arraylst_btn.add((Button) findViewById(R.id.bt_pref));
         arraylst_btn.add((Button) findViewById(R.id.bt_exit));
-        Calendar curr_time = Calendar.getInstance();
-        curr_year = curr_time.get(Calendar.YEAR);
+
         configureBtnListeners();
     }
 
@@ -67,9 +73,7 @@ public class Main_menu extends Activity {
                     @Override
                     public void onClick(View view) {
                         try {
-                            checkAvailability();
-                            Dialog d = createSemesterDialog(0);
-                            d.show();
+                            d = createSemesterDialog(0);
                         } catch (Exception e) {
                             Toast.makeText(Main_menu.this, "Unable to access course data online, try again later.",
                                     Toast.LENGTH_SHORT).show();
@@ -91,9 +95,7 @@ public class Main_menu extends Activity {
                     @Override
                     public void onClick(View view) {
                         try {
-                            checkAvailability();
-                            Dialog d = createSemesterDialog(2);
-                            d.show();
+                            d = createSemesterDialog(2);
                         } catch (Exception e) {
                             Toast.makeText(Main_menu.this, "Unable to access course data online, try again later.",
                                     Toast.LENGTH_SHORT).show();
@@ -180,6 +182,8 @@ public class Main_menu extends Activity {
             yr2 = current_year + 1;
         }
 
+        curr_year2 = yr2;
+
         List<String> lst = new ArrayList<String>();
         String fall = "FALL " + String.valueOf(yr);
         lst.add(fall);
@@ -193,10 +197,9 @@ public class Main_menu extends Activity {
     }
 
     private void checkAvailability() {
-        Parser prs = new Parser();
-        available.add(prs.yearDataReadable(curr_year, FALL));
-        available.add(prs.yearDataReadable(curr_year, SPRING));
-        available.add(prs.yearDataReadable(curr_year, SUMMER));
+        prs = new ParserDataCheck(pg, this);
+        prs.execute(curr_year, FALL, curr_year2, SPRING, curr_year2, SUMMER);
+
     }
 
     private void switchActivity(int activity, int sem) {
@@ -225,6 +228,7 @@ public class Main_menu extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(Main_menu.this);
 
         String data[] = calculateSemString();
+        checkAvailability();
 
         final int activity = button;
         builder.setTitle("Choose Semester")
@@ -246,4 +250,10 @@ public class Main_menu extends Activity {
         return builder.create();
     }
 
+    @Override
+    public void onCheckTaskComplete() {
+        available = prs.getDataStatus();
+        d.show();
+        prs = null; //deference
+    }
 }

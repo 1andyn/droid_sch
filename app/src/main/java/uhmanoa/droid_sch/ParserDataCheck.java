@@ -1,18 +1,54 @@
 package uhmanoa.droid_sch;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
-public class Parser {
+public class ParserDataCheck extends AsyncTask<Integer, Void, Integer> {
 
+    private OnCheckTaskComplete listener;
+    private ProgressDialog pdialog;
+    private ArrayList<Boolean> status; //false = no data, true = data
     final String no_data = "Class availability information for this term is not available " +
             "at this time.";
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        pdialog.show();
+    }
+
     //constructor, doesnt need to do anything for now
-    public Parser() {
+    public ParserDataCheck(ProgressDialog pg, OnCheckTaskComplete listener) {
+        this.listener = listener;
+        status = new ArrayList<>();
+        pdialog = pg;
+    }
+
+    @Override
+    protected Integer doInBackground(Integer... params) {
+        status.add(yearDataReadable(params[0], params[1]));
+        status.add(yearDataReadable(params[2], params[3]));
+        status.add(yearDataReadable(params[4], params[5]));
+        return 1;
+    }
+
+    public ArrayList<Boolean> getDataStatus() {
+        return status;
+    }
+
+    @Override
+    protected void onPostExecute(Integer result) {
+        pdialog.dismiss();
+        listener.onCheckTaskComplete();
     }
 
     public int calculateURLyear(int year, int sem) {
@@ -35,21 +71,26 @@ public class Parser {
     }
 
     private String calculateURLField(int year, int sem) {
-        String yr = String.valueOf(calculateURLyear(year,sem));
+        String yr = String.valueOf(calculateURLyear(year, sem));
         String dig = String.valueOf(getURLDigit(sem));
         return yr+dig;
     }
 
-    public boolean yearDataReadable(int year, int sem) {
+    private Boolean yearDataReadable(int year, int sem) {
         boolean found = false;
         try {
             System.setProperty("https.protocols", "TLSv1,SSLv3,SSLv2Hello");
             Document doc = Jsoup.connect("http://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=" +
             calculateURLField(year, sem)).get();
             Element span_data = doc.select("TD.indefault").first();
-            if(span_data.toString().contains(no_data)) {
-                found = true;
+            if(span_data == null) {
+                found = false;
+            } else {
+                if(span_data.toString().contains(no_data)) {
+                    found = true;
+                }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

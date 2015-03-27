@@ -13,7 +13,7 @@ public class ParserYearSemesterTest extends TestCase {
      */
 
     public void testOldYears() throws Exception {
-        Parser prs = new Parser();
+        ParserDataCheck prs = new ParserDataCheck();
         boolean check = prs.yearDataReadable(2011, FALL);
         assertEquals(false, check);
         check = prs.yearDataReadable(2012, FALL);
@@ -43,7 +43,7 @@ public class ParserYearSemesterTest extends TestCase {
     }
 
     public void testCurrentYears() throws Exception {
-        Parser prs = new Parser();
+        ParserDataCheck prs = new ParserDataCheck();
         boolean check = prs.yearDataReadable(2015, FALL);
         assertEquals(true, check);
         check = prs.yearDataReadable(2015, SPRING);
