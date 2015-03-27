@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_gray">
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:id="@+id/crs_list"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:id="@+id/crn_list"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <!-- for some reason w/o scaling the button doesn't scale to the original aspect ratio -->
+        <Button
+            android:scaleX=".5"
+            android:scaleY=".8"
+            android:layout_weight="1"
+            android:background="@drawable/ic_action_search"
+            android:id="@+id/view_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:padding="10dp"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:id="@+id/check_box"
+            android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
