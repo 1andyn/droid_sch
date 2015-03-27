@@ -128,6 +128,7 @@ public class Visualize extends Activity {
             vw.setBackgroundColor(getResources().getColor(color_values.get((int)c.getID())));
             LinearLayout top = (LinearLayout) vw.findViewById(R.id.vis_frs_crs);
             LinearLayout bot = (LinearLayout) vw.findViewById(R.id.vis_sec_crs);
+            LinearLayout seatdta = (LinearLayout) vw.findViewById(R.id.ll_seat_data);
             if(c.getStart2() == 9999) {
                 bot.setVisibility(View.GONE);
             } else {
@@ -147,6 +148,32 @@ public class Visualize extends Activity {
             TextView room1 = (TextView) vw.findViewById(R.id.vis_room);
             TextView day = (TextView) vw.findViewById(R.id.vis_days);
 
+            TextView prof = (TextView) vw.findViewById(R.id.vis_prof);
+            TextView sect = (TextView) vw.findViewById(R.id.vis_sect);
+            TextView creds = (TextView) vw.findViewById(R.id.vis_cred);
+
+            seatdta.setVisibility(View.GONE);
+
+//            TextView seats = (TextView) vw.findViewById(R.id.vis_seats);
+//            TextView wait = (TextView) vw.findViewById(R.id.vis_wait);
+//            TextView waitav = (TextView) vw.findViewById(R.id.vis_wait_av);
+
+            TextView dates = (TextView) vw.findViewById(R.id.vis_dates);
+            TextView focus = (TextView) vw.findViewById(R.id.vis_focus);
+            
+
+
+            prof.setText("Prof: " + c.getProfessor());
+            sect.setText("Section: " + String.valueOf(c.getSection()));
+            creds.setText("Credits: " + String.valueOf(c.getCredits()));
+
+//            seats.setText("Seats Avail: " + String.valueOf(c.getSeats_avail()));
+//            wait.setText("Waitlsited: " + String.valueOf(c.getWaitlisted()));
+//            waitav.setText("Wait Avail: " + String.valueOf(c.getWait_avail()));
+
+            dates.setText("Dates: " + c.getDates());
+            focus.setText("Focus: " + c.getFocusReqString());
+
             crs1.setText(c.getCourse());
             time1.setText(c.getTimeString(false));
             room1.setText(c.getRoom1());
@@ -163,9 +190,14 @@ public class Visualize extends Activity {
         days1.add('W');
         days1.add('F');
         sch = new Schedule();
+
+        ArrayList<String> foc = new ArrayList<>();
+        foc.add("WI");
+
         Course crs = new Course("ICS 314", "Software Engineering I", 51804, 3,
                 "B Auernheimer", days1, 830, 920, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
+        crs.setFocusReqs(foc);
         Course crs2 = new Course("ICS 314", "Software Engineering I", 51804, 3,
                 "B Auernheimer", days1, 930, 1020, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
