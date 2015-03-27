@@ -20,12 +20,14 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:shadowColor="@color/text_shadow"
+            android:textSize="16dp"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="3" />
         />
 
         <TextView
+            android:textSize="12dp"
             android:textStyle="bold"
             android:id="@+id/vis_time"
             android:layout_width="fill_parent"
@@ -39,6 +41,7 @@
             android:shadowRadius="3" />
 
         <TextView
+            android:textSize="14dp"
             android:textStyle="bold"
             android:id="@+id/vis_days"
             android:layout_width="fill_parent"
@@ -52,6 +55,7 @@
             android:shadowRadius="3" />
 
         <TextView
+            android:textSize="11dp"
             android:textStyle="bold"
             android:id="@+id/vis_room"
             android:layout_width="fill_parent"
@@ -86,6 +90,7 @@
             android:shadowRadius="3" />
 
         <TextView
+            android:textSize="12dp"
             android:textStyle="bold"
             android:id="@+id/vis_time2"
             android:layout_weight="1"
@@ -99,6 +104,7 @@
             android:shadowRadius="3" />
 
         <TextView
+            android:textSize="14dp"
             android:textStyle="bold"
             android:id="@+id/vis_days2"
             android:layout_width="fill_parent"
@@ -112,6 +118,7 @@
             android:shadowRadius="3" />
 
         <TextView
+            android:textSize="11dp"
             android:textStyle="bold"
             android:id="@+id/vis_room2"
             android:layout_weight="1"
@@ -248,6 +255,22 @@
             android:paddingRight="10dp"
             android:textStyle="bold"
             android:id="@+id/vis_focus"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="3" />
+
+        <TextView
+            android:textSize="16dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:id="@+id/vis_CRN"
             android:layout_weight="1"
             android:gravity="center"
             android:layout_width="fill_parent"
