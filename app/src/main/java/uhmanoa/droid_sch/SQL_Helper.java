@@ -131,7 +131,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
 
     /* Create Temp Schedules Table */
     private static final String TABLE_TSCH_CREATE = "CREATE TABLE "
-            + TABLE_COURSE
+            + TABLE_TSCH
             + "("
             + COLUMN_ID + " INT NOT NULL, "
             + COLUMN_CRN + " INT NOT NULL, "
@@ -139,9 +139,35 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_SEM + " INT NOT NULL "
             + " );";
 
-    /* Create Course Storage Table */
+
+    /* SPEED VERSION */
+    private static final String TABLE_FTS_COURSE_CREATE = "CREATE VIRTUAL TABLE "
+            + TABLE_COURSE + " USING fts4"
+            + "("
+            + COLUMN_CRN + " INT NOT NULL, "
+            + COLUMN_CRS + " TEXT NOT NULL, "
+            + COLUMN_SECT + "INT NOT NULL, "
+            + COLUMN_TITL + " TEXT NOT NULL, "
+            + COLUMN_SEM + " INT NOT NULL, "
+            + COLUMN_YEAR + " INT NOT NULL, "
+            + COLUMN_START + " INT NOT NULL, "
+            + COLUMN_START2 + " INT NOT NULL, "
+            + COLUMN_END + " INT NOT NULL, "
+            + COLUMN_END2 + " INT NOT NULL, "
+            + COLUMN_ROOM + " TEXT NOT NULL, "
+            + COLUMN_ROOM2 + " TEXT NOT NULL, "
+            + COLUMN_PROF + " TEXT NOT NULL, "
+            + COLUMN_CREDIT + " INT NOT NULL, "
+            + COLUMN_SEAT + " INT NOT NULL, "
+            + COLUMN_WAITL + " INT NOT NULL, "
+            + COLUMN_WAITLA + " INT NOT NULL, "
+            + COLUMN_DATES + " TEXT NOT NULL "
+            + " );";
+
+
+    /* ORIGINAL: Create Course Storage Table */
     private static final String TABLE_COURSE_CREATE = "CREATE TABLE "
-            + TABLE_SCH
+            + TABLE_COURSE
             + "("
             + COLUMN_CRN + " INT NOT NULL, "
             + COLUMN_CRS + " TEXT NOT NULL, "
@@ -168,6 +194,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
 
     private static final String TABLE_CFOCUS_CREATE = "CREATE TABLE "
             + TABLE_CFOCUS
+            + "("
             + COLUMN_CRS + " TEXT NOT NULL, "
             + COLUMN_SEM + " INT NOT NULL, "
             + COLUMN_YEAR + " INT NOT NULL, "
@@ -187,7 +214,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_ETH + " INT NOT NULL, "
             + COLUMN_HAP + " INT NOT NULL, "
             + COLUMN_OC + " INT NOT NULL, "
-            + COLUMN_WI + " INT NOT NULL, "
+            + COLUMN_WI + " INT NOT NULL "
             + " );";
 
     private static final String TABLE_CDAYS_CREATE = "CREATE TABLE "
@@ -246,7 +273,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
         database.execSQL(TABLE_STAR_CREATE);
         database.execSQL(TABLE_SCH_CREATE);
         database.execSQL(TABLE_TSCH_CREATE);
-        database.execSQL(TABLE_COURSE_CREATE);
+        database.execSQL(TABLE_FTS_COURSE_CREATE);
         database.execSQL(TABLE_CFOCUS_CREATE);
         database.execSQL(TABLE_CDAYS_CREATE);
         database.execSQL(TABLE_PREF_CREATE);
