@@ -98,9 +98,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         schedules = new ArrayList<Schedule>();
 
         for (int i = 0; i < 17; i++){
+            long id = i;
             titles.add("Sched" + i);
             subtitles.add("Num classes in sched " + i);
-            Schedule s = new Schedule();
+            Schedule s = new Schedule(i, 2015, 1);
             for (int j = 0; j < 4; j++) {
                 ArrayList<Character> days = new ArrayList<>();
                 days.add('M');

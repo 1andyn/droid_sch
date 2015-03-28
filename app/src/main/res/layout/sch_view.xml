@@ -12,12 +12,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <LinearLayout
-        android:padding="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         android:orientation="vertical"
         android:id="@+id/crn_list"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_year_sem"/>
+        </LinearLayout>
     <LinearLayout
         android:padding="5dp"
         android:orientation="horizontal"
@@ -28,7 +41,7 @@
         <!-- for some reason w/o scaling the button doesn't scale to the original aspect ratio -->
         <Button
             android:scaleX=".5"
-            android:scaleY=".8"
+            android:scaleY=".75"
             android:layout_weight="1"
             android:background="@drawable/ic_action_search"
             android:id="@+id/view_button"

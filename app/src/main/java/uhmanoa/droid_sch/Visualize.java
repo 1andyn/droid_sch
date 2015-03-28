@@ -193,7 +193,7 @@ public class Visualize extends Activity {
         days1.add('M');
         days1.add('W');
         days1.add('F');
-        sch = new Schedule();
+        sch = new Schedule(0, 2015, 1);
 
         ArrayList<String> foc = new ArrayList<>();
         foc.add("WI");

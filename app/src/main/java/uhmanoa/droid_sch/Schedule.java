@@ -14,13 +14,17 @@ public class Schedule {
     private long sid;
 	private ArrayList<Course> schedule;
     private int semester;
-    private boolean checked = false;
+    private int year;
+    private boolean checked = false; //always initally unchecked
 	
 	/** 
 	 * Empty constructor.
 	 */
-	public Schedule(){
-		schedule = new ArrayList<Course>();
+	public Schedule(long id, int yr, int sem){
+        sid = id;
+		year = yr;
+        semester = sem;
+        schedule = new ArrayList<Course>();
 	}
 	
 	/**
@@ -29,7 +33,10 @@ public class Schedule {
 	 * @param s Existing schedule of courses to be copied.
 	 */
 	public Schedule(Schedule s){
-		this();
+		this.sid = s.getID();
+        this.year = s.getYear();
+        this.semester = s.getSemester();
+        checked = false; //alaways initially unchecked
 		for (Course c : s.getCourses()){
 			schedule.add(c);
 		}
@@ -69,6 +76,14 @@ public class Schedule {
     public void setSemester(int pSem) { semester = pSem; }
 
     public int getSemester() { return semester; }
+
+    public void setYear(int yr) {
+        year = yr;
+    }
+
+    public int getYear() {
+        return year;
+    }
 
 	/**
 	 * Display the list of courses in the schedule.

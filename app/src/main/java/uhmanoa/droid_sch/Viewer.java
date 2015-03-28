@@ -83,14 +83,14 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
     }
 
     private void setupDebugSchedules() {
-
         for (int x = 0; x < 6; x++) {
 
             Random r = new Random(System.currentTimeMillis());
             int rcrn = 10000 + r.nextInt(20000); //Randon CRN Number
 
-            Schedule sch = new Schedule();
-            sch.setID(x);
+            long id = x;
+            final int SPRING = 1;
+            Schedule sch = new Schedule(id, 2015, SPRING);
             ArrayList<Character> days1 = new ArrayList<Character>();
             days1.add('M');
             days1.add('W');
@@ -105,7 +105,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
             ArrayList<String> fr = new ArrayList<String>();
             fr.add("NI");
 
-            Course crt = new Course("EE 160", "Programming for Engineers", rcrn, 4,
+            Course crt = new Course("AMST 202", "American Studies", rcrn, 4,
                     "T Dobry", days1, days2, 830, 730, 920, 1015, "PHYSCI 217", "POST 214", 1, 20, 0,
                     5, "01/12-05/15", "MAJOR");
             crt.setID(0);
