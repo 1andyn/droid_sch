@@ -102,6 +102,7 @@ public class Course {
     Used to hide Checkbox for Schedule Item Purposes
     * */
 
+    private int year = 2015;
 
     private int semester;
 
@@ -867,5 +868,9 @@ public class Course {
     }
 
     public int getSemester() {return semester;}
+
+    public int getYear() { return year;}
+
+    public void setYear(int yr) { year = yr;}
 
 }
