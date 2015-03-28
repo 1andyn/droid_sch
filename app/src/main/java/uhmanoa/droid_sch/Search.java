@@ -37,6 +37,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -48,6 +49,7 @@ public class Search extends ActionBarActivity implements App_const {
     // --------DEBUG
 
     private int sem;
+    private int yr;
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
@@ -87,6 +89,8 @@ public class Search extends ActionBarActivity implements App_const {
         al_course = new ArrayList<Course>();
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
+        Calendar curr_time = Calendar.getInstance();
+        yr = curr_time.get(Calendar.YEAR);
         loadImageResources();
         configureSpinner();
         configureSlidingPanel();
@@ -235,7 +239,7 @@ public class Search extends ActionBarActivity implements App_const {
         if(isclass) {
             if(!crnExists(crs.getCrn())) {
                 Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), crs.getCrn(),
-                        uniqueID(false), semester.fall.ordinal());
+                        uniqueID(false), sem, yr);
                 sobj_adp.add(so);
             } else {
                 Toast.makeText(Search.this,
@@ -245,7 +249,7 @@ public class Search extends ActionBarActivity implements App_const {
         } else {
             if(!crsExists(crs.getCourse())) {
                 Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), -1,
-                        uniqueID(false), semester.fall.ordinal());
+                        uniqueID(false), sem, yr);
                 sobj_adp.add(so);
             } else {
                 Toast.makeText(Search.this, "Course already exists in Starred List",
