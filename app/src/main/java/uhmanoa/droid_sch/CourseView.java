@@ -74,7 +74,10 @@ public class CourseView extends LinearLayout implements App_const{
         tvWait.setText(String.valueOf(crs.getWaitlisted()));
         tvWaita.setText(String.valueOf(crs.getWait_avail()));
         tvDates.setText(crs.getDates());
-        tvPreq.setText(crs.getPrereq());
+
+        // not going to have preq for now
+        tvPreq.setVisibility(View.GONE);
+        //tvPreq.setText(crs.getPrereq());
         tvFoc.setText(crs.getFocusReqString());
 
         /* This check sees if there is a second day, if not it hides it */
