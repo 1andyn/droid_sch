@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 
@@ -45,6 +46,7 @@ public class Builder extends ActionBarActivity implements App_const {
     // --------DEBUG
 
     private int sem; //semester value
+    private int yr; //year value
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
@@ -84,6 +86,8 @@ public class Builder extends ActionBarActivity implements App_const {
         al_desired = new ArrayList<>();
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
+        Calendar curr_time = Calendar.getInstance();
+        yr = curr_time.get(Calendar.YEAR);
         loadImageResources();
         loadProfiles();
         configureSpinner();
@@ -273,7 +277,7 @@ public class Builder extends ActionBarActivity implements App_const {
     private void addDesiredFromStar(long id){
         Star_obj resd =  getResultById(id);
         Star_obj so = new Star_obj(resd.getCourse(), resd.getCourseTitle(), resd.getCRN(), id,
-                resd.getSemester());
+                resd.getSemester(), resd.getYear());
 
         if(so.isClass()) {
             if(!crnExists(so.getCRN())) {
@@ -404,7 +408,8 @@ public class Builder extends ActionBarActivity implements App_const {
     private void DEBUG_add_star() {
         Random r = new Random(System.currentTimeMillis());
         int crn = 10000 + r.nextInt(20000); //Randon CRN Number
-        Star_obj so = new Star_obj("TEST COURSE", "THIS IS A TEST COURSE", crn, uniqueID(), 1);
+        Star_obj so = new Star_obj("TEST COURSE", "THIS IS A TEST COURSE", crn, uniqueID(), sem,
+                yr);
 
         al_strobj.add(so);
         mandatoryDataChange();

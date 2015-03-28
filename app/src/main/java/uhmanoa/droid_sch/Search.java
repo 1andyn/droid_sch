@@ -2,6 +2,7 @@ package uhmanoa.droid_sch;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -75,6 +76,8 @@ public class Search extends ActionBarActivity implements App_const {
     private StarListAdapter sobj_adp;
     private ResultListAdapter crs_adp;
 
+    protected SQL_DataSource datasource;
+
     private final int sliderHeight = 175;
 
     @Override
@@ -91,6 +94,9 @@ public class Search extends ActionBarActivity implements App_const {
         crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
         Calendar curr_time = Calendar.getInstance();
         yr = curr_time.get(Calendar.YEAR);
+        datasource = new SQL_DataSource(this);
+        datasource.open();
+
         loadImageResources();
         configureSpinner();
         configureSlidingPanel();
@@ -99,6 +105,49 @@ public class Search extends ActionBarActivity implements App_const {
         configureListViews();
         handleIntent(getIntent());
         toggle_ViewStub();
+
+        reloadDBData();
+        debugPrintData();
+    }
+
+
+    private void debugPrintData() {
+
+
+    }
+
+    private void reloadDBData() {
+        ArrayList<Star_obj> so = datasource.getAllStar(sem, yr);
+        sobj_adp.clear();
+        for(int x = 0; x < so.size(); x++) {
+            sobj_adp.add(so.get(x));
+        }
+        System.out.println("Contains:" + so.size());
+        for(int x = 0; x < so.size(); x++) {
+            Star_obj sos = so.get(x);
+            System.out.println("---");
+            System.out.println(sos.getCRN());
+            System.out.println(sos.getID());
+            System.out.println(sos.getCourse());
+            System.out.println(sos.getCourseTitle());
+            System.out.println("---");
+        }
+        mandatoryDataChange();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        datasource.open();
+        reloadDBData();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        datasource.close();
+        super.onPause();
     }
 
     private void configureListViews() {
@@ -150,6 +199,7 @@ public class Search extends ActionBarActivity implements App_const {
             public void onClick(View v) {
                 Toast.makeText(Search.this, "Cleared starred list",
                         Toast.LENGTH_SHORT).show();
+                datasource.deleteAllStar();
                 sobj_adp.clear();
                 sobj_adp.clearCheckedList();
                 mandatoryDataChange();
@@ -240,6 +290,7 @@ public class Search extends ActionBarActivity implements App_const {
             if(!crnExists(crs.getCrn())) {
                 Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), crs.getCrn(),
                         uniqueID(false), sem, yr);
+                so.setID(datasource.saveStar(so));
                 sobj_adp.add(so);
             } else {
                 Toast.makeText(Search.this,
@@ -250,6 +301,7 @@ public class Search extends ActionBarActivity implements App_const {
             if(!crsExists(crs.getCourse())) {
                 Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), -1,
                         uniqueID(false), sem, yr);
+                so.setID(datasource.saveStar(so));
                 sobj_adp.add(so);
             } else {
                 Toast.makeText(Search.this, "Course already exists in Starred List",
@@ -264,6 +316,7 @@ public class Search extends ActionBarActivity implements App_const {
             Long temp = al_strobj.get(x).getID();
             if (temp.equals(id)) {
                 if (DEBUG) System.out.println("Deleting " + id + " " + al_strobj.get(x).getCRN());
+                datasource.deleteStar(id);
                 sobj_adp.remove(al_strobj.get(x));
             }
         }
@@ -310,8 +363,8 @@ public class Search extends ActionBarActivity implements App_const {
         lv_sobj.invalidateViews();
         lv_results.invalidateViews();
         lv_sobj.refreshDrawableState();
-        lv_sobj.setAdapter(sobj_adp);
         lv_results.refreshDrawableState();
+        lv_sobj.setAdapter(sobj_adp);
         lv_results.setAdapter(crs_adp);
         toggle_ViewStub();
     }
@@ -647,4 +700,9 @@ public class Search extends ActionBarActivity implements App_const {
         return builder.create();
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        datasource.close();
+    }
 }

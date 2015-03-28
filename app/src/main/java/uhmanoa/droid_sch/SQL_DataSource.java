@@ -243,7 +243,8 @@ public class SQL_DataSource {
     * It then runs a function for converting the row into a
      * fav_obj (object/class representation of the Favorite Object */
 
-    public Star_obj saveStar(Star_obj pStar) {
+    public long saveStar(Star_obj pStar) {
+        database.beginTransaction();
         ContentValues values = new ContentValues();
         values.put(SQL_Helper.COLUMN_CRS, pStar.getCourse());
         values.put(SQL_Helper.COLUMN_CRN, pStar.getCRN());
@@ -252,19 +253,18 @@ public class SQL_DataSource {
         values.put(SQL_Helper.COLUMN_YEAR, pStar.getYear());
 
         long id = database.insert(SQL_Helper.TABLE_STAR, null, values);
-        pStar.setID(id);
-        Cursor curse = database.query(SQL_Helper.TABLE_STAR, STAR_COLUMN, null, null, null, null,
-                null);
-        curse.moveToFirst();
-        Star_obj so = cursorToStarObj(curse);
-        curse.close();
-        return so;
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return id;
     }
 
     //delete starred
     public void deleteStar(long id) {
+        database.beginTransaction();
         System.out.println("Deleting Starred Object with id: " + id);
         database.delete(SQL_Helper.TABLE_STAR, SQL_Helper.COLUMN_ID + " = " + id, null);
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     //get all starred
@@ -281,10 +281,17 @@ public class SQL_DataSource {
     }
 
 
-    public ArrayList<Star_obj> getAllStar() {
+    public ArrayList<Star_obj> getAllStar(int sem, int yr) {
+        database.beginTransaction();
+        String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ?";
+        String whereArgs[] = {
+                String.valueOf(sem),
+                String.valueOf(yr)
+        };
+
         ArrayList<Star_obj> all_starobj = new ArrayList<Star_obj>();
-        Cursor curse = database.query(SQL_Helper.TABLE_STAR, STAR_COLUMN, null, null, null, null,
-                SQL_Helper.COLUMN_CRN + " ASC");
+        Cursor curse = database.query(SQL_Helper.TABLE_STAR, STAR_COLUMN, whereClause, whereArgs,
+                null, null, SQL_Helper.COLUMN_CRN + " ASC");
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
             Star_obj so = cursorToStarObj(curse);
@@ -292,12 +299,17 @@ public class SQL_DataSource {
             curse.moveToNext();
         }
         curse.close();
+        database.setTransactionSuccessful();
+        database.endTransaction();
         return all_starobj;
     }
 
     //delete all starred
     public void deleteAllStar() {
+        database.beginTransaction();
         database.delete(SQL_Helper.TABLE_STAR, null, null);
+        database.setTransactionSuccessful();
+        database.endTransaction();
         System.out.println("Removed all Starred/Favorite Courses");
     }
 

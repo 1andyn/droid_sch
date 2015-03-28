@@ -38,6 +38,7 @@ public class Main_menu extends Activity implements OnCheckTaskComplete{
     private ProgressDialog pg;
     ParserDataCheck prs;
     Dialog d;
+    protected SQL_DataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,22 @@ public class Main_menu extends Activity implements OnCheckTaskComplete{
         pg.setCancelable(false);
         Calendar curr_time = Calendar.getInstance();
         curr_year = curr_time.get(Calendar.YEAR);
+        datasource = new SQL_DataSource(this);
+        datasource.open();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        datasource.close();
+        super.onPause();
     }
 
     protected void populate_btncontainer() {
