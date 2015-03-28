@@ -70,10 +70,10 @@ public class Builder extends ActionBarActivity implements App_const {
 
     // Container Adapter
     private StarListAdapter sobj_adp, desd_adp;
+    protected SQL_DataSource datasource;
 
     private final int sliderHeight = 175;
     private int min_course = -1; //if -1, then use size equal to desired list
-    private int semsester = -1; //this should not be -1, if it is something went wrong
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +88,8 @@ public class Builder extends ActionBarActivity implements App_const {
         desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
         Calendar curr_time = Calendar.getInstance();
         yr = curr_time.get(Calendar.YEAR);
+        datasource = new SQL_DataSource(this);
+        datasource.open();
         loadImageResources();
         loadProfiles();
         configureSpinner();
@@ -97,6 +99,42 @@ public class Builder extends ActionBarActivity implements App_const {
         configureListViews();
         handleIntent(getIntent());
         toggle_ViewStub();
+
+        reloadDBData();
+    }
+
+    private void reloadDBData() {
+        ArrayList<Star_obj> so = datasource.getAllStar(sem, yr);
+        sobj_adp.clear();
+        for(int x = 0; x < so.size(); x++) {
+            sobj_adp.add(so.get(x));
+        }
+        System.out.println("Contains:" + so.size());
+        for(int x = 0; x < so.size(); x++) {
+            Star_obj sos = so.get(x);
+            System.out.println("---");
+            System.out.println(sos.getCRN());
+            System.out.println(sos.getID());
+            System.out.println(sos.getCourse());
+            System.out.println(sos.getCourseTitle());
+            System.out.println("---");
+        }
+        mandatoryDataChange();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        datasource.open();
+        reloadDBData();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        datasource.close();
+        super.onPause();
     }
 
     private void loadProfiles() {
@@ -303,6 +341,7 @@ public class Builder extends ActionBarActivity implements App_const {
             Long temp = al_strobj.get(x).getID();
             if (temp.equals(id)) {
                 if (DEBUG) System.out.println("Deleting " + id + " " + al_strobj.get(x).getCRN());
+                datasource.deleteStar(id);
                 sobj_adp.remove(al_strobj.get(x));
             }
         }
