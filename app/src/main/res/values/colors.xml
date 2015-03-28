@@ -2,6 +2,7 @@
 <resources>
     <color name="aqua">#66FFCC</color>
     <color name="dark_aqua">#52CCA3</color>
+    <color name="darker_gray">#353535</color>
     <color name="dark_gray">#4C4C4C</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>

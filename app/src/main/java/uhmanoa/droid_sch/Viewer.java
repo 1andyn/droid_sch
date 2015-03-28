@@ -1,5 +1,7 @@
 package uhmanoa.droid_sch;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -60,15 +62,35 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
         DeleteItemStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Viewer.this, "Deleting selected items",
-                        Toast.LENGTH_SHORT).show();
-                ArrayList<Long> checked = sch_adp.getChecked_list();
-                System.out.println("Outputting Selection");
-                for (Long l : checked) {
-                    deleteSchedByID(l);
-                }
-                sch_adp.clearCheckedList();
-                mandatoryDataChange();
+                AlertDialog.Builder confirm = new AlertDialog.Builder(Viewer.this)
+                        .setTitle("Deletion Confirmation")
+                        .setMessage("Are you sure you want to delete the selected schedules?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Toast.makeText(Viewer.this, "Deleting selected items",
+                                        Toast.LENGTH_SHORT).show();
+                                ArrayList<Long> checked = sch_adp.getChecked_list();
+                                System.out.println("Outputting Selection");
+                                for (Long l : checked) {
+                                    deleteSchedByID(l);
+                                }
+                                sch_adp.clearCheckedList();
+                                mandatoryDataChange();
+                                return;
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+                confirm.show();
+
+
+
+
             }
         });
     }

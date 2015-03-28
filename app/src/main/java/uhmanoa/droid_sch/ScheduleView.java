@@ -40,7 +40,7 @@ public class ScheduleView extends LinearLayout {
             tvcrs.setTextColor(getResources().getColor(R.color.dark_aqua));
 
             TextView tvcrn = new TextView(context);
-            tvcrn.setText("CRN: " + String.valueOf(crs.get(x).getCrn()));
+            tvcrn.setText(String.valueOf(crs.get(x).getCrn()));
             tvcrn.setTextSize(14);
             tvcrn.setTypeface(null, Typeface.BOLD);
             tvcrn.setTextColor(getResources().getColor(R.color.white));
@@ -56,8 +56,8 @@ public class ScheduleView extends LinearLayout {
         String sem = "SEM";
         switch (sched.getSemester()) {
             case 0: sem = "FALL"; break;
-            case 1: sem = "SPRING"; break;
-            case 2: sem = "SUMMER"; break;
+            case 1: sem = "SPRG"; break;
+            case 2: sem = "SUMR"; break;
         }
 
         tv.setText(sem + " " + String.valueOf(sched.getYear()));
