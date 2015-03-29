@@ -38,7 +38,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     // Table #2 Columns, count = 4, reusing 4: ID, CRN, SEM, YEAR columns -> 0
     // Table #3 Columns, count = 4,  reusing 4: ID, CRN, SEM, YEAR columns -> 0
 
-    // Table #4 Columns, count = 18, resusing 5: CRN, SEM, YEAR, CRS, TITLE-> 13
+    // Table #4 Columns, count = 19, resusing 5: CRN, SEM, YEAR, CRS, TITLE-> 13
     public static final String COLUMN_SECT = "intSection";
     public static final String COLUMN_CREDIT = "intCredits";
     public static final String COLUMN_PROF = "strProf";
@@ -52,6 +52,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     public static final String COLUMN_WAITL = "strWaitlisted";
     public static final String COLUMN_WAITLA = "strWaitAvail";
     public static final String COLUMN_DATES = "strDates";
+    public static final String COLUMN_MJR = "strMajor";
 
     /* Columns for Focus/GE Flags */
     // Table #5 Columns count = 20, rusing 3 Course, Semester, Year -> 17
@@ -90,7 +91,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     //Table #8; count = 10; reuse 10: pname, start, end sun, mon, tue, wed, thr, fri, sat,
 
     /* Table Names */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String TABLE_STAR = "tbStarred";
     public static final String TABLE_SCH = "tbSched";
     public static final String TABLE_TSCH = "tbTempSched";
@@ -107,7 +108,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     private static final String TABLE_STAR_CREATE = "CREATE TABLE "
             + TABLE_STAR
             + "("
-            + COLUMN_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_CRN + " INT NOT NULL, "
             + COLUMN_CRS + " TEXT NOT NULL, "
             + COLUMN_TITL + " TEXT NOT NULL, "
@@ -161,7 +162,8 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_SEAT + " INT NOT NULL, "
             + COLUMN_WAITL + " INT NOT NULL, "
             + COLUMN_WAITLA + " INT NOT NULL, "
-            + COLUMN_DATES + " TEXT NOT NULL "
+            + COLUMN_DATES + " TEXT NOT NULL, "
+            + COLUMN_MJR + " TEXT NOT NULL "
             + " );";
 
 
@@ -186,7 +188,8 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_SEAT + " INT NOT NULL, "
             + COLUMN_WAITL + " INT NOT NULL, "
             + COLUMN_WAITLA + " INT NOT NULL, "
-            + COLUMN_DATES + " TEXT NOT NULL "
+            + COLUMN_DATES + " TEXT NOT NULL, "
+            + COLUMN_MJR + " TEXT NOT NULL "
             + " );";
 
     // For Reference Purposes
@@ -265,7 +268,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     public SQL_Helper(Context context) {
         //super(context, DATABASE_NAME, null, DATABASE_VERSION);
         super(context, "/mnt/sdcard/" + DATABASE_NAME, null, DATABASE_VERSION);
-		    /*DEBUG ONLY, use COMMENTED VERSION FOR RELEASE */
+            /*DEBUG ONLY, use COMMENTED VERSION FOR RELEASE */
     }
 
     @Override
