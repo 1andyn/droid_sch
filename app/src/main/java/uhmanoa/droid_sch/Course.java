@@ -106,6 +106,8 @@ public class Course {
 
     private int semester;
 
+    private String major = "";
+
     /**
      * Empty constructor
      */
@@ -872,5 +874,13 @@ public class Course {
     public int getYear() { return year;}
 
     public void setYear(int yr) { year = yr;}
+
+    public void setMajor(String m) {
+        major = m;
+    }
+
+    public String getMajor() {
+        return major;
+    }
 
 }

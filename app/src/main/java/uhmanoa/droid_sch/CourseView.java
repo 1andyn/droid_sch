@@ -61,10 +61,15 @@ public class CourseView extends LinearLayout implements App_const{
         tvDay.setText(ModifySpacingString(String.valueOf(crs.getDayString(false)),
                 ViewStringCat.day));
         tvLoc.setText(ModifySpacingString(String.valueOf(crs.getRoom1()), ViewStringCat.loc));
-        tvStart.setText(ModifySpacingString(String.valueOf(crs.getStartString(false)),
-                ViewStringCat.time));
-        tvEnd.setText(ModifySpacingString(String.valueOf(crs.getEndString(false)),
-                ViewStringCat.time));
+        if(crs.getStart1() == -1) {
+            tvStart.setText(ModifySpacingString("TBA", ViewStringCat.time));
+            tvEnd.setText(ModifySpacingString("TBA", ViewStringCat.time));
+        } else {
+            tvStart.setText(ModifySpacingString(String.valueOf(crs.getStartString(false)),
+                    ViewStringCat.time));
+            tvEnd.setText(ModifySpacingString(String.valueOf(crs.getEndString(false)),
+                    ViewStringCat.time));
+        }
 
         tvCred.setText(String.valueOf(crs.getCredits()));
         tvSec.setText(ModifySpacingString(String.valueOf(crs.getSection()),
