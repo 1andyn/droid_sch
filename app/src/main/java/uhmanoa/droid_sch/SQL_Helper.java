@@ -91,7 +91,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     //Table #8; count = 10; reuse 10: pname, start, end sun, mon, tue, wed, thr, fri, sat,
 
     /* Table Names */
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     public static final String TABLE_STAR = "tbStarred";
     public static final String TABLE_SCH = "tbSched";
     public static final String TABLE_TSCH = "tbTempSched";
@@ -147,7 +147,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + "("
             + COLUMN_CRN + " INT NOT NULL, "
             + COLUMN_CRS + " TEXT NOT NULL, "
-            + COLUMN_SECT + "INT NOT NULL, "
+            + COLUMN_SECT + " INT NOT NULL, "
             + COLUMN_TITL + " TEXT NOT NULL, "
             + COLUMN_SEM + " INT NOT NULL, "
             + COLUMN_YEAR + " INT NOT NULL, "
@@ -173,7 +173,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + "("
             + COLUMN_CRN + " INT NOT NULL, "
             + COLUMN_CRS + " TEXT NOT NULL, "
-            + COLUMN_SECT + "INT NOT NULL, "
+            + COLUMN_SECT + " INT NOT NULL, "
             + COLUMN_TITL + " TEXT NOT NULL, "
             + COLUMN_SEM + " INT NOT NULL, "
             + COLUMN_YEAR + " INT NOT NULL, "
