@@ -107,12 +107,18 @@ public class Search extends ActionBarActivity implements App_const {
         toggle_ViewStub();
 
         reloadDBData();
-        debugPrintData();
+        checkCourseData();
     }
 
 
-    private void debugPrintData() {
-
+    private void checkCourseData() {
+        if(datasource.courseDataExists(sem, yr)) {
+            Toast.makeText(Search.this, "Course data exists.",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(Search.this, "No courses currently downloaded.",
+                    Toast.LENGTH_SHORT).show();
+        }
 
     }
 
