@@ -127,7 +127,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
             ArrayList<String> fr = new ArrayList<String>();
             fr.add("NI");
 
-            Course crt = new Course("AMST 202", "American Studies", rcrn, 4,
+            Course crt = new Course("AMST 202", "American Studies", rcrn, "4",
                     "T Dobry", days1, days2, 830, 730, 920, 1015, "PHYSCI 217", "POST 214", 1, 20, 0,
                     5, "01/12-05/15", "MAJOR");
             crt.setID(0);
@@ -136,7 +136,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
             ArrayList<Character> days3 = new ArrayList<Character>();
             days3.add('M');
             days3.add('W');
-            Course crt2 = new Course("EE 205", "Object Oriented Programming", rcrn, 3,
+            Course crt2 = new Course("EE 205", "Object Oriented Programming", rcrn, "3",
                     "R Zhang", days3, days4, 1130, 300, 1220, 545, "POST 214", "POST 214", 1, 20, 0,
                     5, "01/12-05/15", "MAJOR");
             crt2.setID(1);

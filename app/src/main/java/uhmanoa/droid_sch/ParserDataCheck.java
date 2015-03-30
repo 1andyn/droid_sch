@@ -81,7 +81,7 @@ public class ParserDataCheck extends AsyncTask<Integer, Void, Integer> {
         try {
             System.setProperty("https.protocols", "TLSv1,SSLv3,SSLv2Hello");
             Document doc = Jsoup.connect("http://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=" +
-            calculateURLField(year, sem)).get();
+                    calculateURLField(year, sem)).timeout(0).userAgent("Mozilla").get();
             Element span_data = doc.select("TD.indefault").first();
             if(span_data == null) {
                 found = false;

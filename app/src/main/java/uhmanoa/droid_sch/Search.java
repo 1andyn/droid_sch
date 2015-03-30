@@ -37,13 +37,19 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Random;
 
 
-public class Search extends ActionBarActivity implements App_const {
+public class Search extends ActionBarActivity implements App_const, OnParseTaskComplete {
 
     // --------DEBUG
     private boolean DEBUG = true;
@@ -51,6 +57,7 @@ public class Search extends ActionBarActivity implements App_const {
 
     private int sem;
     private int yr;
+    private int month;
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
@@ -61,6 +68,8 @@ public class Search extends ActionBarActivity implements App_const {
     private ViewStub empty_star;
     private ArrayList<Star_obj> al_strobj;
     private ArrayList<Course> al_course;
+    private ArrayList<String> mjr_list;
+    private ArrayList<String> full_mjr_list;
     private ArrayAdapter<CharSequence> spinner_data;
     private boolean en_start_tp, en_end_tp = false;
     private int start_hr, end_hr, start_min, end_min = 0;
@@ -76,7 +85,9 @@ public class Search extends ActionBarActivity implements App_const {
     private StarListAdapter sobj_adp;
     private ResultListAdapter crs_adp;
 
+    private ProgressDialog pd;
     protected SQL_DataSource datasource;
+    private Parser p;
 
     private final int sliderHeight = 175;
 
@@ -90,15 +101,23 @@ public class Search extends ActionBarActivity implements App_const {
         SelectedItems = new ArrayList<Integer>();
         al_strobj = new ArrayList<Star_obj>();
         al_course = new ArrayList<Course>();
+
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
+
         Calendar curr_time = Calendar.getInstance();
         yr = curr_time.get(Calendar.YEAR);
+        month = curr_time.get(Calendar.MONTH);
+
         datasource = new SQL_DataSource(this);
         datasource.open();
 
+        pd = new ProgressDialog(Search.this);
+        pd.setMessage("Checking course data availability...");
+        pd.setCancelable(false);
+
         loadImageResources();
-        configureSpinner();
+        configureSpinnerData(null, null);
         configureSlidingPanel();
         configureViewStubs();
         configureListeners();
@@ -113,11 +132,14 @@ public class Search extends ActionBarActivity implements App_const {
 
     private void checkCourseData() {
         if(datasource.courseDataExists(sem, yr)) {
-            Toast.makeText(Search.this, "Course data exists.",
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(Search.this, "Course data exists.",
+//                    Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(Search.this, "No courses currently downloaded.",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(Search.this, "No courses currently downloaded..." +
+                            " attempting to retrieve data ",
+                    Toast.LENGTH_LONG).show();
+            p = new Parser(pd, datasource, this, this);
+            p.execute(sem, yr,month);
         }
 
     }
@@ -406,17 +428,45 @@ public class Search extends ActionBarActivity implements App_const {
         return true;
     }
 
+    private void configureSpinnerData(ArrayList<String> full, ArrayList<String> mjr) {
+        mjr_list = new ArrayList<>();
+        full_mjr_list = new ArrayList<>();
+
+        full_mjr_list.add("Select a Major"); //initial
+        mjr_list.add("NONE"); //initial
+
+        if(full != null) {
+            for (String s : full) {
+                full_mjr_list.add(s);
+            }
+        }
+
+        if(mjr != null) {
+            for (String s : mjr) {
+                mjr_list.add(s);
+            }
+        }
+
+        configureSpinner();
+
+    }
+
     protected void configureSpinner() {
-        spinner = (Spinner) findViewById(R.id.major_spinner);
-        spinner_data = ArrayAdapter.createFromResource(this,
-                R.array.major_list, android.R.layout.simple_spinner_item);
+        if(spinner == null) {
+            spinner = (Spinner) findViewById(R.id.major_spinner);
+        }
+
+        spinner_data = new ArrayAdapter(this, android.R.layout.simple_spinner_item,
+                full_mjr_list.toArray());
+
         spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinner_data);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
-                Toast.makeText(Search.this, "Major selected: " + pos + " with Id: " + id,
+                Toast.makeText(Search.this, "Major selected: " + pos + " with Id: " + id + " KEY: "
+                        + mjr_list.get(pos),
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -499,19 +549,19 @@ public class Search extends ActionBarActivity implements App_const {
         int rand = randValue();
         switch (rand) {
             case 1:
-                debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, 920, 1030, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+                debug = new Course("ICS 314", "Software Engineering I", 51804, "3",
+                        "Brent Auernheimer", days1, 920, 1030, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                         "MATH CLASS ");
                 break;
             case 0:
-                debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1320, "SAKAM D101",
+                debug = new Course("ICS 414", "Software Engineering II", 22222, "3",
+                        "Brent Auernheimer", days1, days2, 930, 1130, 1020, 1320, "SAKAM D101",
                         "HOLM 243", 2, 20, 0, 10, "1/3 to 4/27",
                         "MATH CLASS ");
 
                 break;
             default:
-                debug = new Course("ICS 314", "Software Engineering I", crn, 3,
+                debug = new Course("ICS 314", "Software Engineering I", crn, "3",
                         "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
                         "HOLM 243", 3, 0, 3, 7, "4/3 to 5/27",
                         "MATH CLASS ");
@@ -711,4 +761,15 @@ public class Search extends ActionBarActivity implements App_const {
         super.onDestroy();
         datasource.close();
     }
+
+    @Override
+    public void onParseTaskComplete(IOException e) {
+        if(e != null) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "LOADING SPINNA DATA", Toast.LENGTH_LONG).show();
+        configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
+        reloadDBData();
+    }
+
 }
