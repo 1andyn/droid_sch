@@ -175,6 +175,20 @@ public class SQL_DataSource {
         COLUMN_SAT
     }
 
+    private String[] MJR_COLUMN = {
+        SQL_Helper.COLUMN_SEM,
+        SQL_Helper.COLUMN_YEAR,
+        SQL_Helper.COLUMN_MJR,
+        SQL_Helper.COLUMN_FMJR
+    }
+    
+    enum MJR_ENUM {
+        COLUMN_SEM,
+        COLUMN_YEAR,
+        COLUMN_MJR,
+        COLUMN_FMJR
+    }
+
     private String[] PREF_COLUMN = {
             SQL_Helper.COLUMN_PNAME,
             SQL_Helper.COLUMN_CRSMIN,
@@ -455,20 +469,37 @@ public class SQL_DataSource {
         return so;
     }
 
-    public ArrayList<Course> getSearchResults(int sem, int year, String search_text) {
+    public ArrayList<Course> getSearchResults(int sem, int year, String search_text, String mjr_key) {
         database.beginTransaction();
-
-        //Results Based on CRN
-        String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ? AND " +
-                "(" + SQL_Helper.COLUMN_CRN + " MATCH ? OR " + SQL_Helper.COLUMN_CRS + " MATCH ? " +
-                " OR " + SQL_Helper.COLUMN_TITL + " MATCH ?)";
+        
+        String whereClause;
         String whereArgs[] = {
                 String.valueOf(sem),
                 String.valueOf(year),
                 search_text,
                 search_text,
                 search_text
-        };
+        }
+        
+        if(mjr_key == "NONE") {
+            //don't filter by MAJOR
+            //checks for matches in CRN column, TITLE column and COURSE NAME Column
+            whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ? AND " +
+                "(" + SQL_Helper.COLUMN_CRN + " MATCH ? OR " + SQL_Helper.COLUMN_CRS + " MATCH ? " +
+                " OR " + SQL_Helper.COLUMN_TITL + " MATCH ?)";
+        } else {
+            whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ? AND " +
+                SQL_Helper.COLUMN_MJR + " = ?" +
+                "(" + SQL_Helper.COLUMN_CRN + " MATCH ? OR " + SQL_Helper.COLUMN_CRS + " MATCH ? " +
+                " OR " + SQL_Helper.COLUMN_TITL + " MATCH ?)";
+            whereArgs[] = {
+                String.valueOf(sem),
+                String.valueOf(year),
+                mjr_key,
+                search_text,
+                search_text,
+                search_text
+        }
 
         ArrayList<Course> results = new ArrayList<>();
         Cursor curse = database.query(SQL_Helper.TABLE_COURSE, COURSE_COLUMN, whereClause, whereArgs,
@@ -488,6 +519,54 @@ public class SQL_DataSource {
 
     //--------------------------- COURSE SEARCH DB HELPER FUNCTIONS ------------------------------//
 
+    //--------------------------- MAJOR DATA DB HELPER FUNCTIONS ---------------------------------//
+    
+        public void saveMajor(String full_major, String mjr, int sem, int year) {
+        database.beginTransaction();
+        ContentValues values = new ContentValues();
+        values.put(SQL_Helper.COLUMN_SEM, sem);
+        values.put(SQL_Helper.COLUMN_YEAR, year);
+        values.put(SQL_Helper.COLUMN_MJR, mjr);
+        values.put(SQL_Helper.COLUMN_FMJR, full_major);
+
+        database.insert(SQL_Helper.TABLE_MAJOR, null, values);
+        database.setTransactionSuccessful();
+        database.endTransaction();
+    }
+    
+    public ArrayList<ArrayList<String>> getMajorLists(int sem, int year) {
+        ArrayList<ArrayList<String>> main_container = new ArrayList<>();
+        main_container.add(new ArrayList<String>()); //this is the container for full major list
+        main_container.add(new ArrayList<String>()); //this is the container for the short major list;
+        //e.g. electrical engineering -> stored as EE
+        
+         database.beginTransaction();
+        //Results semester and year
+        String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ?";
+        String whereArgs[] = {
+                String.valueOf(sem),
+                String.valueOf(year),
+        };
+
+        ArrayList<String> full_mjr = main_container.get(0);
+        ArrayList<String> mjr = main_container.get(1);
+        Cursor curse = database.query(SQL_Helper.MAJOR, MJR_COLUMN, whereClause, whereArgs,
+                null, null, SQL_Helper.COLUMN_FMAJR + " ASC");
+        curse.moveToFirst();
+        while (!curse.isAfterLast()) {
+            mjr.add(curse.getString(MJR_ENUM.COLUMN_MJR.oridinal()));
+            full_mjr.add(curse.getString(MJR_ENUM.COLUMN_FMJR.oridinal()));
+            curse.moveToNext();
+        }
+        curse.close();
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return main_container;
+    }
+    
+    //--------------------------- MAJOR DATA DB HELPER FUNCTIONS ---------------------------------//
+    
     //--------------------------- COURSE DB HELPER FUNCTIONS ----------------------------------//
 
     private Course cursorToCourse(Cursor curse) {
@@ -815,8 +894,6 @@ public class SQL_DataSource {
     }
 
     //--------------------------- COURSE DB HELPER FUNCTIONS ----------------------------------//
-
-
     public void deleteSchedule(Schedule s) {
         long id = s.getID();
         System.out.println("Deleted Schedule with id: " + id);
