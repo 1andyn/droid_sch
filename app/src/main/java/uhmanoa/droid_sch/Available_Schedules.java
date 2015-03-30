@@ -107,7 +107,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                 days.add('M');
                 days.add('W');
                 days.add('F');
-                Course c = new Course("EE" + j, "Stuff", 39390 + j, 3, "Professor " + j,
+                Course c = new Course("EE" + j, "Stuff", 39390 + j, "3", "Professor " + j,
                         days, null);// 1230 + j, 1320+ j, "POST" + j);
                 s.addCourse(c);
             }

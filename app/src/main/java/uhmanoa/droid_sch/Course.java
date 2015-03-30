@@ -24,7 +24,7 @@ public class Course {
     /**
      * Credit hours
      */
-    private int credits;
+    private String credits;
     /**
      * Course professor
      */
@@ -152,7 +152,7 @@ public class Course {
      * @param professor Instructor for the course
      * @param fr        Focus requirements for the course, can be 'null.'
      */
-    public Course(String crs, String title, int crn, int credits, String professor,
+    public Course(String crs, String title, int crn, String credits, String professor,
                   ArrayList<Character> d1, ArrayList<String> fr) {
         initValues();
         this.course = crs;
@@ -180,7 +180,7 @@ public class Course {
      * @param end1      End time of the course
      * @param room1     Room the class is held in
      */
-    public Course(String crs, String title, int crn, int credits, String professor,
+    public Course(String crs, String title, int crn, String credits, String professor,
                   ArrayList<Character> days1, int start1, int end1, String room1, int sec,
                   int seats, int wlist, int wlist_a, String date, String req) {
         initValues();
@@ -219,7 +219,7 @@ public class Course {
      * @param room1     Room the first segment of class is held in
      * @param room2     Room the second segment of class is held in
      */
-    public Course(String crs, String title, int crn, int credits, String professor,
+    public Course(String crs, String title, int crn, String credits, String professor,
                   ArrayList<Character> days1, ArrayList<Character> days2, int start1, int start2,
                   int end1, int end2, String room1, String room2, int sec, int seats, int wlist,
                   int wlist_a, String date, String req) {
@@ -253,7 +253,7 @@ public class Course {
         this.course = "";
         this.title = "";
         this.crn = 9999;
-        this.credits = 9999;
+        this.credits = "9999";
         this.professor = "";
         this.days1 = null;
         this.days2 = null;
@@ -466,7 +466,7 @@ public class Course {
      * @return True if course is valid. False if information is missing
      */
     public boolean isInvalid() {
-        if (getTitle() != "" && getCrn() != 9999 && getCredits() != 9999 &&
+        if (getTitle() != "" && getCrn() != 9999 && getCredits() != "9999" &&
                 getProfessor() != "" && getDays1() != null &&
                 getStart1() != 9999 && getEnd1() != 9999 && getRoom1() != "") {
             if (getDays2() == null && getStart2() == 9999 && getEnd2() == 9999 &&
@@ -478,7 +478,6 @@ public class Course {
         }
 
         return true;
-
     }
 
     /*	Setters	*/
@@ -494,7 +493,7 @@ public class Course {
         this.crn = crn;
     }
 
-    public void setCredits(int credits) {
+    public void setCredits(String credits) {
         this.credits = credits;
     }
 
@@ -745,7 +744,7 @@ public class Course {
         return crn;
     }
 
-    public int getCredits() {
+    public String getCredits() {
         return credits;
     }
 

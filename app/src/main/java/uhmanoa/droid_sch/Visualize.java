@@ -198,14 +198,14 @@ public class Visualize extends Activity {
         ArrayList<String> foc = new ArrayList<>();
         foc.add("WI");
 
-        Course crs = new Course("ICS 314", "Software Engineering I", 51804, 3,
+        Course crs = new Course("ICS 314", "Software Engineering I", 51804, "3",
                 "B Auernheimer", days1, 830, 920, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
         crs.setFocusReqs(foc);
-        Course crs2 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+        Course crs2 = new Course("ICS 314", "Software Engineering I", 51804, "3",
                 "B Auernheimer", days1, 930, 1020, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
-        Course crs3 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+        Course crs3 = new Course("ICS 314", "Software Engineering I", 51804, "3",
                 "B Auernheimer", days1, 1030, 1120, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
         sch.addCourse(crs);
@@ -217,10 +217,10 @@ public class Visualize extends Activity {
 
         ArrayList<Character> days3 = new ArrayList<>();
         days3.add('S');
-        Course crs4 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+        Course crs4 = new Course("ICS 314", "Software Engineering I", 51804, "3",
                 "B Auernheimer", days2, 855, 1145, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
-        Course crs5 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+        Course crs5 = new Course("ICS 314", "Software Engineering I", 51804, "3",
                 "B Auernheimer", days3, 1130, 1245, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");
         sch.addCourse(crs4);
@@ -233,7 +233,7 @@ public class Visualize extends Activity {
         ArrayList<Character> days5 = new ArrayList<Character>();
         days5.add('S');
 
-        Course crs6 = new Course("ICS 314", "Software Engineering I", 51804, 3,
+        Course crs6 = new Course("ICS 314", "Software Engineering I", 51804, "3",
                 "B Auernheimer", days4, days5, 1230, 900, 1330, 1000, "SAKAM D101", "SAKAM D202",
                 1, 10, 0, 10, "3/3 to 4/27",
                 "MATH CLASS ");

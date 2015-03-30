@@ -71,7 +71,7 @@ public class CourseView extends LinearLayout implements App_const{
                     ViewStringCat.time));
         }
 
-        tvCred.setText(String.valueOf(crs.getCredits()));
+        tvCred.setText(crs.getCredits());
         tvSec.setText(ModifySpacingString(String.valueOf(crs.getSection()),
                 ViewStringCat.sect));
 
@@ -111,7 +111,6 @@ public class CourseView extends LinearLayout implements App_const{
             tvDay2.setText(ModifySpacingString(String.valueOf(crs.getDayString(true)),
                     ViewStringCat.day));
         }
-
     }
 
     public void setObj(Course pcrs) {

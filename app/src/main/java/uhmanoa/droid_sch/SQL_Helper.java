@@ -40,7 +40,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
 
     // Table #4 Columns, count = 19, resusing 5: CRN, SEM, YEAR, CRS, TITLE-> 13
     public static final String COLUMN_SECT = "intSection";
-    public static final String COLUMN_CREDIT = "intCredits";
+    public static final String COLUMN_CREDIT = "strCredits";
     public static final String COLUMN_PROF = "strProf";
     public static final String COLUMN_START = "intStart";
     public static final String COLUMN_START2 = "intStart2";
@@ -88,10 +88,12 @@ public class SQL_Helper extends SQLiteOpenHelper {
     public static final String COLUMN_PNAME = "strName"; //profile Name
     public static final String COLUMN_CRSMIN = "intMin"; //minimum course count
 
-    //Table #8; count = 10; reuse 10: pname, start, end sun, mon, tue, wed, thr, fri, sat,
+    //Table #8; count = 10; reuse 10: pname, start, end sun, mon, tue, wed, thr, fri, sat -> 0
+    //Table #9 count = 4; reuse: semester, year, mjr -> 1
+    public static final String COLUMN_FMAJOR = "strFMajor"; //full major name
 
     /* Table Names */
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 6;
     public static final String TABLE_STAR = "tbStarred";
     public static final String TABLE_SCH = "tbSched";
     public static final String TABLE_TSCH = "tbTempSched";
@@ -100,6 +102,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     public static final String TABLE_CDAY = "tbCDays";
     public static final String TABLE_PREF = "tbPref";
     public static final String TABLE_PBLOCK = "tbPBlock";
+    public static final String TABLE_MAJOR = "tbMajor";
 
     /* Database Name */
     private final static String DATABASE_NAME = "dbManoaSch.db";
@@ -184,7 +187,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_ROOM + " TEXT NOT NULL, "
             + COLUMN_ROOM2 + " TEXT NOT NULL, "
             + COLUMN_PROF + " TEXT NOT NULL, "
-            + COLUMN_CREDIT + " INT NOT NULL, "
+            + COLUMN_CREDIT + " TEXT NOT NULL, "
             + COLUMN_SEAT + " INT NOT NULL, "
             + COLUMN_WAITL + " INT NOT NULL, "
             + COLUMN_WAITLA + " INT NOT NULL, "
@@ -265,6 +268,15 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_SAT + " INT NOT NULL "
             + " );";
 
+    private static final String TABLE_MAJOR_CREATE = "CREATE TABLE "
+            + TABLE_MAJOR
+            + "("
+            + COLUMN_SEM + " INT NOT NULL, "
+            + COLUMN_YEAR + " INT NOT NULL, "
+            + COLUMN_MJR + " TEXT NOT NULL, "
+            + COLUMN_FMAJOR + " TEXT NOT NULL "
+            + " );";
+
     public SQL_Helper(Context context) {
         //super(context, DATABASE_NAME, null, DATABASE_VERSION);
         super(context, "/mnt/sdcard/" + DATABASE_NAME, null, DATABASE_VERSION);
@@ -281,6 +293,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
         database.execSQL(TABLE_CDAYS_CREATE);
         database.execSQL(TABLE_PREF_CREATE);
         database.execSQL(TABLE_PBLOCK_CREATE);
+        database.execSQL(TABLE_MAJOR_CREATE);
     }
 
     @Override
@@ -296,6 +309,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CDAY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PREF);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PBLOCK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAJOR);
         onCreate(db);
     }
 }
