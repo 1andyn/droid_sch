@@ -7,12 +7,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Display;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,6 +53,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private boolean DEBUG = true;
     // --------DEBUG
 
+    private static String pref_file = "PREF_FILE";
+
+    private boolean lastLoadSuccess = false;
     private int sem;
     private int yr;
     private int month;
@@ -69,6 +75,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private boolean en_start_tp, en_end_tp = false;
     private int start_hr, end_hr, start_min, end_min = 0;
     private ListView lv_results, lv_sobj;
+    PowerManager.WakeLock wl;
 
     // Dialog for Timer Picker
     private CheckBox en_start;
@@ -111,6 +118,18 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         pd.setMessage("Checking course data availability...");
         pd.setCancelable(false);
 
+        SharedPreferences settings = getSharedPreferences(pref_file, 0);
+        lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
+                String.valueOf(yr), false);
+
+        if(DEBUG) {
+            if(lastLoadSuccess) {
+                System.out.println("DEBUG: LAST LOAD WAS SUCCESS");
+            } else {
+                System.out.println("DEBUG: LAST LOAD WAS FAILED");
+            }
+        }
+
         loadImageResources();
         configureSpinnerData(null, null);
         configureSlidingPanel();
@@ -126,17 +145,26 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
 
     private void checkCourseData() {
-        if(datasource.courseDataExists(sem, yr)) {
-//            Toast.makeText(Search.this, "Course data exists.",
-//                    Toast.LENGTH_SHORT).show();
+
+        if(!datasource.courseDataExists(sem, yr) || !lastLoadSuccess ) {
+
+            System.out.println("DEBUG: DATA QUERY IS NOT WORKING");
+            //Retrieve Course Data
+            datasource.clearCourseData(sem, yr);
+            SharedPreferences settings = getSharedPreferences(pref_file, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), false);
+            editor.commit();
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+            wl.acquire();
+            p = new Parser(datasource, this, this);
+            p.execute(sem, yr,month);
+
+        } else {
             ArrayList<ArrayList<String>> data = datasource.getMajorLists(sem, yr);
             configureSpinnerData(data.get(0), data.get(1));
-        } else {
-//            Toast.makeText(Search.this, "No courses currently downloaded..." +
-//                            " attempting to retrieve data ",
-//                    Toast.LENGTH_LONG).show();
-            p = new Parser(pd, datasource, this, this);
-            p.execute(sem, yr,month);
         }
 
     }
@@ -147,23 +175,13 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         for(int x = 0; x < so.size(); x++) {
             sobj_adp.add(so.get(x));
         }
-        System.out.println("Contains:" + so.size());
-        for(int x = 0; x < so.size(); x++) {
-            Star_obj sos = so.get(x);
-            System.out.println("---");
-            System.out.println(sos.getCRN());
-            System.out.println(sos.getID());
-            System.out.println(sos.getCourse());
-            System.out.println(sos.getCourseTitle());
-            System.out.println("---");
-        }
         mandatoryDataChange();
     }
 
     @Override
     protected void onResume()
     {
-        datasource.open();
+        //datasource.open();
         reloadDBData();
         super.onResume();
     }
@@ -171,7 +189,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     @Override
     protected void onPause()
     {
-        datasource.close();
+        //datasource.close();
         super.onPause();
     }
 
@@ -762,10 +780,19 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     @Override
     public void onParseTaskComplete(IOException e) {
         if(e != null) {
+            Toast.makeText(this, "Unable to retrieve course data, try again later.",
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
         reloadDBData();
-    }
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        wl.release();
 
+        SharedPreferences settings = getSharedPreferences(pref_file, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), true);
+        editor.commit();
+
+    }
 }

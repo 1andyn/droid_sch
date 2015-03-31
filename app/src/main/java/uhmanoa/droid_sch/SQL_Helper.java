@@ -27,6 +27,29 @@ import android.util.Log;
 
 public class SQL_Helper extends SQLiteOpenHelper {
 
+    private static SQL_Helper sInstance;
+    private final static String DATABASE_NAME = "dbManoaSch.db";
+    /* Table Names */
+
+    public static final String TABLE_STAR = "tbStarred";
+    public static final String TABLE_SCH = "tbSched";
+    public static final String TABLE_TSCH = "tbTempSched";
+    public static final String TABLE_COURSE = "tbCourse";
+    public static final String TABLE_CFOCUS = "tbCFocus";
+    public static final String TABLE_CDAY = "tbCDays";
+    public static final String TABLE_PREF = "tbPref";
+    public static final String TABLE_PBLOCK = "tbPBlock";
+    public static final String TABLE_MAJOR = "tbMajor";
+    private static final int DATABASE_VERSION = 6;
+
+    public static synchronized SQL_Helper getInstance(Context context) {
+        //singleton code
+        if (sInstance == null) {
+            sInstance = new SQL_Helper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
     // Table #1 Columns, count = 6:
     public static final String COLUMN_ID = "intID";
     public static final String COLUMN_CRN = "intCRN";
@@ -92,20 +115,10 @@ public class SQL_Helper extends SQLiteOpenHelper {
     //Table #9 count = 4; reuse: semester, year, mjr -> 1
     public static final String COLUMN_FMAJOR = "strFMajor"; //full major name
 
-    /* Table Names */
-    private static final int DATABASE_VERSION = 6;
-    public static final String TABLE_STAR = "tbStarred";
-    public static final String TABLE_SCH = "tbSched";
-    public static final String TABLE_TSCH = "tbTempSched";
-    public static final String TABLE_COURSE = "tbCourse";
-    public static final String TABLE_CFOCUS = "tbCFocus";
-    public static final String TABLE_CDAY = "tbCDays";
-    public static final String TABLE_PREF = "tbPref";
-    public static final String TABLE_PBLOCK = "tbPBlock";
-    public static final String TABLE_MAJOR = "tbMajor";
+
 
     /* Database Name */
-    private final static String DATABASE_NAME = "dbManoaSch.db";
+
 
     /* Create Starred Data Table */
     private static final String TABLE_STAR_CREATE = "CREATE TABLE "
@@ -277,7 +290,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_FMAJOR + " TEXT NOT NULL "
             + " );";
 
-    public SQL_Helper(Context context) {
+    private SQL_Helper(Context context) {
         //super(context, DATABASE_NAME, null, DATABASE_VERSION);
         super(context, "/mnt/sdcard/" + DATABASE_NAME, null, DATABASE_VERSION);
             /*DEBUG ONLY, use COMMENTED VERSION FOR RELEASE */

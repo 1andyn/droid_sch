@@ -125,7 +125,7 @@ public class Builder extends ActionBarActivity implements App_const {
     @Override
     protected void onResume()
     {
-        datasource.open();
+        //datasource.open();
         reloadDBData();
         super.onResume();
     }
@@ -133,7 +133,7 @@ public class Builder extends ActionBarActivity implements App_const {
     @Override
     protected void onPause()
     {
-        datasource.close();
+        //datasource.close();
         super.onPause();
     }
 

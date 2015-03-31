@@ -245,7 +245,7 @@ public class SQL_DataSource {
     }
 
     public SQL_DataSource(Context context) {
-        dbhelper = new SQL_Helper(context);
+        dbhelper = SQL_Helper.getInstance(context);
     }
 
     /* Closes Database Helper */
@@ -424,19 +424,18 @@ public class SQL_DataSource {
     //--------------------------- COURSE SEARCH DB HELPER FUNCTIONS ------------------------------//
 
     public boolean courseDataExists(int sem, int year) {
-        //simple check for if data exists
-        String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ?";
         String whereArgs[] = {
                 String.valueOf(sem),
                 String.valueOf(year)
         };
-        Cursor curse = database.query(SQL_Helper.TABLE_COURSE, COURSE_COLUMN, whereClause, whereArgs,
-                null, null, null);
-        if(!(curse.moveToFirst()) || curse.getCount() == 0) {
-            return false;
-        }
 
-        return true;
+        String select = "SELECT * FROM tbCourse WHERE intSemester = " + whereArgs[0] +  " AND " +
+                "intYear = " + whereArgs[1];
+        Cursor curse = database.rawQuery(select, null);
+        if(curse.getCount() > 0) {
+            return true;
+        }
+        return false;
     }
 
     public Star_obj findMatch(int sem, int year, String search_text) {
@@ -907,6 +906,17 @@ public class SQL_DataSource {
         database.delete(SQL_Helper.TABLE_COURSE, null, null);
         database.delete(SQL_Helper.TABLE_CFOCUS, null, null);
         database.delete(SQL_Helper.TABLE_CDAY, null, null);
+    }
+
+    public void clearCourseData(int sem, int year) {
+        database.delete(SQL_Helper.TABLE_MAJOR, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + year, null);
+        database.delete(SQL_Helper.TABLE_COURSE, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + year, null);
+        database.delete(SQL_Helper.TABLE_CFOCUS,  SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + year, null);
+        database.delete(SQL_Helper.TABLE_CDAY,  SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + year, null);
     }
 
     public void clearTempSch() {
