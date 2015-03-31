@@ -416,10 +416,13 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-//            Toast.makeText(Search.this, "Searching for: " + query,
-//                    Toast.LENGTH_SHORT).show();
-            st = new SearchTask(this, datasource, this, sem, yr);
-            st.execute(query, srch_key);
+            if(query.length() < 3) {
+            Toast.makeText(Search.this, "Please enter atleast 3 characters.",
+                    Toast.LENGTH_LONG).show();
+            } else {
+                st = new SearchTask(this, datasource, this, sem, yr);
+                st.execute(query, srch_key);
+            }
             sv.clearFocus();
         }
     }
@@ -821,7 +824,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
         //Update Display
         mandatoryDataChange();
-        Toast.makeText(Search.this, results.size() + " results found.",
+        Toast.makeText(Search.this, final_results.size() + " results found.",
                 Toast.LENGTH_SHORT).show();
 
         sv.clearFocus();
