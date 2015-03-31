@@ -768,32 +768,58 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
     private void populateResults(ArrayList<Course> results) {
 
-        ArrayList<Courses> final
+        ArrayList<Course> final_results = results;
+
         //time filtering START TIME
-
         if(en_start_tp) {
-
+            final_results = new ArrayList<>();
+            int time = timeConvert(start_hr, start_min);
+            for(Course c : results) {
+                if(c.getStart2() == 9999) {
+                    //only check first day
+                    if(c.getStart1() >= time) {
+                        final_results.add(c);
+                    }
+                } else {
+                    if(c.getStart1() >= time &&
+                            c.getStart2() >= time) {
+                        final_results.add(c);
+                    }
+                }
+            }
         }
 
+        //time filtering END TIME
         if(en_end_tp) {
-
+            ArrayList<Course> temp = new ArrayList<>();
+            int time = timeConvert(end_hr, end_min);
+            for(Course c : final_results) {
+                if(c.getStart2() == 9999) {
+                    //only check first day
+                    if(c.getEnd1() <= time) {
+                        temp.add(c);
+                    }
+                } else {
+                    if(c.getEnd1() <= time &&
+                            c.getEnd2() <= time) {
+                        temp.add(c);
+                    }
+                }
+            }
+            final_results = temp;
         }
-
 
         //time filtering END TIME
 
 
 
-        for(int x = 0; x < results.size(); x++) {
-            Course c = results.get(x);
+        for(int x = 0; x < final_results.size(); x++) {
+            Course c = final_results.get(x);
             c.setID(uniqueID(true));
             crs_adp.add(c);
         }
 
-        //Run filters here
-        //FOCUS FILTERS
-        //TIME FILTERS
-
+        //Update Display
         mandatoryDataChange();
         Toast.makeText(Search.this, results.size() + " results found.",
                 Toast.LENGTH_SHORT).show();
