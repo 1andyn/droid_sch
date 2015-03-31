@@ -68,7 +68,7 @@ public class Parser extends AsyncTask<Integer, Void, Integer> {
 
         String webURL = WEB_URL + calculateURLField(use_yr, params[0]);
         pdialog.setMessage("Retrieving Major List");
-        retrieveMajorData(webURL);
+        parseData(webURL, params[0], params[1]);
 
         //Parse Course Data
         return 1;
@@ -82,7 +82,7 @@ public class Parser extends AsyncTask<Integer, Void, Integer> {
         return full_mjr_list;
     }
 
-    private void retrieveMajorData(String webURL) {
+    private void parseData(String webURL, int sem, int year) {
         try {
             System.setProperty("https.protocols", "TLSv1,SSLv3,SSLv2Hello");
             Document startDoc = Jsoup.connect(
@@ -90,9 +90,12 @@ public class Parser extends AsyncTask<Integer, Void, Integer> {
             Elements subjectLinks = startDoc.select("ul.subjects").select("a[href]");
             for (Element subjectLink : subjectLinks) {
                 String subjectURL = subjectLink.attr("abs:href");
-                mjr_list.add(subjectURL.substring(subjectURL.indexOf("&s=") + 3,
-                        subjectURL.length()));
-                full_mjr_list.add(subjectLink.text());
+                String fullmjr = subjectLink.text();
+                String mjr = subjectURL.substring(subjectURL.indexOf("&s=") + 3,
+                        subjectURL.length());
+                mjr_list.add(mjr);
+                full_mjr_list.add(fullmjr);
+                datasource.saveMajor(fullmjr, mjr, sem, year);
             }
         } catch (IOException e) {
             Toast.makeText(app_context, "Unable to retrieve course data, try again later.",

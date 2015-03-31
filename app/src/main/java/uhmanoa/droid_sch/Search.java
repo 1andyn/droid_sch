@@ -37,11 +37,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,10 +129,12 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         if(datasource.courseDataExists(sem, yr)) {
 //            Toast.makeText(Search.this, "Course data exists.",
 //                    Toast.LENGTH_SHORT).show();
+            ArrayList<ArrayList<String>> data = datasource.getMajorLists(sem, yr);
+            configureSpinnerData(data.get(0), data.get(1));
         } else {
-            Toast.makeText(Search.this, "No courses currently downloaded..." +
-                            " attempting to retrieve data ",
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(Search.this, "No courses currently downloaded..." +
+//                            " attempting to retrieve data ",
+//                    Toast.LENGTH_LONG).show();
             p = new Parser(pd, datasource, this, this);
             p.execute(sem, yr,month);
         }
@@ -767,7 +764,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         if(e != null) {
             e.printStackTrace();
         }
-        Toast.makeText(this, "LOADING SPINNA DATA", Toast.LENGTH_LONG).show();
         configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
         reloadDBData();
     }

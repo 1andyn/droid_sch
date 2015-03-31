@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /* This is a helper class for interacting with the database such as retrieving, inserting
 * or deleting data. Functionality for this class will have to be implemented as more functionality
@@ -179,14 +180,14 @@ public class SQL_DataSource {
         SQL_Helper.COLUMN_SEM,
         SQL_Helper.COLUMN_YEAR,
         SQL_Helper.COLUMN_MJR,
-        SQL_Helper.COLUMN_FMJR
-    }
+        SQL_Helper.COLUMN_FMAJOR
+    };
     
     enum MJR_ENUM {
         COLUMN_SEM,
         COLUMN_YEAR,
         COLUMN_MJR,
-        COLUMN_FMJR
+        COLUMN_FMAJOR
     }
 
     private String[] PREF_COLUMN = {
@@ -479,7 +480,7 @@ public class SQL_DataSource {
                 search_text,
                 search_text,
                 search_text
-        }
+        };
         
         if(mjr_key == "NONE") {
             //don't filter by MAJOR
@@ -492,13 +493,14 @@ public class SQL_DataSource {
                 SQL_Helper.COLUMN_MJR + " = ?" +
                 "(" + SQL_Helper.COLUMN_CRN + " MATCH ? OR " + SQL_Helper.COLUMN_CRS + " MATCH ? " +
                 " OR " + SQL_Helper.COLUMN_TITL + " MATCH ?)";
-            whereArgs[] = {
-                String.valueOf(sem),
-                String.valueOf(year),
-                mjr_key,
-                search_text,
-                search_text,
-                search_text
+            List<String> args = new ArrayList<String>();
+            args.add(String.valueOf(sem));
+            args.add(String.valueOf(year));
+            args.add(mjr_key);
+            args.add(search_text);
+            args.add(search_text);
+            args.add(search_text);
+            whereArgs = args.toArray(new String[args.size()]);
         }
 
         ArrayList<Course> results = new ArrayList<>();
@@ -527,7 +529,7 @@ public class SQL_DataSource {
         values.put(SQL_Helper.COLUMN_SEM, sem);
         values.put(SQL_Helper.COLUMN_YEAR, year);
         values.put(SQL_Helper.COLUMN_MJR, mjr);
-        values.put(SQL_Helper.COLUMN_FMJR, full_major);
+        values.put(SQL_Helper.COLUMN_FMAJOR, full_major);
 
         database.insert(SQL_Helper.TABLE_MAJOR, null, values);
         database.setTransactionSuccessful();
@@ -550,12 +552,12 @@ public class SQL_DataSource {
 
         ArrayList<String> full_mjr = main_container.get(0);
         ArrayList<String> mjr = main_container.get(1);
-        Cursor curse = database.query(SQL_Helper.MAJOR, MJR_COLUMN, whereClause, whereArgs,
-                null, null, SQL_Helper.COLUMN_FMAJR + " ASC");
+        Cursor curse = database.query(SQL_Helper.TABLE_MAJOR, MJR_COLUMN, whereClause, whereArgs,
+                null, null, SQL_Helper.COLUMN_FMAJOR + " ASC");
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
-            mjr.add(curse.getString(MJR_ENUM.COLUMN_MJR.oridinal()));
-            full_mjr.add(curse.getString(MJR_ENUM.COLUMN_FMJR.oridinal()));
+            mjr.add(curse.getString(MJR_ENUM.COLUMN_MJR.ordinal()));
+            full_mjr.add(curse.getString(MJR_ENUM.COLUMN_FMAJOR.ordinal()));
             curse.moveToNext();
         }
         curse.close();
@@ -632,6 +634,7 @@ public class SQL_DataSource {
         return c;
     }
 
+    // used by get schedule function
     public Course getCourse(int sem, int year, int crn) {
         database.beginTransaction();
         String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = " +
@@ -642,7 +645,6 @@ public class SQL_DataSource {
                 String.valueOf(crn)
         };
 
-        ArrayList<Character> day_array = new ArrayList<>();
         Cursor curse = database.query(SQL_Helper.TABLE_CDAY, CDAYS_COLUMN, whereClause, whereArgs,
                 null, null, null);
         curse.moveToFirst();
@@ -657,6 +659,7 @@ public class SQL_DataSource {
         return c;
     }
 
+    //used by parser to save course data
     public void saveCourse(Course crs) {
         database.beginTransaction();
 
