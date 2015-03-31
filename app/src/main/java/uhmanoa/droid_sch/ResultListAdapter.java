@@ -72,13 +72,13 @@ public class ResultListAdapter extends ArrayAdapter<Course> {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 if (buttonView.isChecked()) {
-                    Toast.makeText(app_Context, "Checked " + crs.getID() + " " + crs.getCrn(),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(app_Context, "Checked " + crs.getID() + " " + crs.getCrn(),
+//                            Toast.LENGTH_SHORT).show();
                     checked_list.add(object_list.get(pos).getID());
                     crs.setChecked(true);
                 } else {
-                    Toast.makeText(app_Context, "UnChecked " + crs.getID() + " " + crs.getCrn(),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(app_Context, "UnChecked " + crs.getID() + " " + crs.getCrn(),
+//                            Toast.LENGTH_SHORT).show();
                     crs.setChecked(false);
                     checkedRemove(object_list.get(pos).getID());
                 }

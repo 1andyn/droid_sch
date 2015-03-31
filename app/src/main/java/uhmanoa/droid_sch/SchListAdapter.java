@@ -25,6 +25,13 @@ import java.util.List;
 
 public class SchListAdapter extends ArrayAdapter<Schedule> {
 
+        static class SchViewHolder {
+            ScheduleView sv;
+            CheckBox cbx;
+            Button btn;
+        }
+
+
         //Context in which eventListAdapter is being used
         private Context app_Context;
         private ArrayList<Schedule> object_list;
@@ -54,20 +61,31 @@ public class SchListAdapter extends ArrayAdapter<Schedule> {
             final CheckBox cb;
             final Button bt;
 
+            SchViewHolder scv;
+
             if (convertView == null) {
+                scv = new SchViewHolder();
+
                 convertView = inflater.inflate(layout_resrc, parent, false);
                 ScheduleView schview = new ScheduleView(app_Context);
                 schview.setObj((Schedule) getItem(pos));
                 schview.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
                 convertView = schview;
                 cb = (CheckBox) convertView.findViewById(R.id.check_box);
-                convertView.setTag(R.id.check_box, cb);
                 bt = (Button) convertView.findViewById(R.id.view_button);
-                convertView.setTag(R.id.view_button, bt);
+
+                scv.sv = schview;
+                scv.cbx = cb;
+                scv.btn = bt;
+
+                convertView.setTag(scv);
             } else {
-                convertView.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
-                cb = (CheckBox) convertView.getTag(R.id.check_box);
-                bt = (Button) convertView.getTag(R.id.view_button);
+                scv = (SchViewHolder) convertView.getTag();
+                scv.sv.setObj(getItem(pos));
+                scv.sv.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
+                convertView = scv.sv;
+                cb = scv.cbx;
+                bt = scv.btn;
             }
 
             bt.setOnClickListener(new View.OnClickListener() {

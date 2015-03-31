@@ -13,6 +13,11 @@ import java.util.ArrayList;
 
 public class StarListAdapter extends ArrayAdapter<Star_obj> {
 
+    static class StarHolder {
+        StarView sv;
+        CheckBox cbx;
+    }
+
     //Context in which eventListAdapter is being used
     private Context app_Context;
     private ArrayList<Star_obj> object_list;
@@ -39,17 +44,27 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
         final Star_obj so = object_list.get(pos);
         final CheckBox cb;
 
+        StarHolder sh;
+
         if (convertView == null) {
+            sh = new StarHolder();
             convertView = inflater.inflate(layout_resrc, parent, false);
             StarView sview = new StarView(app_Context);
             sview.setObj((Star_obj) getItem(pos));
             sview.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
             convertView = sview;
+            sh.sv = sview;
+
             cb = (CheckBox) convertView.findViewById(R.id.chk_star);
-            convertView.setTag(cb);
+            sh.cbx = cb;
+
+            convertView.setTag(sh);
         } else {
-            convertView.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
-            cb = (CheckBox) convertView.getTag();
+            sh = (StarHolder) convertView.getTag();
+            sh.sv.setObj(getItem(pos));
+            sh.sv.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
+            convertView = sh.sv;
+            cb = sh.cbx;
         }
 
         cb.setChecked(so.isChecked());
@@ -57,13 +72,13 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 if (buttonView.isChecked()) {
-                    Toast.makeText(app_Context, "Checked " + so.getID() + " " + so.getCRN(),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(app_Context, "Checked " + so.getID() + " " + so.getCRN(),
+//                            Toast.LENGTH_SHORT).show();
                     checked_list.add(object_list.get(pos).getID());
                     so.setChecked(true);
                 } else {
-                    Toast.makeText(app_Context, "UnChecked " + so.getID() + " " + so.getCRN(),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(app_Context, "UnChecked " + so.getID() + " " + so.getCRN(),
+//                            Toast.LENGTH_SHORT).show();
                     so.setChecked(false);
                     checkedRemove(object_list.get(pos).getID());
                 }
