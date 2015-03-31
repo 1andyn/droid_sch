@@ -47,7 +47,8 @@ import java.util.Iterator;
 import java.util.Random;
 
 
-public class Search extends ActionBarActivity implements App_const, OnParseTaskComplete {
+public class Search extends ActionBarActivity implements App_const, OnParseTaskComplete,
+        OnSearchTaskComplete {
 
     // --------DEBUG
     private boolean DEBUG = true;
@@ -55,7 +56,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
     private static String pref_file = "PREF_FILE";
 
+    private SearchView sv;
     private boolean lastLoadSuccess = false;
+    private String srch_key = "";
     private int sem;
     private int yr;
     private int month;
@@ -87,9 +90,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private StarListAdapter sobj_adp;
     private ResultListAdapter crs_adp;
 
-    private ProgressDialog pd;
     protected SQL_DataSource datasource;
     private Parser p;
+    private SearchTask st;
 
     private final int sliderHeight = 175;
 
@@ -113,10 +116,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
         datasource = new SQL_DataSource(this);
         datasource.open();
-
-        pd = new ProgressDialog(Search.this);
-        pd.setMessage("Checking course data availability...");
-        pd.setCancelable(false);
 
         SharedPreferences settings = getSharedPreferences(pref_file, 0);
         lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
@@ -148,7 +147,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
         if(!datasource.courseDataExists(sem, yr) || !lastLoadSuccess ) {
 
-            System.out.println("DEBUG: DATA QUERY IS NOT WORKING");
             //Retrieve Course Data
             datasource.clearCourseData(sem, yr);
             SharedPreferences settings = getSharedPreferences(pref_file, 0);
@@ -181,7 +179,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     @Override
     protected void onResume()
     {
-        //datasource.open();
         reloadDBData();
         super.onResume();
     }
@@ -189,7 +186,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     @Override
     protected void onPause()
     {
-        //datasource.close();
         super.onPause();
     }
 
@@ -420,9 +416,11 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(Search.this, "Search for: " + query,
-                    Toast.LENGTH_SHORT).show();
-            //search();
+//            Toast.makeText(Search.this, "Searching for: " + query,
+//                    Toast.LENGTH_SHORT).show();
+            st = new SearchTask(this, datasource, this, sem, yr);
+            st.execute(query, srch_key);
+            sv.clearFocus();
         }
     }
 
@@ -434,11 +432,10 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         //Config ActionBar's Search Box
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
+        sv = (SearchView) menu.findItem(R.id.search).getActionView();
+        sv.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
+        sv.setIconifiedByDefault(true);
 
         return true;
     }
@@ -479,10 +476,11 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                // An item was selected. You can retrieve the selected item using
-                Toast.makeText(Search.this, "Major selected: " + pos + " with Id: " + id + " KEY: "
-                        + mjr_list.get(pos),
-                        Toast.LENGTH_SHORT).show();
+//                // An item was selected. You can retrieve the selected item using
+//                Toast.makeText(Search.this, "Major selected: " + pos + " with KEY: "
+//                        + mjr_list.get(pos),
+//                        Toast.LENGTH_SHORT).show();
+                srch_key = mjr_list.get(pos);
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -531,9 +529,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             case R.id.action_time_fil:
                 Dialog diag_time = createTimeDialog();
                 return true;
-            case R.id.action_debug_add:
-                addDebugResults();
-                return true;
+//            case R.id.action_debug_add:
+//                addDebugResults();
+//                return true;
             case R.id.action_clear_results:
                 crs_adp.clear();
                 crs_adp.clearCheckedList();
@@ -544,49 +542,49 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     }
 
     //DEBUG
-    private void addDebugResults() {
-        Random r = new Random(System.currentTimeMillis());
-        int crn = 10000 + r.nextInt(20000); //Randon CRN Number
-        ArrayList<Character> days1 = new ArrayList<Character>();
-        days1.add('M');
-        days1.add('W');
-        days1.add('F');
-
-        ArrayList<Character> days2 = new ArrayList<Character>();
-        days2.add('R');
-
-        ArrayList<String> fr = new ArrayList<String>();
-        fr.add("WI");
-        fr.add("NI");
-
-        Course debug;
-
-        int rand = randValue();
-        switch (rand) {
-            case 1:
-                debug = new Course("ICS 314", "Software Engineering I", 51804, "3",
-                        "Brent Auernheimer", days1, 920, 1030, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
-                        "MATH CLASS ");
-                break;
-            case 0:
-                debug = new Course("ICS 414", "Software Engineering II", 22222, "3",
-                        "Brent Auernheimer", days1, days2, 930, 1130, 1020, 1320, "SAKAM D101",
-                        "HOLM 243", 2, 20, 0, 10, "1/3 to 4/27",
-                        "MATH CLASS ");
-
-                break;
-            default:
-                debug = new Course("ICS 314", "Software Engineering I", crn, "3",
-                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
-                        "HOLM 243", 3, 0, 3, 7, "4/3 to 5/27",
-                        "MATH CLASS ");
-                debug.setFocusReqs(fr);
-                break;
-        }
-        debug.setID(uniqueID(true));
-        al_course.add(debug);
-        mandatoryDataChange();
-    }
+//    private void addDebugResults() {
+//        Random r = new Random(System.currentTimeMillis());
+//        int crn = 10000 + r.nextInt(20000); //Randon CRN Number
+//        ArrayList<Character> days1 = new ArrayList<Character>();
+//        days1.add('M');
+//        days1.add('W');
+//        days1.add('F');
+//
+//        ArrayList<Character> days2 = new ArrayList<Character>();
+//        days2.add('R');
+//
+//        ArrayList<String> fr = new ArrayList<String>();
+//        fr.add("WI");
+//        fr.add("NI");
+//
+//        Course debug;
+//
+//        int rand = randValue();
+//        switch (rand) {
+//            case 1:
+//                debug = new Course("ICS 314", "Software Engineering I", 51804, "3",
+//                        "Brent Auernheimer", days1, 920, 1030, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
+//                        "MATH CLASS ");
+//                break;
+//            case 0:
+//                debug = new Course("ICS 414", "Software Engineering II", 22222, "3",
+//                        "Brent Auernheimer", days1, days2, 930, 1130, 1020, 1320, "SAKAM D101",
+//                        "HOLM 243", 2, 20, 0, 10, "1/3 to 4/27",
+//                        "MATH CLASS ");
+//
+//                break;
+//            default:
+//                debug = new Course("ICS 314", "Software Engineering I", crn, "3",
+//                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
+//                        "HOLM 243", 3, 0, 3, 7, "4/3 to 5/27",
+//                        "MATH CLASS ");
+//                debug.setFocusReqs(fr);
+//                break;
+//        }
+//        debug.setID(uniqueID(true));
+//        al_course.add(debug);
+//        mandatoryDataChange();
+//    }
 
     protected void acquireResolution() {
         Display dsp = getWindowManager().getDefaultDisplay();
@@ -795,4 +793,33 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         editor.commit();
 
     }
+
+    @Override
+    public void onSearchTaskComplete() {
+        //clear search display
+        crs_adp.clear();
+        crs_adp.clearCheckedList();
+        mandatoryDataChange();
+        populateResults(st.getResults());
+
+    }
+
+    private void populateResults(ArrayList<Course> results) {
+        for(int x = 0; x < results.size(); x++) {
+            Course c = results.get(x);
+            c.setID(uniqueID(true));
+            crs_adp.add(c);
+        }
+
+        //Run filters here
+        //FOCUS FILTERS
+        //TIME FILTERS
+
+        mandatoryDataChange();
+        Toast.makeText(Search.this, results.size() + " results found.",
+                Toast.LENGTH_SHORT).show();
+
+        sv.clearFocus();
+    }
+
 }

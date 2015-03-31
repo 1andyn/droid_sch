@@ -13,6 +13,11 @@ import java.util.ArrayList;
 
 public class ResultListAdapter extends ArrayAdapter<Course> {
 
+    static class ViewHolder {
+        CourseView cv;
+        CheckBox cbx;
+    }
+
     //Context in which eventListAdapter is being used
     private Context app_Context;
     private ArrayList<Course> object_list;
@@ -39,17 +44,27 @@ public class ResultListAdapter extends ArrayAdapter<Course> {
         final Course crs = object_list.get(pos);
         final CheckBox cb;
 
+        ViewHolder v;
+
         if (convertView == null) {
+
+            v = new ViewHolder();
             convertView = inflater.inflate(layout_resrc, parent, false);
             CourseView crsview = new CourseView(app_Context);
             crsview.setObj((Course) getItem(pos));
             crsview.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
             convertView = crsview;
+            v.cv = crsview;
+
             cb = (CheckBox) convertView.findViewById(R.id.chk_star);
-            convertView.setTag(cb);
+            v.cbx = cb;
+            convertView.setTag(v);
         } else {
-            convertView.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
-            cb = (CheckBox) convertView.getTag();
+            v = (ViewHolder) convertView.getTag();
+            v.cv.setObj(getItem(pos));
+            v.cv.setBackgroundColor(app_Context.getResources().getColor(R.color.dark_gray));
+            convertView = v.cv;
+            cb = v.cbx;
         }
 
         cb.setChecked(crs.isChecked());

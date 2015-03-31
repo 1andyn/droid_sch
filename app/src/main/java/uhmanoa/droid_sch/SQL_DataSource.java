@@ -469,45 +469,73 @@ public class SQL_DataSource {
         return so;
     }
 
+    private boolean isCRN (String text) {
+        boolean isCRN = true;
+        if(text.length() < 5) {
+            return false;
+        }
+        for(int x = 0; x < 5; x++) {
+            if(!Character.isDigit(text.charAt(x))) {
+                return false;
+            }
+        }
+        return isCRN;
+    }
+
     public ArrayList<Course> getSearchResults(int sem, int year, String search_text, String mjr_key) {
         database.beginTransaction();
-        
-        String whereClause;
-        String whereArgs[] = {
-                String.valueOf(sem),
-                String.valueOf(year),
-                search_text,
-                search_text,
-                search_text
-        };
-        
+
+        String query = search_text;
+        boolean isCRN = isCRN(search_text);
+        if(isCRN) {
+            query = search_text.substring(0, 5);
+        }
+
+        String selection = "";
+
         if(mjr_key == "NONE") {
             //don't filter by MAJOR
-            //checks for matches in CRN column, TITLE column and COURSE NAME Column
-            whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ? AND " +
-                "(" + SQL_Helper.COLUMN_CRN + " MATCH ? OR " + SQL_Helper.COLUMN_CRS + " MATCH ? " +
-                " OR " + SQL_Helper.COLUMN_TITL + " MATCH ?)";
+            if(isCRN) {
+                selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
+                        + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
+                        + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) + " AND "
+                        + SQL_Helper.COLUMN_CRN + " = " + query
+                        + " ORDER BY " + SQL_Helper.COLUMN_CRS + " ASC ";
+            } else {
+                selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
+                        + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
+                        + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) + " AND ("
+                        + SQL_Helper.COLUMN_CRS + " LIKE '%" + search_text + "%' OR "
+                        + SQL_Helper.COLUMN_TITL + " LIKE '%" + search_text + "%')"
+                        + " ORDER BY " + SQL_Helper.COLUMN_CRS + " ASC ";
+            }
+
         } else {
-            whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ? AND " +
-                SQL_Helper.COLUMN_MJR + " = ?" +
-                "(" + SQL_Helper.COLUMN_CRN + " MATCH ? OR " + SQL_Helper.COLUMN_CRS + " MATCH ? " +
-                " OR " + SQL_Helper.COLUMN_TITL + " MATCH ?)";
-            List<String> args = new ArrayList<String>();
-            args.add(String.valueOf(sem));
-            args.add(String.valueOf(year));
-            args.add(mjr_key);
-            args.add(search_text);
-            args.add(search_text);
-            args.add(search_text);
-            whereArgs = args.toArray(new String[args.size()]);
+            if(isCRN) {
+                selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
+                        + SQL_Helper.COLUMN_MJR + " = '" + mjr_key + "' AND "
+                        + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
+                        + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) + " AND "
+                        + SQL_Helper.COLUMN_CRN + " = " + query
+                        + " ORDER BY " + SQL_Helper.COLUMN_CRS + " ASC ";
+            } else {
+                selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
+                        + SQL_Helper.COLUMN_MJR + " = '" + mjr_key + "' AND "
+                        + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
+                        + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) + " AND ("
+                        + SQL_Helper.COLUMN_CRS + " LIKE '%" + search_text + "%' OR "
+                        + SQL_Helper.COLUMN_TITL + " LIKE '%" + search_text + "%')"
+                        + " ORDER BY " + SQL_Helper.COLUMN_CRS + " ASC ";
+            }
         }
 
         ArrayList<Course> results = new ArrayList<>();
-        Cursor curse = database.query(SQL_Helper.TABLE_COURSE, COURSE_COLUMN, whereClause, whereArgs,
-                null, null, SQL_Helper.COLUMN_CRS + " ASC");
+        Cursor curse = database.rawQuery(selection, null);
+        System.out.println("DEBUG: RESULTS RETURNED: " + curse.getCount());
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
             Course c = cursorToCourse(curse);
+
             results.add(c);
             curse.moveToNext();
         }

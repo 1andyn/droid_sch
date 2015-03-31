@@ -109,23 +109,12 @@ public class Builder extends ActionBarActivity implements App_const {
         for(int x = 0; x < so.size(); x++) {
             sobj_adp.add(so.get(x));
         }
-        System.out.println("Contains:" + so.size());
-        for(int x = 0; x < so.size(); x++) {
-            Star_obj sos = so.get(x);
-            System.out.println("---");
-            System.out.println(sos.getCRN());
-            System.out.println(sos.getID());
-            System.out.println(sos.getCourse());
-            System.out.println(sos.getCourseTitle());
-            System.out.println("---");
-        }
         mandatoryDataChange();
     }
 
     @Override
     protected void onResume()
     {
-        //datasource.open();
         reloadDBData();
         super.onResume();
     }
@@ -133,7 +122,6 @@ public class Builder extends ActionBarActivity implements App_const {
     @Override
     protected void onPause()
     {
-        //datasource.close();
         super.onPause();
     }
 
