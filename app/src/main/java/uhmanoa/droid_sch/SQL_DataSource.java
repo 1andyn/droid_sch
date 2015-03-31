@@ -177,12 +177,12 @@ public class SQL_DataSource {
     }
 
     private String[] MJR_COLUMN = {
-        SQL_Helper.COLUMN_SEM,
-        SQL_Helper.COLUMN_YEAR,
-        SQL_Helper.COLUMN_MJR,
-        SQL_Helper.COLUMN_FMAJOR
+            SQL_Helper.COLUMN_SEM,
+            SQL_Helper.COLUMN_YEAR,
+            SQL_Helper.COLUMN_MJR,
+            SQL_Helper.COLUMN_FMAJOR
     };
-    
+
     enum MJR_ENUM {
         COLUMN_SEM,
         COLUMN_YEAR,
@@ -335,7 +335,7 @@ public class SQL_DataSource {
     //Finds unique ID for Schedule
     private long getUniqueSchedID() {
         int id = 0;
-        while(true) {
+        while (true) {
             String whereClause = SQL_Helper.COLUMN_ID + " = ?";
             String whereArgs[] = {
                     String.valueOf(id)
@@ -344,7 +344,7 @@ public class SQL_DataSource {
             Cursor curse = database.query(SQL_Helper.TABLE_SCH, SCH_COLUMN, whereClause, whereArgs,
                     null, null, SQL_Helper.COLUMN_CRN + " ASC");
 
-            if(!(curse.moveToFirst()) || curse.getCount() == 0 ) {
+            if (!(curse.moveToFirst()) || curse.getCount() == 0) {
                 //cursor is empty so this id is unique
                 return (long) id;
             } else {
@@ -363,7 +363,7 @@ public class SQL_DataSource {
         int yr = sch.getYear();
         int sem = sch.getSemester();
 
-        for(int x = 0; x < crs.size(); x++) {
+        for (int x = 0; x < crs.size(); x++) {
             ContentValues values = new ContentValues();
             Course c = crs.get(x);
             values.put(SQL_Helper.COLUMN_ID, id);
@@ -406,7 +406,7 @@ public class SQL_DataSource {
         int yr = sch.getYear();
         int sem = sch.getSemester();
 
-        for(int x = 0; x < crs.size(); x++) {
+        for (int x = 0; x < crs.size(); x++) {
             ContentValues values = new ContentValues();
             Course c = crs.get(x);
             values.put(SQL_Helper.COLUMN_ID, id);
@@ -429,10 +429,10 @@ public class SQL_DataSource {
                 String.valueOf(year)
         };
 
-        String select = "SELECT * FROM tbCourse WHERE intSemester = " + whereArgs[0] +  " AND " +
+        String select = "SELECT * FROM tbCourse WHERE intSemester = " + whereArgs[0] + " AND " +
                 "intYear = " + whereArgs[1];
         Cursor curse = database.rawQuery(select, null);
-        if(curse.getCount() > 0) {
+        if (curse.getCount() > 0) {
             return true;
         }
         return false;
@@ -443,7 +443,7 @@ public class SQL_DataSource {
         Boolean isCRN = Character.isDigit(search_text.charAt(0));
 
         String whereClause = "";
-        if(isCRN) {
+        if (isCRN) {
             whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = " +
                     "? AND " + SQL_Helper.COLUMN_CRN + " MATCH ?";
         } else {
@@ -452,15 +452,15 @@ public class SQL_DataSource {
         }
 
         String whereArgs[] = {
-            String.valueOf(sem),
-            String.valueOf(year),
-            search_text
+                String.valueOf(sem),
+                String.valueOf(year),
+                search_text
         };
 
         Cursor curse = database.query(SQL_Helper.TABLE_COURSE, COURSE_COLUMN, whereClause, whereArgs,
                 null, null, SQL_Helper.COLUMN_CRS + " ASC");
         curse.moveToFirst();
-        if(curse.getCount() != 0 ){
+        if (curse.getCount() != 0) {
             Course c = cursorToCourse(curse);
             so = new Star_obj(c.getCourse(), c.getTitle(), c.getCrn(), -1, sem, year);
         }
@@ -469,13 +469,13 @@ public class SQL_DataSource {
         return so;
     }
 
-    private boolean isCRN (String text) {
+    private boolean isCRN(String text) {
         boolean isCRN = true;
-        if(text.length() < 5) {
+        if (text.length() < 5) {
             return false;
         }
-        for(int x = 0; x < 5; x++) {
-            if(!Character.isDigit(text.charAt(x))) {
+        for (int x = 0; x < 5; x++) {
+            if (!Character.isDigit(text.charAt(x))) {
                 return false;
             }
         }
@@ -487,15 +487,15 @@ public class SQL_DataSource {
 
         String query = search_text;
         boolean isCRN = isCRN(search_text);
-        if(isCRN) {
+        if (isCRN) {
             query = search_text.substring(0, 5);
         }
 
         String selection = "";
 
-        if(mjr_key == "NONE") {
+        if (mjr_key == "NONE") {
             //don't filter by MAJOR
-            if(isCRN) {
+            if (isCRN) {
                 selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
                         + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
                         + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) + " AND "
@@ -511,7 +511,7 @@ public class SQL_DataSource {
             }
 
         } else {
-            if(isCRN) {
+            if (isCRN) {
                 selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
                         + SQL_Helper.COLUMN_MJR + " = '" + mjr_key + "' AND "
                         + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
@@ -546,11 +546,47 @@ public class SQL_DataSource {
         return results;
     }
 
+    public ArrayList<Course> getSearchResultsNoText(int sem, int year, String mjr_key) {
+        database.beginTransaction();
+
+        String selection = "";
+
+        if (mjr_key == "NONE") {
+            //don't filter by MAJOR
+            selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
+                    + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
+                    + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year)
+                    + " ORDER BY " + SQL_Helper.COLUMN_CRS + " ASC ";
+        } else {
+            selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
+                    + SQL_Helper.COLUMN_MJR + " = '" + mjr_key + "' AND "
+                    + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
+                    + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year)
+                    + " ORDER BY " + SQL_Helper.COLUMN_CRS + " ASC ";
+        }
+
+        ArrayList<Course> results = new ArrayList<>();
+        Cursor curse = database.rawQuery(selection, null);
+        System.out.println("DEBUG: RESULTS RETURNED: " + curse.getCount());
+        curse.moveToFirst();
+        while (!curse.isAfterLast()) {
+            Course c = cursorToCourse(curse);
+
+            results.add(c);
+            curse.moveToNext();
+        }
+        curse.close();
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return results;
+    }
+
     //--------------------------- COURSE SEARCH DB HELPER FUNCTIONS ------------------------------//
 
     //--------------------------- MAJOR DATA DB HELPER FUNCTIONS ---------------------------------//
-    
-        public void saveMajor(String full_major, String mjr, int sem, int year) {
+
+    public void saveMajor(String full_major, String mjr, int sem, int year) {
         database.beginTransaction();
         ContentValues values = new ContentValues();
         values.put(SQL_Helper.COLUMN_SEM, sem);
@@ -562,14 +598,14 @@ public class SQL_DataSource {
         database.setTransactionSuccessful();
         database.endTransaction();
     }
-    
+
     public ArrayList<ArrayList<String>> getMajorLists(int sem, int year) {
         ArrayList<ArrayList<String>> main_container = new ArrayList<>();
         main_container.add(new ArrayList<String>()); //this is the container for full major list
         main_container.add(new ArrayList<String>()); //this is the container for the short major list;
         //e.g. electrical engineering -> stored as EE
-        
-         database.beginTransaction();
+
+        database.beginTransaction();
         //Results semester and year
         String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ?";
         String whereArgs[] = {
@@ -593,9 +629,9 @@ public class SQL_DataSource {
         database.endTransaction();
         return main_container;
     }
-    
+
     //--------------------------- MAJOR DATA DB HELPER FUNCTIONS ---------------------------------//
-    
+
     //--------------------------- COURSE DB HELPER FUNCTIONS ----------------------------------//
 
     private Course cursorToCourse(Cursor curse) {
@@ -611,7 +647,7 @@ public class SQL_DataSource {
         ArrayList<Character> day2 = getDayArray(sem, year, crn, 1);
 
 
-        if(curse.getInt(COURSE_ENUM.COLUMN_START2.ordinal()) != 9999) {
+        if (curse.getInt(COURSE_ENUM.COLUMN_START2.ordinal()) != 9999) {
             c = new Course(
                     curse.getString(COURSE_ENUM.COLUMN_CRS.ordinal()),
                     curse.getString(COURSE_ENUM.COLUMN_TITL.ordinal()),
@@ -677,7 +713,7 @@ public class SQL_DataSource {
         curse.moveToFirst();
 
         Course c = null;
-        if(curse.getCount() != 0) {
+        if (curse.getCount() != 0) {
             c = cursorToCourse(curse);
         }
 
@@ -721,7 +757,7 @@ public class SQL_DataSource {
         saveCDays(sem, year, crs.getCrn(), false, dayarr);
 
         //Store Day2 Values
-        if(crs.getStart2() != 9999) {
+        if (crs.getStart2() != 9999) {
             days = crs.getDays2();
             dayarr = getDayArray(days);
             saveCDays(sem, year, crs.getCrn(), true, dayarr);
@@ -738,7 +774,7 @@ public class SQL_DataSource {
 
         Cursor curse = database.query(SQL_Helper.TABLE_CFOCUS, CFOCUS_COLUMN, whereClause, whereArgs,
                 null, null, null);
-        if(!(curse.moveToFirst()) || curse.getCount() == 0 ) {
+        if (!(curse.moveToFirst()) || curse.getCount() == 0) {
             //Save Focus Values
             saveCFocus(sem, year, crs.getCourse(), crs.getFocusReqs());
         }
@@ -777,8 +813,8 @@ public class SQL_DataSource {
 
         ArrayList<String> allFocus = getAllFocusStrings();
         int col = 3; //start all column 3
-        for(int x = 0; x < allFocus.size(); x++) {
-            if(focus.contains(allFocus.get(x))) {
+        for (int x = 0; x < allFocus.size(); x++) {
+            if (focus.contains(allFocus.get(x))) {
                 cv.put(CFOCUS_COLUMN[col], 1); //1 = true
             } else {
                 cv.put(CFOCUS_COLUMN[col], 0); //0 = false
@@ -793,7 +829,7 @@ public class SQL_DataSource {
         cv.put(SQL_Helper.COLUMN_CRN, CRN);
         cv.put(SQL_Helper.COLUMN_YEAR, year);
         cv.put(SQL_Helper.COLUMN_SEM, sem);
-        if(secday) {
+        if (secday) {
             cv.put(SQL_Helper.COLUMN_SECDAY, 1);
         } else {
             cv.put(SQL_Helper.COLUMN_SECDAY, 0);
@@ -810,7 +846,7 @@ public class SQL_DataSource {
 
     private ArrayList<String> getFocusArray(String crs, int sem, int year) {
         String whereClause = SQL_Helper.COLUMN_YEAR + " = ? AND " + SQL_Helper.COLUMN_CRS + " = ?" +
-                " AND " + SQL_Helper. COLUMN_SEM+ " = ?";
+                " AND " + SQL_Helper.COLUMN_SEM + " = ?";
         String whereArgs[] = {
                 String.valueOf(year),
                 crs,
@@ -821,12 +857,12 @@ public class SQL_DataSource {
         Cursor curse = database.query(SQL_Helper.TABLE_CFOCUS, CFOCUS_COLUMN, whereClause, whereArgs,
                 null, null, null);
         curse.moveToFirst();
-        if(curse.getCount() != 0) {
+        if (curse.getCount() != 0) {
             //start at col 3 (FGA)
             int col = 3;
             ArrayList<String> allfoc = getAllFocusStrings();
-            for(int x = 0; x < allfoc.size(); x++) {
-                if(curse.getInt(col) == 1) {
+            for (int x = 0; x < allfoc.size(); x++) {
+                if (curse.getInt(col) == 1) {
                     focus.add(allfoc.get(x));
                 }
                 col++;
@@ -835,9 +871,9 @@ public class SQL_DataSource {
         return focus;
     }
 
-    private ArrayList<Character> getDayArray (int sem, int year, int CRN, int sec) {
+    private ArrayList<Character> getDayArray(int sem, int year, int CRN, int sec) {
         String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = " +
-                "? AND " + SQL_Helper.COLUMN_CRN + " = ? AND " + SQL_Helper. COLUMN_SECDAY + " = ?";
+                "? AND " + SQL_Helper.COLUMN_CRN + " = ? AND " + SQL_Helper.COLUMN_SECDAY + " = ?";
         String whereArgs[] = {
                 String.valueOf(sem),
                 String.valueOf(year),
@@ -849,7 +885,7 @@ public class SQL_DataSource {
         Cursor curse = database.query(SQL_Helper.TABLE_CDAY, CDAYS_COLUMN, whereClause, whereArgs,
                 null, null, null);
         curse.moveToFirst();
-        if(curse.getCount() != 0) {
+        if (curse.getCount() != 0) {
             if (curse.getInt(CDAY_ENUM.COLUMN_SUN.ordinal()) == 1) {
                 day_array.add('U');
             }
@@ -878,43 +914,43 @@ public class SQL_DataSource {
 
     private ArrayList<Integer> getDayArray(ArrayList<Character> days) {
         ArrayList<Integer> day_array = new ArrayList<>();
-        if(days.contains('U')) {
+        if (days.contains('U')) {
             day_array.add(1);
         } else {
             day_array.add(0);
         }
 
-        if(days.contains('M')) {
+        if (days.contains('M')) {
             day_array.add(1);
         } else {
             day_array.add(0);
         }
 
-        if(days.contains('T')) {
+        if (days.contains('T')) {
             day_array.add(1);
         } else {
             day_array.add(0);
         }
 
-        if(days.contains('W')) {
+        if (days.contains('W')) {
             day_array.add(1);
         } else {
             day_array.add(0);
         }
 
-        if(days.contains('R')) {
+        if (days.contains('R')) {
             day_array.add(1);
         } else {
             day_array.add(0);
         }
 
-        if(days.contains('F')) {
+        if (days.contains('F')) {
             day_array.add(1);
         } else {
             day_array.add(0);
         }
 
-        if(days.contains('S')) {
+        if (days.contains('S')) {
             day_array.add(1);
         } else {
             day_array.add(0);
@@ -941,9 +977,9 @@ public class SQL_DataSource {
                 SQL_Helper.COLUMN_YEAR + " = " + year, null);
         database.delete(SQL_Helper.TABLE_COURSE, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
                 SQL_Helper.COLUMN_YEAR + " = " + year, null);
-        database.delete(SQL_Helper.TABLE_CFOCUS,  SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+        database.delete(SQL_Helper.TABLE_CFOCUS, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
                 SQL_Helper.COLUMN_YEAR + " = " + year, null);
-        database.delete(SQL_Helper.TABLE_CDAY,  SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+        database.delete(SQL_Helper.TABLE_CDAY, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
                 SQL_Helper.COLUMN_YEAR + " = " + year, null);
     }
 

@@ -69,7 +69,7 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="1sp"
+                android:dividerHeight="2sp"
                 android:longClickable="true" />
         </LinearLayout>
         <!--Use this Layout for Starred Objects -->

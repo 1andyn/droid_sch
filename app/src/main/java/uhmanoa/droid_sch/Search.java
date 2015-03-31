@@ -529,62 +529,24 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             case R.id.action_time_fil:
                 Dialog diag_time = createTimeDialog();
                 return true;
-//            case R.id.action_debug_add:
-//                addDebugResults();
-//                return true;
             case R.id.action_clear_results:
                 crs_adp.clear();
                 crs_adp.clearCheckedList();
                 mandatoryDataChange();
+                return true;
+            case R.id.action_force_fil:
+                if(srch_key == "NONE") {
+                    Toast.makeText(this, "Please select a Major to use this function.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    st = new SearchTask(this, datasource, this, sem, yr);
+                    st.execute("", srch_key);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    //DEBUG
-//    private void addDebugResults() {
-//        Random r = new Random(System.currentTimeMillis());
-//        int crn = 10000 + r.nextInt(20000); //Randon CRN Number
-//        ArrayList<Character> days1 = new ArrayList<Character>();
-//        days1.add('M');
-//        days1.add('W');
-//        days1.add('F');
-//
-//        ArrayList<Character> days2 = new ArrayList<Character>();
-//        days2.add('R');
-//
-//        ArrayList<String> fr = new ArrayList<String>();
-//        fr.add("WI");
-//        fr.add("NI");
-//
-//        Course debug;
-//
-//        int rand = randValue();
-//        switch (rand) {
-//            case 1:
-//                debug = new Course("ICS 314", "Software Engineering I", 51804, "3",
-//                        "Brent Auernheimer", days1, 920, 1030, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
-//                        "MATH CLASS ");
-//                break;
-//            case 0:
-//                debug = new Course("ICS 414", "Software Engineering II", 22222, "3",
-//                        "Brent Auernheimer", days1, days2, 930, 1130, 1020, 1320, "SAKAM D101",
-//                        "HOLM 243", 2, 20, 0, 10, "1/3 to 4/27",
-//                        "MATH CLASS ");
-//
-//                break;
-//            default:
-//                debug = new Course("ICS 314", "Software Engineering I", crn, "3",
-//                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
-//                        "HOLM 243", 3, 0, 3, 7, "4/3 to 5/27",
-//                        "MATH CLASS ");
-//                debug.setFocusReqs(fr);
-//                break;
-//        }
-//        debug.setID(uniqueID(true));
-//        al_course.add(debug);
-//        mandatoryDataChange();
-//    }
 
     protected void acquireResolution() {
         Display dsp = getWindowManager().getDefaultDisplay();
@@ -805,6 +767,23 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     }
 
     private void populateResults(ArrayList<Course> results) {
+
+        ArrayList<Courses> final
+        //time filtering START TIME
+
+        if(en_start_tp) {
+
+        }
+
+        if(en_end_tp) {
+
+        }
+
+
+        //time filtering END TIME
+
+
+
         for(int x = 0; x < results.size(); x++) {
             Course c = results.get(x);
             c.setID(uniqueID(true));
@@ -820,6 +799,11 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 Toast.LENGTH_SHORT).show();
 
         sv.clearFocus();
+    }
+
+    private int timeConvert(int hr, int min) {
+        int full_hr = hr * 100;
+        return full_hr + min;
     }
 
 }

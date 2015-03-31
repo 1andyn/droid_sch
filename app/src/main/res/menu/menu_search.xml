@@ -27,12 +27,6 @@
         android:orderInCategory="100"
         android:title="@string/menu_fil"
         app:showAsAction="never" />
-    <!--  DEBUG ITEM, DELETE BEFORE PRODUCTION -->
-    <item
-        android:id="@+id/action_debug_add"
-        android:orderInCategory="100"
-        android:title="DEBUG: ADD to RESULTS List"
-        app:showAsAction="never" />
     <item
         android:id="@+id/action_clear_results"
         android:orderInCategory="100"

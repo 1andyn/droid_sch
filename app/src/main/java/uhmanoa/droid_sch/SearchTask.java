@@ -43,7 +43,11 @@ public class SearchTask extends AsyncTask<String, Void, Integer> {
 
     @Override
     protected Integer doInBackground(String... params) {
-        courses = data.getSearchResults(semester, yr, params[0], params[1]);
+        if(params[0] == "") {
+            courses = data.getSearchResultsNoText(semester,yr, params[1]);
+        } else {
+            courses = data.getSearchResults(semester, yr, params[0], params[1]);
+        }
         return 1;
     }
 
