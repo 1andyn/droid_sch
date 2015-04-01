@@ -254,6 +254,9 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                                 int times[] = getStartEndTime(time);
                                 start1 = times[0];
                                 end1 = times[1];
+                            } else if (time.equals("TBA")){
+                                start1 = -1;
+                                end1 = -1;
                             }
 
                             if (!time2.equalsIgnoreCase("TBA")
@@ -261,6 +264,9 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                                 int times[] = getStartEndTime(time2);
                                 start2 = times[0];
                                 end2 = times[1];
+                            } else if (time2.equals("TBA")){
+                                start2 = -1;
+                                end2 = -1;
                             }
 
                             int sts, wt, wla;
