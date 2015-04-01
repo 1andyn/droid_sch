@@ -24,10 +24,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import uhmanoa.droid_sch.uhmanoa.adapters.Sched_Adapter;
-
-
-public class Available_Schedules extends ActionBarActivity implements View.OnClickListener{
+public class Available_Schedules extends ActionBarActivity implements View.OnClickListener,
+    OnBuildTaskComplete {
 
     public static final String LOGTAG = "SCHED";
     public static final String CONFIRM_SAVE = "Warning: By clicking ok you will save the selected " +
@@ -44,6 +42,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     Sched_Adapter adapter;
 
     ArrayList<Schedule> schedules, schedPage;
+    private ArrayList<Star_obj> star_list;
+    private SQL_DataSource datasource;
+    private ScheduleBuildTask sbt;
 
     int totalPages, currentPage;
 
@@ -51,17 +52,34 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_schedules);
+        setBackground();
+
+        star_list = new ArrayList<>();
 
         Bundle extras = getIntent().getExtras();
         sem = extras.getInt("SEMESTER");
         year = extras.getInt("YEAR");
         month = extras.getInt("MONTH");
 
-        setBackground();
-        populateList();
-        initLayout();
-        populateNextPage();
+        datasource = new SQL_DataSource(this);
+        datasource.open();
 
+        loadStarObjects();
+        runBuildTask();
+
+
+
+
+    }
+
+    private void loadStarObjects() {
+        star_list = datasource.getAllTempStar(sem, year);
+    }
+
+    private void runBuildTask() {
+        sbt = new ScheduleBuildTask(Available_Schedules.this, datasource,
+                Available_Schedules.this, sem, year, star_list);
+        sbt.execute();
     }
 
     private void setBackground(){
@@ -98,27 +116,18 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         updateGotoButton();
     }
 
-    private void populateList(){
+    private void populateList(ArrayList<Schedule> res){
         titles = new ArrayList<String>();
         subtitles = new ArrayList<String>();
 
         schedules = new ArrayList<Schedule>();
 
-        for (int i = 0; i < 17; i++){
-            long id = i;
-            titles.add("Sched" + i);
-            subtitles.add("Num classes in sched " + i);
-            Schedule s = new Schedule(i, 2015, 1);
-            for (int j = 0; j < 4; j++) {
-                ArrayList<Character> days = new ArrayList<>();
-                days.add('M');
-                days.add('W');
-                days.add('F');
-                Course c = new Course("EE" + j, "Stuff", 39390 + j, "3", "Professor " + j,
-                        days, null);// 1230 + j, 1320+ j, "POST" + j);
-                s.addCourse(c);
-            }
+        int x = 1;
+        for(Schedule s : res) {
+            titles.add("Sched " + x);
+            subtitles.add("Num classes in sched" + s.getCourses().size());
             schedules.add(s);
+            x++;
         }
 
         totalPages = 0;
@@ -263,5 +272,12 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
     private void updateGotoButton(){
         btnGoto.setText("Page \t" + (currentPage + 1) + " / " + totalPages);
+    }
+
+    @Override
+    public void onBuildTaskComplete() {
+        populateList(sbt.getResults());
+        initLayout();
+        populateNextPage();
     }
 }

@@ -27,7 +27,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -41,21 +40,20 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 
 
 public class Builder extends ActionBarActivity implements App_const, OnCheckTaskComplete,
         OnParseTaskComplete {
 
     // --------DEBUG
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     // --------DEBUG
 
     private boolean lastLoadSuccess = false;
 
     private SearchView sv;
     private int sem; //semester value
-    private int yr; //year value
+    private int year; //year value
     private int month; //month value
     private Drawable drw_bg;
     private Resources res_srch;
@@ -94,27 +92,27 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_builder);
+
         Bundle extras = getIntent().getExtras();
         sem = extras.getInt("SEMESTER");
+        year = extras.getInt("YEAR");
+        month = extras.getInt("MONTH");
+
         pt_resolution = new Point();
         al_strobj = new ArrayList<>();
         al_desired = new ArrayList<>();
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
 
-        Calendar curr_time = Calendar.getInstance();
-        yr = curr_time.get(Calendar.YEAR);
-        month = curr_time.get(Calendar.MONTH);
-
         datasource = new SQL_DataSource(this);
         datasource.open();
 
-        System.out.println("DEBUG: SEM: " + sem + " YEAR: " + yr);
+        System.out.println("DEBUG: SEM: " + sem + " YEAR: " + year);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 getApplicationContext());
         lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
-                String.valueOf(yr), false);
+                String.valueOf(year), false);
 
         loadImageResources();
         loadProfiles();
@@ -133,31 +131,37 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     private void checkCourseData() {
 
-        if (!datasource.courseDataExists(sem, yr) || !lastLoadSuccess) {
+        if (!datasource.courseDataExists(sem, year) || !lastLoadSuccess) {
             //Retrieve Course Data
-            datasource.clearCourseData(sem, yr);
+            datasource.clearCourseData(sem, year);
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                     getApplicationContext());
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), false);
+            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(year), false);
             editor.commit();
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "PARSEDATA_BUILDER");
             wl.acquire();
             p = new Parser(datasource, this, this);
-            p.execute(sem, yr, month);
-
+            p.execute(sem, year, month);
         }
         //don't need to do anything if data already exists
     }
 
     private void reloadDBData() {
-        ArrayList<Star_obj> so = datasource.getAllStar(sem, yr);
+        ArrayList<Star_obj> so = datasource.getAllStar(sem, year);
         sobj_adp.clear();
         for (int x = 0; x < so.size(); x++) {
             sobj_adp.add(so.get(x));
         }
+
+        ArrayList<Star_obj> dso = datasource.getAllTempStar(sem, year);
+        desd_adp.clear();
+        for(int x = 0; x < dso.size(); x++) {
+            desd_adp.add(dso.get(x));
+        }
+
         mandatoryDataChange();
     }
 
@@ -182,6 +186,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         //Set up Dialog settings from Profile settings
         en_start_tp = false; //stub
         en_end_tp = false; //stub
+        en_min_np = false; //stub
     }
 
     private void configureSpinner() {
@@ -311,6 +316,11 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     Toast.makeText(Builder.this, "Building Schedules",
                             Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
+                    Bundle b = new Bundle();
+                    b.putInt("SEMESTER", sem);
+                    b.putInt("YEAR", year);
+                    b.putInt("MONTH", month);
+                    i.putExtras(b);
                     startActivity(i);
                 }
             }
@@ -354,6 +364,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
         if (so.isClass()) {
             if (!crnExists(so.getCRN())) {
+                so.setID(datasource.saveTStar(so));
                 desd_adp.add(so);
             } else {
                 Toast.makeText(Builder.this,
@@ -362,6 +373,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             }
         } else {
             if (!crsExists(so.getCourse())) {
+                so.setID(datasource.saveTStar(so));
                 desd_adp.add(so);
             } else {
                 Toast.makeText(Builder.this, "Course already exists in Course List",
@@ -387,6 +399,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             Long temp = al_desired.get(x).getID();
             if (temp.equals(id)) {
                 if (DEBUG) System.out.println("Deleting " + id + " " + al_desired.get(x).getCRN());
+                datasource.deleteTStar(id);
                 desd_adp.remove(al_desired.get(x));
             }
         }
@@ -416,7 +429,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 Toast.makeText(Builder.this, "Please enter atleast 3 characters.",
                         Toast.LENGTH_LONG).show();
             } else {
-                cct = new CourseCheckTask(this, datasource, this, sem, yr);
+                cct = new CourseCheckTask(this, datasource, this, sem, year);
                 cct.execute(query);
             }
         }
@@ -679,6 +692,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     Toast.LENGTH_LONG).show();
         } else {
             match.setID(uniqueID());
+            match.setID(datasource.saveTStar(match));
             desd_adp.add(match);
             mandatoryDataChange();
         }
@@ -696,8 +710,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                     getApplicationContext());
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), true);
+            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(year), true);
             editor.commit();
         }
     }
+
 }

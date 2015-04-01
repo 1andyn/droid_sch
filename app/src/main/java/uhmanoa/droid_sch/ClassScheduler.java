@@ -84,19 +84,15 @@ public class ClassScheduler {
             }
         }
 
-        System.out.println("DEBUG DATA");
         //create schedules of the same courses in same schedule container
         for (Star_obj so : names) {
             Schedule s = new Schedule(-1, year, semester);
             ArrayList<Course> crs = ds.getCoursesByName(semester, year, so.getCourse());
-            System.out.println(so.getCourse());
-            System.out.println(crs.size() + " is the size");
             for (Course c : crs) {
                 s.addCourse(c);
             }
             results.add(s);
         }
-        System.out.println("DEBUG DATA");
 
         //crns only contains courses searched by
         ArrayList<Star_obj> crns = new ArrayList<>();
@@ -124,10 +120,6 @@ public class ClassScheduler {
             results.add(sch);
         }
 
-        for (Schedule s : results) {
-            s.display();
-        }
-
         return results;
     }
 
@@ -135,6 +127,11 @@ public class ClassScheduler {
         ArrayList<Schedule> course_list = findCourses(so); //gets all courses into one container
         ArrayList<Schedule> sorted_list = sortSchedules(course_list, SCHED_SIZE);
         ArrayList<Schedule> result_list = createSchedules(sorted_list, sorted_list.size());
+        for (Schedule s : sorted_list) {
+            System.out.println("------");
+            s.display();
+        }
+
         return result_list;
     }
 
@@ -148,12 +145,11 @@ public class ClassScheduler {
      */
     private ArrayList<Schedule> createSchedules(ArrayList<Schedule> list, int schedMinSize) {
         ArrayList<Schedule> scheds = new ArrayList<Schedule>();
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            if (checkOverlap(list.get(i), schedMinSize))
-                scheds.add(list.get(i));
+        for (Course c : list.get(0).getCourses()) {
+            Schedule sched = new Schedule(-1, year, semester);
+            sched.addCourse(c);
+            scheds = addNextCourse(sched, list, 1, 0, scheds, schedMinSize);
         }
-
         return scheds;
     }
 
@@ -212,11 +208,11 @@ public class ClassScheduler {
      * @param allScheds      The array of all schedules being created.
      * @return An array of all schedules created.
      */
-    private ArrayList<Schedule> addNextCourse(Schedule sched, ArrayList<Schedule> desiredCourses,
-                                              int courseNum, int classNum, ArrayList<Schedule> allScheds, int schedMinSize) {
+    public static ArrayList<Schedule> addNextCourse(Schedule sched, ArrayList<Schedule> desiredCourses,
+            int courseNum, int classNum, ArrayList<Schedule> allScheds, int schedMinSize) {
 
 		/*	If we've gone through each desired class, add the current
-         * schedule to the list of schedules and return */
+		 * schedule to the list of schedules and return */
         if (courseNum >= desiredCourses.size()) {
             if (sched.getCourses().size() >= schedMinSize)
                 if (!allScheds.contains(sched))
@@ -303,53 +299,6 @@ public class ClassScheduler {
 
         }
         return sorted;
-    }
-
-    /**
-     * Parses a string of days (ex. 'MWF') into an array of characters.
-     * One entry for each day (ex. M,W,F).
-     *
-     * @param days String of days to be parsed.
-     * @return Array of the parsed days.
-     */
-    private ArrayList<Character> getDaysList(String days) {
-        if (days.equals("NULL"))
-            return null;
-
-        ArrayList<Character> d = new ArrayList<Character>();
-        for (int i = 0; i < days.length(); i++)
-            d.add(days.charAt(i));
-
-        return d;
-    }
-
-    /**
-     * Breaks a string of focus requirements into separate, individual
-     * requirements.
-     *
-     * @param f String of focus requirements (delimited by '.')
-     * @return Array of strings - one for
-     */
-    private ArrayList<String> getFocusList(String f) {
-        if (f == "NULL") return null;
-
-        ArrayList<String> focus = new ArrayList<String>();
-        String temp = f;
-
-        int num = 0;
-        // count number of delimiters ('.')
-        for (int i = 0; i < f.length(); i++)
-            if (f.charAt(i) == '.') num++;
-
-        // for each delimiter, break up into separate words
-        for (int i = 0; i < num; i++) {
-            int place = temp.indexOf('.');
-            focus.add(temp.substring(0, place));
-            temp = temp.substring(place + 1, temp.length());
-        }
-        focus.add(temp);
-
-        return focus;
     }
 
     public static void quitOnError(String msg) {
