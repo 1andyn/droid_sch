@@ -40,7 +40,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     public static final String TABLE_PREF = "tbPref";
     public static final String TABLE_PBLOCK = "tbPBlock";
     public static final String TABLE_MAJOR = "tbMajor";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     public static synchronized SQL_Helper getInstance(Context context) {
         //singleton code
@@ -179,8 +179,12 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_WAITL + " INT NOT NULL, "
             + COLUMN_WAITLA + " INT NOT NULL, "
             + COLUMN_DATES + " TEXT NOT NULL, "
-            + COLUMN_MJR + " TEXT NOT NULL "
-            + " );";
+            + COLUMN_MJR + " TEXT NOT NULL, "
+            + " PRIMARY KEY ("
+            + COLUMN_CRN + ", "
+            + COLUMN_SEM + ", "
+            + COLUMN_YEAR + ")"
+            + ");";
 
 
     /* ORIGINAL: Create Course Storage Table */
@@ -205,8 +209,12 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_WAITL + " INT NOT NULL, "
             + COLUMN_WAITLA + " INT NOT NULL, "
             + COLUMN_DATES + " TEXT NOT NULL, "
-            + COLUMN_MJR + " TEXT NOT NULL "
-            + " );";
+            + COLUMN_MJR + " TEXT NOT NULL, "
+            + " PRIMARY KEY ("
+            + COLUMN_CRN + ", "
+            + COLUMN_SEM + ", "
+            + COLUMN_YEAR + ")"
+            + ");";
 
     // For Reference Purposes
     //+ "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "

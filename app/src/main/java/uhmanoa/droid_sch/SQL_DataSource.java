@@ -439,30 +439,39 @@ public class SQL_DataSource {
     }
 
     public Star_obj findMatch(int sem, int year, String search_text) {
-        Star_obj so = null;
-        Boolean isCRN = Character.isDigit(search_text.charAt(0));
-
-        String whereClause = "";
-        if (isCRN) {
-            whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = " +
-                    "? AND " + SQL_Helper.COLUMN_CRN + " MATCH ?";
-        } else {
-            whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = " +
-                    "? AND " + SQL_Helper.COLUMN_CRS + " MATCH ?";
+        if(search_text == "") {
+            return null;
         }
 
-        String whereArgs[] = {
-                String.valueOf(sem),
-                String.valueOf(year),
-                search_text
-        };
+        Star_obj so = null;
+        String query = search_text;
+        boolean isCRN = isCRN(search_text);
+        if (isCRN) {
+            query = search_text.substring(0, 5);
+        }
 
-        Cursor curse = database.query(SQL_Helper.TABLE_COURSE, COURSE_COLUMN, whereClause, whereArgs,
-                null, null, SQL_Helper.COLUMN_CRS + " ASC");
+        String select = "";
+        if (isCRN) {
+            select = "SELECT * FROM " + SQL_Helper.TABLE_COURSE
+                    + " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem)
+                    + " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year)
+                    + " AND " + SQL_Helper.COLUMN_CRN + " = " + query;
+        } else {
+            select = "SELECT * FROM " + SQL_Helper.TABLE_COURSE
+                    + " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem)
+                    + " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year)
+                    + " AND " + SQL_Helper.COLUMN_CRS + " = " + "UPPER('" + query + "')";
+        }
+
+        Cursor curse = database.rawQuery(select, null);
         curse.moveToFirst();
         if (curse.getCount() != 0) {
             Course c = cursorToCourse(curse);
-            so = new Star_obj(c.getCourse(), c.getTitle(), c.getCrn(), -1, sem, year);
+            if(isCRN) {
+                so = new Star_obj(c.getCourse(), c.getTitle(), c.getCrn(), -1, sem, year);
+            } else {
+                so = new Star_obj(c.getCourse(), c.getTitle(), -1, -1, sem, year);
+            }
         }
         curse.close();
 
