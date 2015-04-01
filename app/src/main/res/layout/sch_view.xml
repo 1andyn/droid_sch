@@ -8,19 +8,16 @@
         android:padding="10dp"
         android:orientation="vertical"
         android:id="@+id/crs_list"
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <LinearLayout
-        android:paddingTop="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
+        android:padding="10dp"
         android:orientation="vertical"
         android:id="@+id/crn_list"
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <LinearLayout
+        android:padding="10dp"
         android:orientation="vertical"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
@@ -32,24 +29,29 @@
             android:id="@+id/text_year_sem"/>
         </LinearLayout>
     <LinearLayout
-        android:padding="5dp"
+        android:padding="10dp"
         android:orientation="horizontal"
-        android:layout_gravity="right"
-        android:gravity="right"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <!-- for some reason w/o scaling the button doesn't scale to the original aspect ratio -->
         <Button
+            style="@style/btnStyleGenoa"
             android:textStyle="bold"
             android:textSize="12dp"
             android:text="VIEW"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:id="@+id/view_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:padding="5dp"
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
         <CheckBox
-            android:padding="10dp"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:id="@+id/check_box"
             android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

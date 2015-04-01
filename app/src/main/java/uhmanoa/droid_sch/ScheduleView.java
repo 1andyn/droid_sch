@@ -29,6 +29,8 @@ public class ScheduleView extends LinearLayout {
         // Linear Layouts
         ll_crs_list = (LinearLayout) findViewById(R.id.crs_list);
         ll_crn_list = (LinearLayout) findViewById(R.id.crn_list);
+        ll_crn_list.removeAllViews();
+        ll_crs_list.removeAllViews();
 
         ArrayList<Course> crs = sched.getCourses();
         for(int x = 0; x < sched.getCourses().size(); x++){
