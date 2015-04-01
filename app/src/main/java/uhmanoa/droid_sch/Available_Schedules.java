@@ -34,6 +34,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             "schedules and discard all other schedules.  Are you sure you want to continue?";
     public static final int ITEMS_PER_PAGE = 5;
 
+    private int sem, year, month;
+
     ArrayList<String> titles, t1;
     ArrayList<String> subtitles, s1;
     ListView lv_item;
@@ -49,6 +51,11 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_schedules);
+
+        Bundle extras = getIntent().getExtras();
+        sem = extras.getInt("SEMESTER");
+        year = extras.getInt("YEAR");
+        month = extras.getInt("MONTH");
 
         setBackground();
         populateList();

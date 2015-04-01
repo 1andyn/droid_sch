@@ -236,7 +236,12 @@ public class Main_menu extends Activity implements OnCheckTaskComplete{
                 break; //
         }
         Bundle b = new Bundle();
+        Calendar rightNow = Calendar.getInstance();
+        int month = rightNow.get(Calendar.MONTH);
+        int current_year = rightNow.get(Calendar.YEAR);
         b.putInt("SEMESTER", sem);
+        b.putInt("YEAR", current_year);
+        b.putInt("MONTH", month);
         i.putExtras(b);
         startActivity(i);
     }

@@ -101,8 +101,12 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
         Bundle extras = getIntent().getExtras();
         sem = extras.getInt("SEMESTER");
+        yr = extras.getInt("YEAR");
+        month = extras.getInt("MONTH");
+
         pt_resolution = new Point();
         SelectedItems = new ArrayList<Integer>();
         al_strobj = new ArrayList<Star_obj>();
@@ -110,10 +114,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
-
-        Calendar curr_time = Calendar.getInstance();
-        yr = curr_time.get(Calendar.YEAR);
-        month = curr_time.get(Calendar.MONTH);
 
         datasource = new SQL_DataSource(this);
         datasource.open();
