@@ -476,10 +476,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-//                // An item was selected. You can retrieve the selected item using
-//                Toast.makeText(Search.this, "Major selected: " + pos + " with KEY: "
-//                        + mjr_list.get(pos),
-//                        Toast.LENGTH_SHORT).show();
                 srch_key = mjr_list.get(pos);
             }
 
