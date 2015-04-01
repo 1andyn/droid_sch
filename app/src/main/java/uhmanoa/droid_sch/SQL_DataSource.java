@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.lang.reflect.Array;
+import java.sql.SQLPermission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -707,18 +708,15 @@ public class SQL_DataSource {
     }
 
     // used by get schedule function
-    public Course getCourse(int sem, int year, int crn) {
+    public Course getCourseByCRN(int sem, int year, int crn) {
         database.beginTransaction();
-        String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = " +
-                "? AND " + SQL_Helper.COLUMN_CRN + " = ?";
-        String whereArgs[] = {
-                String.valueOf(sem),
-                String.valueOf(year),
-                String.valueOf(crn)
-        };
 
-        Cursor curse = database.query(SQL_Helper.TABLE_CDAY, CDAYS_COLUMN, whereClause, whereArgs,
-                null, null, null);
+        String select = "SELECT DISTINCT * FROM " + SQL_Helper.TABLE_COURSE +
+                " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) +
+                " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) +
+                " AND " + SQL_Helper.COLUMN_CRN + " = " + String.valueOf(crn);
+
+        Cursor curse = database.rawQuery(select, null);
         curse.moveToFirst();
 
         Course c = null;
@@ -730,6 +728,54 @@ public class SQL_DataSource {
         database.endTransaction();
         return c;
     }
+
+    // used by get builder function
+    public ArrayList<Course> getCoursesByCRN(int sem, int year, int crn) {
+        ArrayList<Course> results = new ArrayList<>();
+        database.beginTransaction();
+
+        String select = "SELECT DISTINCT * FROM " + SQL_Helper.TABLE_COURSE +
+                " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) +
+                " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) +
+                " AND " + SQL_Helper.COLUMN_CRN + " = " + String.valueOf(crn);
+
+        Cursor curse = database.rawQuery(select, null);
+        curse.moveToFirst();
+
+        Course c = null;
+        if (curse.getCount() != 0) {
+            c = cursorToCourse(curse);
+            results.add(c);
+        }
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return results;
+    }
+
+    public ArrayList<Course> getCoursesByName(int sem, int year, String name) {
+        ArrayList<Course> results = new ArrayList<>();
+        database.beginTransaction();
+
+        String select = "SELECT DISTINCT * FROM " + SQL_Helper.TABLE_COURSE +
+                " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) +
+                " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) +
+                " AND " + SQL_Helper.COLUMN_CRS + " = " + "'" + name + "'";
+
+        Cursor curse = database.rawQuery(select, null);
+        curse.moveToFirst();
+
+        Course c = null;
+        if (curse.getCount() != 0) {
+            c = cursorToCourse(curse);
+            results.add(c);
+        }
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return results;
+    }
+
 
     //used by parser to save course data
     public void saveCourse(Course crs) {
