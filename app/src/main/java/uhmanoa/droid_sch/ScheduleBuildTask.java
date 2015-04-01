@@ -40,7 +40,7 @@ public class ScheduleBuildTask extends AsyncTask<Void, Void, Integer> {
     @Override
     protected Integer doInBackground(Void... params) {
         ClassScheduler cs = new ClassScheduler(semester, year, data);
-
+        results = cs.getPossibleSchedules(inputs);
         return 1;
     }
 
