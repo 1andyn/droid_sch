@@ -351,7 +351,6 @@ public class SQL_DataSource {
                 String.valueOf(sem),
                 String.valueOf(yr)
         };
-
         ArrayList<Star_obj> all_starobj = new ArrayList<>();
         Cursor curse = database.query(SQL_Helper.TABLE_TSTAR, STAR_COLUMN, whereClause, whereArgs,
                 null, null, SQL_Helper.COLUMN_CRN + " ASC");

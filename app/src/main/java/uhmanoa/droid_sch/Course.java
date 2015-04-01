@@ -342,9 +342,7 @@ public class Course {
 		/* one class starts after the other ends */
 
         //if time == -1 then it is TBA and assumed to be an ONLINE course
-        if (e1 < os1 || s1 > oe1 ||
-                s1 == -1 || e1 == -1 ||
-                os1 == -1 || oe1 == -1)
+        if (e1 < os1 || s1 > oe1 )
             return false;
 
         return true;
