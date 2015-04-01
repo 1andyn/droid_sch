@@ -340,7 +340,11 @@ public class Course {
      */
     public boolean timeOverlaps(int s1, int e1, int os1, int oe1) {
 		/* one class starts after the other ends */
-        if (e1 < os1 || s1 > oe1)
+
+        //if time == -1 then it is TBA and assumed to be an ONLINE course
+        if (e1 < os1 || s1 > oe1 ||
+                s1 == -1 || e1 == -1 ||
+                os1 == -1 || oe1 == -1)
             return false;
 
         return true;
