@@ -36,6 +36,7 @@ public class Schedule {
 		this.sid = s.getID();
         this.year = s.getYear();
         this.semester = s.getSemester();
+        schedule = new ArrayList<>();
         checked = false; //alaways initially unchecked
 		for (Course c : s.getCourses()){
 			schedule.add(c);
