@@ -62,9 +62,7 @@ public class Sched_Adapter extends BaseAdapter {
 
             holder.title = (TextView) convertView.findViewById(R.id.tv_sched_title);
             holder.subtitle = (TextView) convertView.findViewById(R.id.tv_sched_subtitle);
-
             convertView.setTag(holder);
-
         }
         else{
             holder = (ViewHolder) convertView.getTag();
@@ -76,7 +74,22 @@ public class Sched_Adapter extends BaseAdapter {
         String classes = "";
         Schedule current = schedules.get(position);
         for (Course c : current.getCourses()){
-            classes += c.getCourse() + " ";
+            String time1 = c.getTimeString(false);
+            if(c.getStart1() == -1) {
+                time1 = "TBA";
+            }
+            classes += c.getCourse() + "     " + c.getCrn()  + "     " + time1 + "     "
+                    + c.getDayString(false) + " \n";
+
+            if(c.getStart2() != 9999) {
+                String time2 = c.getTimeString(true);
+                if (c.getStart2() == -1) {
+                    time2 = "TBA";
+                }
+                classes += "---" + "     "  + time2 + "     " + c.getDayString(
+                        true) + " \n";
+            }
+
         }
         holder.subtitle.setText(classes);
 
