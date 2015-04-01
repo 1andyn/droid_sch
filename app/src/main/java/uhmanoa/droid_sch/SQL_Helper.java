@@ -32,15 +32,15 @@ public class SQL_Helper extends SQLiteOpenHelper {
     /* Table Names */
 
     public static final String TABLE_STAR = "tbStarred";
+    public static final String TABLE_TSTAR = "tbTempStar";
     public static final String TABLE_SCH = "tbSched";
-    public static final String TABLE_TSCH = "tbTempSched";
     public static final String TABLE_COURSE = "tbCourse";
     public static final String TABLE_CFOCUS = "tbCFocus";
     public static final String TABLE_CDAY = "tbCDays";
     public static final String TABLE_PREF = "tbPref";
     public static final String TABLE_PBLOCK = "tbPBlock";
     public static final String TABLE_MAJOR = "tbMajor";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     public static synchronized SQL_Helper getInstance(Context context) {
         //singleton code
@@ -146,16 +146,17 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_SEM + " INT NOT NULL "
             + " );";
 
-    /* Create Temp Schedules Table */
-    private static final String TABLE_TSCH_CREATE = "CREATE TABLE "
-            + TABLE_TSCH
+    /* Create Starred Data Table */
+    private static final String TABLE_TSTAR_CREATE = "CREATE TABLE "
+            + TABLE_TSTAR
             + "("
-            + COLUMN_ID + " INT NOT NULL, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_CRN + " INT NOT NULL, "
-            + COLUMN_YEAR + " INT NOT NULL, "
-            + COLUMN_SEM + " INT NOT NULL "
+            + COLUMN_CRS + " TEXT NOT NULL, "
+            + COLUMN_TITL + " TEXT NOT NULL, "
+            + COLUMN_SEM + " INT NOT NULL, "
+            + COLUMN_YEAR + " INT NOT NULL "
             + " );";
-
 
     /* SPEED VERSION */
     private static final String TABLE_FTS_COURSE_CREATE = "CREATE VIRTUAL TABLE "
@@ -308,7 +309,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(TABLE_STAR_CREATE);
         database.execSQL(TABLE_SCH_CREATE);
-        database.execSQL(TABLE_TSCH_CREATE);
+        database.execSQL(TABLE_TSTAR_CREATE);
         database.execSQL(TABLE_COURSE_CREATE);
         database.execSQL(TABLE_CFOCUS_CREATE);
         database.execSQL(TABLE_CDAYS_CREATE);
@@ -324,7 +325,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAR);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCH);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TSCH);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TSTAR);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CFOCUS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CDAY);

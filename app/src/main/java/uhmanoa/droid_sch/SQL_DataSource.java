@@ -275,11 +275,35 @@ public class SQL_DataSource {
         return id;
     }
 
+    public long saveTStar(Star_obj pStar) {
+        database.beginTransaction();
+        ContentValues values = new ContentValues();
+        values.put(SQL_Helper.COLUMN_CRS, pStar.getCourse());
+        values.put(SQL_Helper.COLUMN_CRN, pStar.getCRN());
+        values.put(SQL_Helper.COLUMN_TITL, pStar.getCourseTitle());
+        values.put(SQL_Helper.COLUMN_SEM, pStar.getSemester());
+        values.put(SQL_Helper.COLUMN_YEAR, pStar.getYear());
+
+        long id = database.insert(SQL_Helper.TABLE_TSTAR, null, values);
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return id;
+    }
+
     //delete starred
     public void deleteStar(long id) {
         database.beginTransaction();
         System.out.println("Deleting Starred Object with id: " + id);
         database.delete(SQL_Helper.TABLE_STAR, SQL_Helper.COLUMN_ID + " = " + id, null);
+        database.setTransactionSuccessful();
+        database.endTransaction();
+    }
+
+    //delete starred
+    public void deleteTStar(long id) {
+        database.beginTransaction();
+        System.out.println("Deleting Starred Object with id: " + id);
+        database.delete(SQL_Helper.TABLE_TSTAR, SQL_Helper.COLUMN_ID + " = " + id, null);
         database.setTransactionSuccessful();
         database.endTransaction();
     }
@@ -307,6 +331,29 @@ public class SQL_DataSource {
 
         ArrayList<Star_obj> all_starobj = new ArrayList<>();
         Cursor curse = database.query(SQL_Helper.TABLE_STAR, STAR_COLUMN, whereClause, whereArgs,
+                null, null, SQL_Helper.COLUMN_CRN + " ASC");
+        curse.moveToFirst();
+        while (!curse.isAfterLast()) {
+            Star_obj so = cursorToStarObj(curse);
+            all_starobj.add(so);
+            curse.moveToNext();
+        }
+        curse.close();
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return all_starobj;
+    }
+
+    public ArrayList<Star_obj> getAllTempStar(int sem, int yr) {
+        database.beginTransaction();
+        String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ?";
+        String whereArgs[] = {
+                String.valueOf(sem),
+                String.valueOf(yr)
+        };
+
+        ArrayList<Star_obj> all_starobj = new ArrayList<>();
+        Cursor curse = database.query(SQL_Helper.TABLE_TSTAR, STAR_COLUMN, whereClause, whereArgs,
                 null, null, SQL_Helper.COLUMN_CRN + " ASC");
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
@@ -391,37 +438,6 @@ public class SQL_DataSource {
 
     //--------------------------- SCHEDULE DB HELPER FUNCTIONS----------------------------//
 
-    //--------------------------- TEMP SCHEDULE DB HELPER FUNCTIONS----------------------------//
-
-    public ArrayList<Schedule> getAllTempSchedules() {
-        ArrayList<Schedule> sch = new ArrayList<>();
-        return sch;
-    }
-
-    public void saveTSched(Schedule sch) {
-        database.beginTransaction();
-
-        ArrayList<Course> crs = sch.getCourses();
-
-        long id = sch.getID();
-        int yr = sch.getYear();
-        int sem = sch.getSemester();
-
-        for (int x = 0; x < crs.size(); x++) {
-            ContentValues values = new ContentValues();
-            Course c = crs.get(x);
-            values.put(SQL_Helper.COLUMN_ID, id);
-            values.put(SQL_Helper.COLUMN_CRN, c.getCrn());
-            values.put(SQL_Helper.COLUMN_YEAR, yr);
-            values.put(SQL_Helper.COLUMN_SEM, sem);
-            database.insert(SQL_Helper.TABLE_TSCH, null, values);
-        }
-
-        database.setTransactionSuccessful();
-        database.endTransaction();
-    }
-
-    //--------------------------- TEMP SCHEDULE DB HELPER FUNCTIONS----------------------------//
     //--------------------------- COURSE SEARCH DB HELPER FUNCTIONS ------------------------------//
 
     public boolean courseDataExists(int sem, int year) {
@@ -711,7 +727,7 @@ public class SQL_DataSource {
     public Course getCourseByCRN(int sem, int year, int crn) {
         database.beginTransaction();
 
-        String select = "SELECT DISTINCT * FROM " + SQL_Helper.TABLE_COURSE +
+        String select = "SELECT * FROM " + SQL_Helper.TABLE_COURSE +
                 " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) +
                 " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) +
                 " AND " + SQL_Helper.COLUMN_CRN + " = " + String.valueOf(crn);
@@ -723,7 +739,7 @@ public class SQL_DataSource {
         if (curse.getCount() != 0) {
             c = cursorToCourse(curse);
         }
-
+        curse.close();
         database.setTransactionSuccessful();
         database.endTransaction();
         return c;
@@ -733,7 +749,7 @@ public class SQL_DataSource {
         ArrayList<Course> results = new ArrayList<>();
         database.beginTransaction();
 
-        String select = "SELECT DISTINCT * FROM " + SQL_Helper.TABLE_COURSE +
+        String select = "SELECT * FROM " + SQL_Helper.TABLE_COURSE +
                 " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) +
                 " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) +
                 " AND " + SQL_Helper.COLUMN_CRS + " = " + "'" + name + "'";
@@ -742,11 +758,12 @@ public class SQL_DataSource {
         curse.moveToFirst();
 
         Course c = null;
-        if (curse.getCount() != 0) {
+        while(!curse.isAfterLast()) {
             c = cursorToCourse(curse);
             results.add(c);
+            curse.moveToNext();
         }
-
+        curse.close();
         database.setTransactionSuccessful();
         database.endTransaction();
         return results;
@@ -809,7 +826,7 @@ public class SQL_DataSource {
             //Save Focus Values
             saveCFocus(sem, year, crs.getCourse(), crs.getFocusReqs());
         }
-
+        curse.close();
         database.setTransactionSuccessful();
         database.endTransaction();
     }
@@ -899,6 +916,7 @@ public class SQL_DataSource {
                 col++;
             }
         }
+        curse.close();
         return focus;
     }
 
@@ -1014,8 +1032,8 @@ public class SQL_DataSource {
                 SQL_Helper.COLUMN_YEAR + " = " + year, null);
     }
 
-    public void clearTempSch() {
-        database.delete(SQL_Helper.TABLE_TSCH, null, null);
+    public void clearTempStar() {
+        database.delete(SQL_Helper.TABLE_TSTAR, null, null);
     }
 
 }
