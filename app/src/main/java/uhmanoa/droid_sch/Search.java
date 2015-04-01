@@ -15,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Display;
@@ -117,17 +118,12 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         datasource = new SQL_DataSource(this);
         datasource.open();
 
-        SharedPreferences settings = getSharedPreferences(pref_file, 0);
+        System.out.println("DEBUG: SEM: " + sem + " YEAR: " + yr);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getApplicationContext());
         lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
                 String.valueOf(yr), false);
-
-        if(DEBUG) {
-            if(lastLoadSuccess) {
-                System.out.println("DEBUG: LAST LOAD WAS SUCCESS");
-            } else {
-                System.out.println("DEBUG: LAST LOAD WAS FAILED");
-            }
-        }
 
         loadImageResources();
         configureSpinnerData(null, null);
@@ -149,13 +145,14 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
             //Retrieve Course Data
             datasource.clearCourseData(sem, yr);
-            SharedPreferences settings = getSharedPreferences(pref_file, 0);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                    getApplicationContext());
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), false);
             editor.commit();
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+            wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "PARSEDATA_SEARCH");
             wl.acquire();
             p = new Parser(datasource, this, this);
             p.execute(sem, yr,month);
@@ -752,7 +749,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         wl.release();
 
-        SharedPreferences settings = getSharedPreferences(pref_file, 0);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getApplicationContext());
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), true);
         editor.commit();
