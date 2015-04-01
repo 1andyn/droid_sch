@@ -67,8 +67,13 @@ public class ClassScheduler {
             }
 
         }
-        courses = null; //dereference courses list, no longer used
+
         // ----------------------- REDUNDANCY CHECK ---------------------------------
+
+//        System.out.println("DEBUG DATA");
+//        for(Star_obj so: course_list) {
+//            System.out.println(so.getCourse() + " " +  so.getCRN());
+//        }
 
         //course_list = star_obj w/o redudancies
         //names only contains courses searched by name
@@ -79,15 +84,19 @@ public class ClassScheduler {
             }
         }
 
+        System.out.println("DEBUG DATA");
         //create schedules of the same courses in same schedule container
         for (Star_obj so : names) {
             Schedule s = new Schedule(-1, year, semester);
             ArrayList<Course> crs = ds.getCoursesByName(semester, year, so.getCourse());
+            System.out.println(so.getCourse());
+            System.out.println(crs.size() + " is the size");
             for (Course c : crs) {
                 s.addCourse(c);
             }
             results.add(s);
         }
+        System.out.println("DEBUG DATA");
 
         //crns only contains courses searched by
         ArrayList<Star_obj> crns = new ArrayList<>();
@@ -96,7 +105,6 @@ public class ClassScheduler {
                 crns.add(so);
             }
         }
-        course_list = null; //dereference
 
         ArrayList<String> unique_crs = new ArrayList<>();
         for (Star_obj so : crns) {
