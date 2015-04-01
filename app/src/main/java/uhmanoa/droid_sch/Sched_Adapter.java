@@ -1,4 +1,4 @@
-package uhmanoa.droid_sch.uhmanoa.adapters;
+package uhmanoa.droid_sch;
 
 import android.app.Activity;
 import android.content.Context;
@@ -76,7 +76,7 @@ public class Sched_Adapter extends BaseAdapter {
         String classes = "";
         Schedule current = schedules.get(position);
         for (Course c : current.getCourses()){
-            classes += c.getTitle() + " ";
+            classes += c.getCourse() + " ";
         }
         holder.subtitle.setText(classes);
 
