@@ -249,7 +249,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                                     end2 = 9999;
 
                             if (!time.equalsIgnoreCase("TBA")
-                                    && time != "NULL") {
+                                    && !time.equals("NULL")) {
 
                                 int times[] = getStartEndTime(time);
                                 start1 = times[0];
@@ -260,7 +260,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                             }
 
                             if (!time2.equalsIgnoreCase("TBA")
-                                    && time2 != "NULL") {
+                                    && !time2.equals("NULL")) {
                                 int times[] = getStartEndTime(time2);
                                 start2 = times[0];
                                 end2 = times[1];
@@ -270,19 +270,19 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                             }
 
                             int sts, wt, wla;
-                            if (seats == "9999") {
+                            if (seats.equals("9999")) {
                                 sts = 0;
                             } else {
                                 sts = Integer.valueOf(seats);
                             }
 
-                            if (wlisted == "9999") {
+                            if (wlisted.equals("9999")) {
                                 wt = 0;
                             } else {
                                 wt = Integer.valueOf(wlisted);
                             }
 
-                            if (wlava == "9999") {
+                            if (wlava.equals("9999")) {
                                 wla = 0;
                             } else {
                                 wla = Integer.valueOf(wlava);

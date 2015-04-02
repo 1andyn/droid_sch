@@ -6,10 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.lang.reflect.Array;
-import java.sql.SQLPermission;
 import java.util.ArrayList;
-import java.util.List;
 
 /* This is a helper class for interacting with the database such as retrieving, inserting
 * or deleting data. Functionality for this class will have to be implemented as more functionality
@@ -471,12 +468,6 @@ public class SQL_DataSource {
         return sch;
     }
 
-    public Schedule getSchedule(long id) {
-        Schedule s = null;
-
-        return s;
-    }
-
     //--------------------------- SCHEDULE DB HELPER FUNCTIONS----------------------------//
 
     //--------------------------- COURSE SEARCH DB HELPER FUNCTIONS ------------------------------//
@@ -497,7 +488,7 @@ public class SQL_DataSource {
     }
 
     public Star_obj findMatch(int sem, int year, String search_text) {
-        if(search_text == "") {
+        if(search_text.equals("")) {
             return null;
         }
 
@@ -508,7 +499,7 @@ public class SQL_DataSource {
             query = search_text.substring(0, 5);
         }
 
-        String select = "";
+        String select;
         if (isCRN) {
             select = "SELECT * FROM " + SQL_Helper.TABLE_COURSE
                     + " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem)
@@ -537,7 +528,6 @@ public class SQL_DataSource {
     }
 
     private boolean isCRN(String text) {
-        boolean isCRN = true;
         if (text.length() < 5) {
             return false;
         }
@@ -546,7 +536,7 @@ public class SQL_DataSource {
                 return false;
             }
         }
-        return isCRN;
+        return true;
     }
 
     public ArrayList<Course> getSearchResults(int sem, int year, String search_text, String mjr_key) {
@@ -558,9 +548,9 @@ public class SQL_DataSource {
             query = search_text.substring(0, 5);
         }
 
-        String selection = "";
+        String selection;
 
-        if (mjr_key == "NONE") {
+        if (mjr_key.equals("NONE")) {
             //don't filter by MAJOR
             if (isCRN) {
                 selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
@@ -616,9 +606,9 @@ public class SQL_DataSource {
     public ArrayList<Course> getSearchResultsNoText(int sem, int year, String mjr_key) {
         database.beginTransaction();
 
-        String selection = "";
+        String selection;
 
-        if (mjr_key == "NONE") {
+        if (mjr_key.equals("NONE")) {
             //don't filter by MAJOR
             selection = " SELECT * FROM " + SQL_Helper.TABLE_COURSE + " WHERE "
                     + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) + " AND "
@@ -798,7 +788,7 @@ public class SQL_DataSource {
         Cursor curse = database.rawQuery(select, null);
         curse.moveToFirst();
 
-        Course c = null;
+        Course c;
         while(!curse.isAfterLast()) {
             c = cursorToCourse(curse);
             results.add(c);

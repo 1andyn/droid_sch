@@ -1,7 +1,5 @@
 package uhmanoa.droid_sch;
 
-import java.util.ArrayList;
-
 
 public class SingletonSchedule {
     private static SingletonSchedule instance = null;

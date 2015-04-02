@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,7 +30,7 @@ public class ResultListAdapter extends ArrayAdapter<Course> {
         object_list = star_list;
         layout_resrc = rsrc;
         inflater = LayoutInflater.from(c);
-        checked_list = new ArrayList<Long>();
+        checked_list = new ArrayList<>();
     }
 
     @Override

@@ -2,7 +2,6 @@ package uhmanoa.droid_sch;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,7 +42,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -108,9 +106,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         month = extras.getInt("MONTH");
 
         pt_resolution = new Point();
-        SelectedItems = new ArrayList<Integer>();
-        al_strobj = new ArrayList<Star_obj>();
-        al_course = new ArrayList<Course>();
+        SelectedItems = new ArrayList<>();
+        al_strobj = new ArrayList<>();
+        al_course = new ArrayList<>();
 
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
@@ -363,7 +361,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         boolean unique = false; // Initialize Unique to False
         while (!unique) {
             boolean match = false; // Reset Match Flag to False
-            int size = 0;
+            int size;
             if(main_list) {
                 size = al_course.size();
             } else {
@@ -531,7 +529,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 mandatoryDataChange();
                 return true;
             case R.id.action_force_fil:
-                if(srch_key == "NONE") {
+                if(srch_key.equals("NONE")) {
                     Toast.makeText(this, "Please select a Major to use this function.",
                             Toast.LENGTH_LONG).show();
                 } else {
@@ -596,7 +594,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
     public Dialog createFilterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
-        final ArrayList<Integer> SelectedOriginal = new ArrayList<Integer>();
+        final ArrayList<Integer> SelectedOriginal = new ArrayList<>();
         //Deep Copy
         Iterator<Integer> it = SelectedItems.iterator();
         for (Integer i : SelectedItems) {

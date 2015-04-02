@@ -73,7 +73,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
     protected void populate_btncontainer() {
 
-        arraylst_btn = new ArrayList<Button>();
+        arraylst_btn = new ArrayList<>();
         available = new ArrayList<>();
         arraylst_btn.add((Button) findViewById(R.id.bt_create));
         arraylst_btn.add((Button) findViewById(R.id.bt_view));
@@ -183,7 +183,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
         Calendar rightNow = Calendar.getInstance();
         int month = rightNow.get(Calendar.MONTH);
-        int yr, yr2 = 0;
+        int yr, yr2;
         //yr = fall, yr2 = spring, summer
 
         //ALWAYS USE CURRENT YEAR FOR FALL (might be unavail)
@@ -202,7 +202,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
         curr_year2 = yr2;
 
-        List<String> lst = new ArrayList<String>();
+        List<String> lst = new ArrayList<>();
         String fall = "FALL " + String.valueOf(yr);
         lst.add(fall);
         String spring = "SPRING " + String.valueOf(yr2);

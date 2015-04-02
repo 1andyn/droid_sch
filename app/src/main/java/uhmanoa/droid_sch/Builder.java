@@ -39,7 +39,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 
 public class Builder extends ActionBarActivity implements App_const, OnCheckTaskComplete,
@@ -177,7 +176,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     }
 
     private void loadProfiles() {
-        al_profiles = new ArrayList<String>();
+        al_profiles = new ArrayList<>();
         al_profiles.add("Default Profile");
         cfg_settings_from_profile();
     }
@@ -191,7 +190,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     private void configureSpinner() {
         spinner = (Spinner) findViewById(R.id.major_spinner);
-        spinner_data = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
+        spinner_data = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
                 al_profiles);
         spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinner_data);

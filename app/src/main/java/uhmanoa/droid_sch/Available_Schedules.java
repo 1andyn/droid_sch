@@ -1,7 +1,5 @@
 package uhmanoa.droid_sch;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -122,10 +120,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     private void populateList(ArrayList<Schedule> res) {
-        titles = new ArrayList<String>();
-        subtitles = new ArrayList<String>();
+        titles = new ArrayList<>();
+        subtitles = new ArrayList<>();
 
-        schedules = new ArrayList<Schedule>();
+        schedules = new ArrayList<>();
 
         int x = 1;
         for (Schedule s : res) {
@@ -145,10 +143,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     private void populateNextPage() {
-        t1 = new ArrayList<String>(ITEMS_PER_PAGE);
-        s1 = new ArrayList<String>(ITEMS_PER_PAGE);
+        t1 = new ArrayList<>(ITEMS_PER_PAGE);
+        s1 = new ArrayList<>(ITEMS_PER_PAGE);
 
-        schedPage = new ArrayList<Schedule>(ITEMS_PER_PAGE);
+        schedPage = new ArrayList<>(ITEMS_PER_PAGE);
 
         int itemsOnPage = ITEMS_PER_PAGE;
         if (currentPage == totalPages - 1)

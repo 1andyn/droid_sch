@@ -1,7 +1,6 @@
 package uhmanoa.droid_sch;
 
 
-import java.sql.*;
 import java.util.ArrayList;
 
 public class ClassScheduler {
@@ -143,13 +142,11 @@ public class ClassScheduler {
      * Creates all possible non-conflicting schedules given a list of classes
      * a student desires to take.
      *
-     * @param list Array of schedules.  Each schedule contains a list of CRN's offered
-     *             for a given class.
      * @return Array of possible non-conflicting schedules.
      */
     public static ArrayList<Schedule> createSchedules(ArrayList<Schedule> input, int schedMinSize,
                                                       int sem, int yr) {
-        ArrayList<Schedule> scheds = new ArrayList<Schedule>();
+        ArrayList<Schedule> scheds = new ArrayList<>();
 
         int numClasses = input.size(); // e.g. 4
         int[] numChoices = new int[numClasses]; // e.g. 4 1 2 1
@@ -238,7 +235,7 @@ public class ClassScheduler {
 
 
     public static ArrayList<Schedule> sortSchedules(ArrayList<Schedule> s, int orderBy) {
-        ArrayList<Schedule> sorted = new ArrayList<Schedule>();
+        ArrayList<Schedule> sorted = new ArrayList<>();
 
         switch (orderBy) {
             case SCHED_SIZE:

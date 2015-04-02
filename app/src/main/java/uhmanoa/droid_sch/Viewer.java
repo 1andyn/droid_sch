@@ -23,7 +23,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class Viewer extends ActionBarActivity implements OnViewButtonPress {
@@ -41,7 +40,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        al_sched = new ArrayList<Schedule>();
+        al_sched = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 

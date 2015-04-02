@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import java.util.ArrayList;
-
 public class CourseCheckTask extends AsyncTask<String, Void, Integer> {
 
     private OnCheckTaskComplete listener;

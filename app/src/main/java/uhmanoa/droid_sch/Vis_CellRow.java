@@ -10,7 +10,7 @@ public class Vis_CellRow {
     ArrayList<Vis_Cell> row_heights;
 
     public Vis_CellRow() {
-        row_heights = new ArrayList<Vis_Cell>();
+        row_heights = new ArrayList<>();
     }
 
     public void addVisCell(Vis_Cell vc) {

@@ -24,7 +24,7 @@ public class Schedule {
         sid = id;
 		year = yr;
         semester = sem;
-        schedule = new ArrayList<Course>();
+        schedule = new ArrayList<>();
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class Schedule {
         if(getCourses().size() == 0) return 0;
         for(Course c: getCourses()) {
             int temp = c.getStart1();
-            if(c.getStart1() == -1 || c.getStart1() == -1) {
+            if(c.getStart1() == -1 || c.getStart2() == -1) {
                 continue;
             }
             if(c.getStart2() != 9999) {

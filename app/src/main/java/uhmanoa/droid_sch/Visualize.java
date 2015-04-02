@@ -11,8 +11,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 
@@ -128,7 +126,7 @@ public class Visualize extends Activity {
         initializeDayValues();
         initializeColorValues();
         loadSchedule();
-        height_values = new ArrayList<Vis_CellRow>();
+        height_values = new ArrayList<>();
         config_Title();
         table_layout = (TableLayout) findViewById(R.id.tableLayout1);
         populateHeights();
@@ -322,7 +320,7 @@ public class Visualize extends Activity {
                     //is empty so add empty vis_cell
                     vcr.addVisCell(getVisCell(null, null, false, false, 5));
                 } else {
-                    int vis_case = 5;
+                    int vis_case;
 
                     Vis_Package vp = getCoursesWithin(start, end, matches, y);
                     ArrayList<Course> actual_matches = vp.getMatches();
@@ -383,8 +381,8 @@ public class Visualize extends Activity {
 
     private Vis_Package getCoursesWithin(int start, int end, ArrayList<Course> matches, int day) {
 
-        ArrayList<Course> actual_matches = new ArrayList<Course>();
-        ArrayList<Boolean> secondary_crs = new ArrayList<Boolean>();
+        ArrayList<Course> actual_matches = new ArrayList<>();
+        ArrayList<Boolean> secondary_crs = new ArrayList<>();
         //boolean values of sel, FALSE = first course e.g. getStart1
         // TRUE = second course e.g. getStart2
         // Sel is for keeping track of which start/end time we are looking at
@@ -421,9 +419,9 @@ public class Visualize extends Activity {
         }
 
         //CASE 1,2,3
-        ArrayList<Course> special_matches = new ArrayList<Course>();
-        ArrayList<Boolean> start_end = new ArrayList<Boolean>();
-        ArrayList<Boolean> sec_sel = new ArrayList<Boolean>();
+        ArrayList<Course> special_matches = new ArrayList<>();
+        ArrayList<Boolean> start_end = new ArrayList<>();
+        ArrayList<Boolean> sec_sel = new ArrayList<>();
         // start_end, TRUE if time in question START, FALSE if the time in question is END
         // sec_sel is same as sel ArrayList, except since we may rearrange it, use temp for now
 
@@ -474,7 +472,7 @@ public class Visualize extends Activity {
 
         }
 
-        int vcase = 5;
+        int vcase;
         switch (special_matches.size()) {
             case 1:
                 //if theres size 1, theres only one course; either case 1 or 2

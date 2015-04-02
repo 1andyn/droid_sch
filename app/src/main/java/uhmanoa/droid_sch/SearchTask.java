@@ -4,11 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchTask extends AsyncTask<String, Void, Integer> {
@@ -43,7 +38,7 @@ public class SearchTask extends AsyncTask<String, Void, Integer> {
 
     @Override
     protected Integer doInBackground(String... params) {
-        if(params[0] == "") {
+        if(params[0].equals("")) {
             courses = data.getSearchResultsNoText(semester,yr, params[1]);
         } else {
             courses = data.getSearchResults(semester, yr, params[0], params[1]);

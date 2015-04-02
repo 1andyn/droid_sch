@@ -1,7 +1,6 @@
 package uhmanoa.droid_sch;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import org.jsoup.Jsoup;
@@ -9,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ParserDataCheck extends AsyncTask<Integer, Void, Integer> {
