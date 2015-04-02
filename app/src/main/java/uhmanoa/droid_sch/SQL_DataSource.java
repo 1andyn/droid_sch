@@ -384,7 +384,7 @@ public class SQL_DataSource {
         int id = 0;
         while (true) {
             String select = "SELECT " + SQL_Helper.COLUMN_ID + " FROM " + SQL_Helper.TABLE_SCH +
-                    "WHERE " + SQL_Helper.COLUMN_ID + " = " + String.valueOf(id);
+                    " WHERE " + SQL_Helper.COLUMN_ID + " = " + String.valueOf(id);
             Cursor curse = database.rawQuery(select, null);
             if (!(curse.moveToFirst()) || curse.getCount() == 0) {
                 //cursor is empty so this id is unique
@@ -457,6 +457,14 @@ public class SQL_DataSource {
             crn.add(curse.getInt(SCH_ENUM.COLUMN_CRN.ordinal()));
             curse.moveToNext();
         }
+
+        //load last schedule
+        Schedule s = new Schedule(prev_id, yr, sem);
+        for (Integer i : crn) {
+            Course c = getCourseByCRN(sem, yr, i);
+            s.addCourse(c);
+        }
+        sch.add(s);
 
         database.setTransactionSuccessful();
         database.endTransaction();
@@ -1042,8 +1050,7 @@ public class SQL_DataSource {
     }
 
     //--------------------------- COURSE DB HELPER FUNCTIONS ----------------------------------//
-    public void deleteSchedule(Schedule s) {
-        long id = s.getID();
+    public void deleteSchedule(long id) {
         System.out.println("Deleted Schedule with id: " + id);
         database.delete(SQL_Helper.TABLE_SCH, SQL_Helper.COLUMN_ID + " = " + id, null);
     }
