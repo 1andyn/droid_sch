@@ -395,10 +395,19 @@ public class Course {
     }
 
     public String getTimeString(boolean sec) {
+
         if(sec) {
-            return (getStdTime(getStart2()) + "-" + getStdTime(getEnd2()));
+            if(getStart2() == -1) {
+                return "TBA";
+            } else {
+                return (getStdTime(getStart2()) + "-" + getStdTime(getEnd2()));
+            }
         } else {
-            return (getStdTime(getStart1()) + "-" + getStdTime(getEnd1()));
+            if(getStart1() == -1) {
+                return "TBA";
+            } else {
+                return (getStdTime(getStart1()) + "-" + getStdTime(getEnd1()));
+            }
         }
     }
 
