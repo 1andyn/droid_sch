@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 public class SingletonSchedule {
     private static SingletonSchedule instance = null;
-	private ArrayList<Course> courses;
+	private Schedule sched;
 
 	private SingletonSchedule(){
-        courses = new ArrayList<Course>();
+        sched = new Schedule(-1, -1, -1);
 	}
 
     public static SingletonSchedule getInstance() {
@@ -18,30 +18,12 @@ public class SingletonSchedule {
         return instance;
     }
 
-    public ArrayList<Course> getCourses() {
-        return courses;
+    public void setSchedule(Schedule s) {
+        sched = new Schedule(s);
     }
 
-    public void setCourses(ArrayList<Course> c) {
-
-        if(c != null && !c.isEmpty()) {
-            courses.clear();
-            for (Course crs : c) {
-                courses.add(crs);
-            }
-        }
-
-    }
-
-	public void addCourse(Course c){
-		if (!courses.contains(c))
-			if (!c.isInvalid())
-				courses.add(new Course(c));
-			else{
-				System.out.println("Invalid course, please fill in appropriate fields.");
-				System.out.println("Current course data is: ");
-				c.display();
-			}
+	public Schedule getSchedule(){
+		return sched;
 	}
 
 
