@@ -1,6 +1,7 @@
 package uhmanoa.droid_sch;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,7 +65,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder confirm = new AlertDialog.Builder(Viewer.this)
-                        .setTitle("Deletion Confirmation")
+                        .setTitle(Html.fromHtml("<font color='#66FFCC'>Deletion Confirmation</font>"))
                         .setMessage("Are you sure you want to delete the selected schedules?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -86,11 +88,11 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
                                 return;
                             }
                         });
-                confirm.show();
-
-
-
-
+                Dialog d = confirm.show();
+                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+                        null, null);
+                View dv = d.findViewById(dividerId);
+                dv.setBackgroundColor(getResources().getColor(R.color.aqua));
             }
         });
     }
@@ -100,6 +102,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
             Long temp = al_sched.get(x).getID();
             if(temp == id) {
                 sch_adp.remove(al_sched.get(x));
+                ds.deleteSchedule(id);
             }
         }
     }
