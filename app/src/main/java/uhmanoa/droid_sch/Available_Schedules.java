@@ -1,5 +1,6 @@
 package uhmanoa.droid_sch;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,8 +25,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+
 public class Available_Schedules extends ActionBarActivity implements View.OnClickListener,
-    OnBuildTaskComplete {
+    OnBuildTaskComplete, OnViewButtonPress {
 
     public static final String LOGTAG = "SCHED";
     public static final String CONFIRM_SAVE = "Warning: By clicking ok you will save the selected " +
@@ -39,7 +41,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     ListView lv_item;
     Button btnPrev, btnNext, btnGoto, btnSave;
     TextView tvTitle;
-    Sched_Adapter adapter;
+    SchListAdapter adapter;
 
     ArrayList<Schedule> schedules, schedPage;
     private ArrayList<Star_obj> star_list;
@@ -66,10 +68,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
         loadStarObjects();
         runBuildTask();
-
-
-
-
     }
 
     private void loadStarObjects() {
@@ -157,7 +155,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         }
 
         Log.e(LOGTAG, "Size! " + schedules.size());
-        adapter = new Sched_Adapter((Activity) this, schedPage);
+        adapter = new SchListAdapter(this, R.layout.sch_view, schedPage, this);
         lv_item.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -167,7 +165,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_available__schedules, menu);
         return true;
     }
 
@@ -279,5 +276,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         populateList(sbt.getResults());
         initLayout();
         populateNextPage();
+    }
+
+    @Override
+    public void onViewButtonPress(long id) {
+
     }
 }

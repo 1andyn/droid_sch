@@ -313,8 +313,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     Toast.makeText(Builder.this, "Please add atleast two courses.",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Builder.this, "Building Schedules",
-                            Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
                     Bundle b = new Bundle();
                     b.putInt("SEMESTER", sem);

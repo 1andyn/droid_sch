@@ -15,6 +15,15 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+//String sem = "SEM";
+//        switch (sched.getSemester()) {
+//        case 0: sem = "FALL"; break;
+//        case 1: sem = "SPRING"; break;
+//        case 2: sem = "SUMNER"; break;
+//        }
+//
+//        tv.setText(sem + " " + String.valueOf(sched.getYear()));
+
 
 public class Visualize extends Activity {
 

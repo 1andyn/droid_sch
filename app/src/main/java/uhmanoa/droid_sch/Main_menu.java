@@ -1,6 +1,5 @@
 package uhmanoa.droid_sch;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -12,6 +11,8 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.Display;
 import android.view.Menu;
 import android.view.View;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class Main_menu extends Activity implements OnCheckTaskComplete{
+public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
     private Drawable drw_bg;
     private Resources res_main;
@@ -253,7 +254,7 @@ public class Main_menu extends Activity implements OnCheckTaskComplete{
         checkAvailability();
 
         final int activity = button;
-        builder.setTitle("Choose Semester")
+        builder.setTitle(Html.fromHtml("<font color='#66FFCC'>Choose a Semester</font>"))
                 .setItems(data, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
@@ -269,6 +270,7 @@ public class Main_menu extends Activity implements OnCheckTaskComplete{
                         }
                     }
                 });
+
         return builder.create();
     }
 
@@ -276,6 +278,16 @@ public class Main_menu extends Activity implements OnCheckTaskComplete{
     public void onCheckTaskComplete() {
         available = prs.getDataStatus();
         d.show();
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+                null, null);
+        View dv = d.findViewById(dividerId);
+        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
+
+        if(prs.getException() != null) {
+            Toast.makeText(Main_menu.this, "Warning, the data check failed. Course data retrieval" +
+                            "will likely fail.",
+                    Toast.LENGTH_LONG).show();
+        }
         prs = null; //deference
     }
 }

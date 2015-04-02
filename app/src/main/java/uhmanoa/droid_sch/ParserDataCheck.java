@@ -19,6 +19,7 @@ public class ParserDataCheck extends AsyncTask<Integer, Void, Integer> {
     private ArrayList<Boolean> status; //false = no data, true = data
     final String no_data = "Class availability information for this term is not available " +
             "at this time.";
+    private IOException ex = null;
 
     @Override
     protected void onPreExecute() {
@@ -81,7 +82,8 @@ public class ParserDataCheck extends AsyncTask<Integer, Void, Integer> {
         try {
             System.setProperty("https.protocols", "TLSv1,SSLv3,SSLv2Hello");
             Document doc = Jsoup.connect("http://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=" +
-                    calculateURLField(year, sem)).timeout(0).userAgent("Mozilla").get();
+                    calculateURLField(year, sem)).timeout(3000).userAgent("Mozilla").get();
+
             Element span_data = doc.select("TD.indefault").first();
             if(span_data == null) {
                 found = false;
@@ -92,7 +94,7 @@ public class ParserDataCheck extends AsyncTask<Integer, Void, Integer> {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            ex = e;
         }
 
         if(found) {
@@ -100,6 +102,10 @@ public class ParserDataCheck extends AsyncTask<Integer, Void, Integer> {
         } else {
           return true;
         }
+    }
+
+    public IOException getException() {
+        return ex;
     }
 
 }
