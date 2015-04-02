@@ -91,7 +91,7 @@
 
     <string name="previous">&lt;</string>
     <string name="next">></string>
-    <string name="txt_num_sched">&lt;number of schedules></string>
+    <string name="txt_num_sched">Currently building Schedules...</string>
     <string name="bt_txt_save_sel">Save Selected</string>
     <string name="txt_avail_sched_subtitle">Select the schedule(s) you would like to save.</string>
     <string name="title_activity_preferences">Preferences</string>
