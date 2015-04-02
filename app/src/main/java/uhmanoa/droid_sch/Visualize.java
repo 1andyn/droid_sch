@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -128,7 +129,7 @@ public class Visualize extends Activity {
         for(Course c: sch.getCourses()) {
             View vw = getLayoutInflater().inflate(R.layout.vis_list_item, null);
             vw.setBackgroundColor(getResources().getColor(color_values.get((int)c.getID())));
-            LinearLayout top = (LinearLayout) vw.findViewById(R.id.vis_frs_crs);
+            //LinearLayout top = (LinearLayout) vw.findViewById(R.id.vis_frs_crs);
             LinearLayout bot = (LinearLayout) vw.findViewById(R.id.vis_sec_crs);
             LinearLayout seatdta = (LinearLayout) vw.findViewById(R.id.ll_seat_data);
             if(c.getStart2() == 9999) {
@@ -156,11 +157,9 @@ public class Visualize extends Activity {
 
             TextView crn = (TextView) vw.findViewById(R.id.vis_CRN);
 
-            seatdta.setVisibility(View.GONE);
-
-//            TextView seats = (TextView) vw.findViewById(R.id.vis_seats);
-//            TextView wait = (TextView) vw.findViewById(R.id.vis_wait);
-//            TextView waitav = (TextView) vw.findViewById(R.id.vis_wait_av);
+            TextView seats = (TextView) vw.findViewById(R.id.vis_seats);
+            TextView wait = (TextView) vw.findViewById(R.id.vis_wait);
+            TextView waitav = (TextView) vw.findViewById(R.id.vis_wait_av);
 
             TextView dates = (TextView) vw.findViewById(R.id.vis_dates);
             TextView focus = (TextView) vw.findViewById(R.id.vis_focus);
@@ -171,9 +170,9 @@ public class Visualize extends Activity {
             sect.setText("Section: " + String.valueOf(c.getSection()));
             creds.setText("Credits: " + String.valueOf(c.getCredits()));
 
-//            seats.setText("Seats Avail: " + String.valueOf(c.getSeats_avail()));
-//            wait.setText("Waitlsited: " + String.valueOf(c.getWaitlisted()));
-//            waitav.setText("Wait Avail: " + String.valueOf(c.getWait_avail()));
+            seats.setText("Seats Avail: " + String.valueOf(c.getSeats_avail()));
+            wait.setText("Waitlsited: " + String.valueOf(c.getWaitlisted()));
+            waitav.setText("Wait Avail: " + String.valueOf(c.getWait_avail()));
 
             dates.setText("Dates: " + c.getDates());
             focus.setText("Focus: " + c.getFocusReqString());
@@ -184,6 +183,7 @@ public class Visualize extends Activity {
             day.setText(c.getDayString(false));
 
             ll.addView(vw);
+            ll.addView(producerDivider());
         }
 
     }
@@ -352,7 +352,7 @@ public class Visualize extends Activity {
                 } else {
                     int vis_case = 5;
 
-                    Vis_Package vp = getCoursesWithin(start, end,matches);
+                    Vis_Package vp = getCoursesWithin(start, end, matches, y);
                     ArrayList<Course> actual_matches = vp.getMatches();
                     ArrayList<Boolean> course_selector = vp.getSec();
                     vis_case = vp.getCase();
@@ -393,7 +393,23 @@ public class Visualize extends Activity {
         }
     }
 
-    private Vis_Package getCoursesWithin(int start, int end, ArrayList<Course> matches) {
+    private boolean containsDay (Course c, boolean sec, int day) {
+        ArrayList<Character> days;
+        if(sec) {
+            days = c.getDays2();
+        } else {
+            days = c.getDays1();
+        }
+
+        char firstLetter = day_values.get(day).charAt(0);
+        if(days.contains(firstLetter)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private Vis_Package getCoursesWithin(int start, int end, ArrayList<Course> matches, int day) {
 
         ArrayList<Course> actual_matches = new ArrayList<Course>();
         ArrayList<Boolean> secondary_crs = new ArrayList<Boolean>();
@@ -401,10 +417,22 @@ public class Visualize extends Activity {
         // TRUE = second course e.g. getStart2
         // Sel is for keeping track of which start/end time we are looking at
 
+
         //CASE 4 CHECKER
         for (Course c : matches) {
+
+            boolean firstDayCheck = containsDay(c, false, day);
+            boolean secDayCheck = false;
+
+            if(c.getStart2() != 9999) {
+                secDayCheck = containsDay(c, true, day);
+            }
+
+
             if ((courseTimeToMinutes(c.getStart1()) <= start) &&
-                    (courseTimeToMinutes(c.getEnd1()) >= end)) {
+                    (courseTimeToMinutes(c.getEnd1()) >= end) &&
+                    firstDayCheck
+                    ) {
                 //this course goes through this block of time
                 actual_matches.add(c);
                 secondary_crs.add(false);
@@ -412,7 +440,8 @@ public class Visualize extends Activity {
             }
 
             if ((courseTimeToMinutes(c.getStart2()) <= start) &&
-                    (courseTimeToMinutes(c.getEnd2()) >= end)) {
+                    (courseTimeToMinutes(c.getEnd2()) >= end) &&
+                    secDayCheck) {
                 actual_matches.add(c);
                 secondary_crs.add(true);
                 return new Vis_Package(actual_matches, secondary_crs, 4);
@@ -428,9 +457,16 @@ public class Visualize extends Activity {
 
         for (Course c : matches) {
 
+            boolean firstDayCheck = containsDay(c, false, day);
+            boolean secDayCheck = false;
+
+            if(c.getStart2() != 9999) {
+                secDayCheck = containsDay(c, true, day);
+            }
+
             //  CASE 1 CHECKS
             int top = courseTimeToMinutes(c.getEnd1());
-            if (top >= start && top <= end) {
+            if (top >= start && top <= end && firstDayCheck) {
                 special_matches.add(c);
                 start_end.add(false); //Looking at END TIME
                 sec_sel.add(false); //Looking at START1/END1
@@ -438,7 +474,7 @@ public class Visualize extends Activity {
 
             if(c.getEnd2() != 9999) {
                 top = courseTimeToMinutes(c.getEnd2());
-                if (top >= start && top <= end) {
+                if (top >= start && top <= end && secDayCheck) {
                     special_matches.add(c);
                     start_end.add(false);//Looking at END TIME
                     sec_sel.add(true);//Looking at START2/END2
@@ -446,18 +482,16 @@ public class Visualize extends Activity {
             }
             // ----------------
 
-
-
             //  CASE 2 CHECKS
             int bot = courseTimeToMinutes(c.getStart1());
-            if (bot >= start && bot <= end) {
+            if (bot >= start && bot <= end && firstDayCheck) {
                 special_matches.add(c);
                 start_end.add(true); //Looking at START TIME
                 sec_sel.add(false); //Looking at START1/END1
             }
             if(c.getStart2() != 9999) {
                 bot = courseTimeToMinutes(c.getStart2());
-                if (bot >= start && bot <= end) {
+                if (bot >= start && bot <= end && secDayCheck) {
                     special_matches.add(c);
                     start_end.add(true); //Looking at START TIME
                     sec_sel.add(true);//Looking at START2/END2
@@ -733,6 +767,17 @@ public class Visualize extends Activity {
                 TableRow.LayoutParams.WRAP_CONTENT));
         tv.setGravity(Gravity.CENTER);
         return table_view;
+    }
+
+    private ImageView producerDivider() {
+        ImageView divider = new ImageView(this);
+        LinearLayout.LayoutParams lp =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(5, 5, 5, 5);
+        divider.setLayoutParams(lp);
+        divider.setBackgroundColor(this.getResources().getColor(R.color.darker_gray));
+        return divider;
     }
 
 }
