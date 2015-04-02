@@ -33,12 +33,20 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
     private ViewStub empty_sched;
     private ListView lv_sched;
     private SchListAdapter sch_adp;
+    private SingletonSchedule ss;
+
+    private SQL_DataSource ds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         al_sched = new ArrayList<Schedule>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
+
+        ds = new SQL_DataSource(this);
+        ds.open();
+        ss = SingletonSchedule.getInstance();
+
         sch_adp = new SchListAdapter(this, R.layout.sch_view, al_sched, this);
         pt_resolution = new Point();
         loadImageResources();
@@ -46,16 +54,8 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
         configureViewStubs();
         configureButtons();
         toggle_ViewStub();
-        setupDebugSchedules();
+        load_schedules();
     }
-
-    //DEBUG
-    private void debugVisualize() {
-        Intent i;
-        i = new Intent(this, Visualize.class);
-        startActivity(i);
-    }
-
 
     private void configureButtons() {
         final Button DeleteItemStar = (Button) findViewById(R.id.delete_button);
@@ -104,50 +104,12 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
         }
     }
 
-    private void setupDebugSchedules() {
-        for (int x = 0; x < 6; x++) {
-
-            Random r = new Random(System.currentTimeMillis());
-            int rcrn = 10000 + r.nextInt(20000); //Randon CRN Number
-
-            long id = x;
-            final int SPRING = 1;
-            Schedule sch = new Schedule(id, 2015, SPRING);
-            ArrayList<Character> days1 = new ArrayList<Character>();
-            days1.add('M');
-            days1.add('W');
-            days1.add('F');
-
-            ArrayList<Character> days2 = new ArrayList<Character>();
-            days2.add('T');
-
-            ArrayList<Character> days4 = new ArrayList<Character>();
-            days4.add('T');
-
-            ArrayList<String> fr = new ArrayList<String>();
-            fr.add("NI");
-
-            Course crt = new Course("AMST 202", "American Studies", rcrn, "4",
-                    "T Dobry", days1, days2, 830, 730, 920, 1015, "PHYSCI 217", "POST 214", 1, 20, 0,
-                    5, "01/12-05/15", "MAJOR");
-            crt.setID(0);
-            sch.addCourse(crt);
-
-            ArrayList<Character> days3 = new ArrayList<Character>();
-            days3.add('M');
-            days3.add('W');
-            Course crt2 = new Course("EE 205", "Object Oriented Programming", rcrn, "3",
-                    "R Zhang", days3, days4, 1130, 300, 1220, 545, "POST 214", "POST 214", 1, 20, 0,
-                    5, "01/12-05/15", "MAJOR");
-            crt2.setID(1);
-            crt2.setFocusReqs(fr);
-
-
-            sch.addCourse(crt2);
-            al_sched.add(sch);
-
-            mandatoryDataChange();
+    private void load_schedules() {
+        ArrayList<Schedule> sch = ds.getAllSchedules();
+        for(Schedule s: sch) {
+            sch_adp.add(s);
         }
+        mandatoryDataChange();
     }
 
     private void configureListView() {
@@ -222,6 +184,12 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
 
     @Override
     public void onViewButtonPress(Schedule s) {
-        //do nothing for now
+        ss.setSchedule(s);
+        Intent i = new Intent(this, Visualize.class);
+        Bundle b = new Bundle();
+        b.putInt("SEMESTER", s.getSemester());
+        b.putInt("YEAR", s.getYear());
+        i.putExtras(b);
+        startActivity(i);
     }
 }

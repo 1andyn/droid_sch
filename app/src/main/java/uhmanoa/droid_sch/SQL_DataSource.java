@@ -383,20 +383,17 @@ public class SQL_DataSource {
     private long getUniqueSchedID() {
         int id = 0;
         while (true) {
-            String whereClause = SQL_Helper.COLUMN_ID + " = ?";
-            String whereArgs[] = {
-                    String.valueOf(id)
-            };
-
-            Cursor curse = database.query(SQL_Helper.TABLE_SCH, SCH_COLUMN, whereClause, whereArgs,
-                    null, null, SQL_Helper.COLUMN_CRN + " ASC");
-
+            String select = "SELECT " + SQL_Helper.COLUMN_ID + " FROM " + SQL_Helper.TABLE_SCH +
+                    "WHERE " + SQL_Helper.COLUMN_ID + " = " + String.valueOf(id);
+            Cursor curse = database.rawQuery(select, null);
             if (!(curse.moveToFirst()) || curse.getCount() == 0) {
                 //cursor is empty so this id is unique
+                curse.close();
                 return (long) id;
             } else {
                 id++;
             }
+            curse.close();
         }
     }
 
@@ -426,6 +423,43 @@ public class SQL_DataSource {
 
     public ArrayList<Schedule> getAllSchedules() {
         ArrayList<Schedule> sch = new ArrayList<>();
+        database.beginTransaction();
+        String select = "SELECT * FROM " + SQL_Helper.TABLE_SCH + " ORDER BY "
+                + SQL_Helper.COLUMN_ID + " ASC";
+        Cursor curse = database.rawQuery(select, null);
+
+        int prev_id, sem, yr; //continue only if query returned results
+        if(curse.moveToFirst()) {
+            prev_id = curse.getInt(SCH_ENUM.COLUMN_ID.ordinal()); //first id
+            sem = curse.getInt(SCH_ENUM.COLUMN_SEM.ordinal()); //initial semester
+            yr = curse.getInt(SCH_ENUM.COLUMN_YEAR.ordinal()); //initial year
+        } else {
+            return sch;
+        }
+
+        ArrayList<Integer> crn = new ArrayList<>();
+        while(!curse.isAfterLast()) {
+            int id = curse.getInt(SCH_ENUM.COLUMN_ID.ordinal());
+            if(prev_id != id) {
+                //this is starting a new semester
+                Schedule s = new Schedule(prev_id, yr, sem);
+                for (Integer i : crn) {
+                    Course c = getCourseByCRN(sem, yr, i);
+                    s.addCourse(c);
+                }
+                sch.add(s); //save schedule
+                crn.clear(); //clear old CRN list
+
+                sem = curse.getInt(SCH_ENUM.COLUMN_SEM.ordinal()); //initialize new semester value
+                yr = curse.getInt(SCH_ENUM.COLUMN_YEAR.ordinal()); //initialize new year value
+                prev_id = id; //set previous id to the new id
+            }
+            crn.add(curse.getInt(SCH_ENUM.COLUMN_CRN.ordinal()));
+            curse.moveToNext();
+        }
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
         return sch;
     }
 

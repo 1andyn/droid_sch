@@ -290,7 +290,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         Bundle b = new Bundle();
         b.putInt("SEMESTER", s.getSemester());
         b.putInt("YEAR", s.getYear());
-        b.putInt("MONTH", month); //not really needed but add anyways for consistency
         i.putExtras(b);
         startActivity(i);
     }
