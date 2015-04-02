@@ -124,9 +124,13 @@ public class ClassScheduler {
     }
 
     public ArrayList<Schedule> getPossibleSchedules(ArrayList<Star_obj> so) {
+        int semester, year;
+        semester = so.get(0).getSemester();
+        year = so.get(0).getYear();
         ArrayList<Schedule> course_list = findCourses(so); //gets all courses into one container
         ArrayList<Schedule> sorted_list = sortSchedules(course_list, SCHED_SIZE);
-        ArrayList<Schedule> result_list = createSchedules(sorted_list, sorted_list.size());
+        ArrayList<Schedule> result_list = createSchedules(sorted_list, sorted_list.size(),
+                semester, year);
         for (Schedule s : sorted_list) {
             System.out.println("------");
             s.display();
@@ -136,129 +140,104 @@ public class ClassScheduler {
     }
 
     /**
-     * Given schedules marks how many conflicts there are
-     * per schedule, then returns desired schedules
+     * Creates all possible non-conflicting schedules given a list of classes
+     * a student desires to take.
      *
      * @param list Array of schedules.  Each schedule contains a list of CRN's offered
      *             for a given class.
-     * @return Array of possible minimum courses with/without overlap
+     * @return Array of possible non-conflicting schedules.
      */
-    private ArrayList<Schedule> createSchedules(ArrayList<Schedule> list, int schedMinSize) {
+    public static ArrayList<Schedule> createSchedules(ArrayList<Schedule> input, int schedMinSize,
+                                                      int sem, int yr) {
         ArrayList<Schedule> scheds = new ArrayList<Schedule>();
-        for (Course c : list.get(0).getCourses()) {
-            Schedule sched = new Schedule(-1, year, semester);
-            sched.addCourse(c);
-            scheds = addNextCourse(sched, list, 1, 0, scheds, schedMinSize);
+
+        int numClasses = input.size(); // e.g. 4
+        int[] numChoices = new int[numClasses]; // e.g. 4 1 2 1
+        int maxResults = 0; // e.g. 8
+
+        // Initialize numChoices, maxResults:
+        for (int i = 0; i < numClasses; i++) {
+            numChoices[i] = input.get(i).getCourses().size();
+//            System.out.println("num:" + numChoices[i]);
+            if (i == 0) {
+                maxResults = numChoices[i];
+            } else {
+                maxResults *= numChoices[i];
+            }
         }
-        return scheds;
-    }
+//        System.out.println("max results: " + maxResults);
 
-    /**
-     * Given schedule returns if schedule falls within minimum overlap
-     *
-     * @param list Schedule and desired amount of non-conflicting classes
-     * @return True or False if the schedule falls within minimum desired courses
-     */
-    private boolean checkOverlap(Schedule list, int schedMinSize) {
-        if ((list.getCourses().size() - schedMinSize) < 0)
-            return false;
-        if (Conflict(list) <= (list.getCourses().size() - schedMinSize))
-            return true;
-        else
-            return false;
-    }
+        // Set up all of the paths:
+        int[][] paths = new int[maxResults][numClasses];
+        for (int i = 0; i < maxResults; i++) for (int j = 0; j < numClasses; j++) paths[i][j] = -1;
 
-    /**
-     * Given schedule returns how many courses do not conflict
-     *
-     * @param Schedule of Courses
-     * @return Number of courses that don't overlap
-     */
-    private int Conflict(Schedule list) {
-        int conflict = 0;
-        ArrayList<Course> sched = list.getCourses();
-        int size = sched.size();
+        int[] current = new int[numClasses];
+        for (int i = 0; i < numClasses; i++) current[i] = 0;
 
-        for (int i = 0; i < size - 1; i++) {
-            for (int j = i + 1; j < size; j++)
-                if (sched.get(i).overlaps(sched.get(j)))
-                    conflict++;
-        }
+        for (int i = 0; i < maxResults; i++) {
+            // write current to path
+            for (int j = 0; j < numClasses; j++) {
+                paths[i][j] = current[j];
+            }
 
-        return conflict;
+            // increment current:
+            boolean carryOver = true;
 
-    }
-
-
-    /**
-     * Finds all possible combinations of non-overlapping courses and creates
-     * an array of possible schedules. Functions finds the next non-overlapping
-     * class and, if there are no more CRN's for that course, it adds it and
-     * checks the next course.  If there are more CRN's for the current course, it
-     * copies the current schedule and branches to find all combinations of classes
-     * for the next CRN.
-     * <p> For the parameters - Courses are defined as a specific course title (ex. EE 324),
-     * while Classes refer to specific CRN's within the course.</p>
-     *
-     * @param sched          The current schedule being created.
-     * @param desiredCourses Array of desired courses entered by the user.  Includes
-     *                       all CRN's available for the desired courses.
-     * @param courseNum      The index for the array of courses currently being checked.
-     * @param classNum       The index for the array of classes for the current course.
-     * @param allScheds      The array of all schedules being created.
-     * @return An array of all schedules created.
-     */
-    public static ArrayList<Schedule> addNextCourse(Schedule sched, ArrayList<Schedule> desiredCourses,
-            int courseNum, int classNum, ArrayList<Schedule> allScheds, int schedMinSize) {
-
-		/*	If we've gone through each desired class, add the current
-		 * schedule to the list of schedules and return */
-        if (courseNum >= desiredCourses.size()) {
-            if (sched.getCourses().size() >= schedMinSize)
-                if (!allScheds.contains(sched))
-                    allScheds.add(sched);
-
-            return allScheds;
-        }
-
-        ArrayList<Course> classes = desiredCourses.get(courseNum).getCourses();
-		/* If classNum is out of bounds, return  */
-        if (classNum >= classes.size())
-            return allScheds;
-
-		/* find the next class that doesn't overlap classes in the
-		 * current schedule
-		 */
-        for (Course c : sched.getCourses()) {
-            while ((classNum < classes.size()) && (classes.get(classNum).overlaps(c))) {
-                classNum++;
+            for (int j = numClasses - 1; j >= 0; j--) {
+                if (carryOver == true) {
+                    current[j]++;
+                    if (current[j] >= numChoices[j]) {
+                        current[j] = 0;
+                        carryOver = true;
+                    } else carryOver = false;
+                }
             }
         }
 
-		/*  if there are more classes in the current course listing, create another
-		 * schedule and find more alternatives 	 */
-        if (classNum < classes.size() - 1)
-            addNextCourse(new Schedule(sched), desiredCourses, courseNum, classNum + 1, allScheds, schedMinSize);
+        // Check each path, see if there are no overlaps:
+        boolean[] allowed = new boolean[maxResults];
+        for (int i = 0; i < maxResults; i++) allowed[i] = false;
 
-		/*  if we've found a class that doesn't overlap the current schedule, then
-		 * add the class to the current schedule */
-        if (classNum < classes.size())
-            sched.addCourse(classes.get(classNum));
+        for (int i = 0; i < maxResults; i++) {
+            // test each path
+            boolean pass = true;
+            outerloop:
+            for (int j = 0; j < numClasses - 1; j++) {
+                for (int k = j + 1; k < numClasses; k++) {
+                    if (input.get(j).getCourses().get(paths[i][j]).overlaps(input.get(k).getCourses().get(paths[i][k]))) {
+                        pass = false;
+                        break outerloop;
+                    }
+                }
+            }
+            allowed[i] = pass;
+        }
 
-		/*  find the next class to add to the schedule */
-        addNextCourse(sched, desiredCourses, courseNum + 1, 0, allScheds, schedMinSize);
+        // For each allowed path, add it to schedules:
+        for (int i = 0; i < maxResults; i++) {
+            if (allowed[i] == true) {
+                Schedule sched = new Schedule(i, yr, sem);
+                for (int j = 0; j < numClasses; j++) {
+                    sched.addCourse(input.get(j).getCourses().get(paths[i][j]));
+                }
+                scheds.add(sched);
+            }
+        }
 
-        return allScheds;
+        return scheds;
     }
 
-    /**
-     * Sorts an array of schedules based on the passed criteria.
-     *
-     * @param s       Unsorted array of schedules.
-     * @param orderBy Int constant specifying how to sort the array.
-     * @return Sorted list of schedules.
-     */
-    private ArrayList<Schedule> sortSchedules(ArrayList<Schedule> s, int orderBy) {
+    public static void quitOnError(String msg) {
+        debug(msg);
+        System.exit(0);
+    }
+
+    public static void debug(String msg) {
+        System.out.println(msg);
+    }
+
+
+    public static ArrayList<Schedule> sortSchedules(ArrayList<Schedule> s, int orderBy) {
         ArrayList<Schedule> sorted = new ArrayList<Schedule>();
 
         switch (orderBy) {
@@ -300,14 +279,4 @@ public class ClassScheduler {
         }
         return sorted;
     }
-
-    public static void quitOnError(String msg) {
-        debug(msg);
-        System.exit(0);
-    }
-
-    public static void debug(String msg) {
-        System.out.println(msg);
-    }
-
 }
