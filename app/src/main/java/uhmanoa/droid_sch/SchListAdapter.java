@@ -92,7 +92,7 @@ public class SchListAdapter extends ArrayAdapter<Schedule> {
                 @Override
                 public void onClick(View v) {
                     //This needs to be rewritten to display the specific schedule
-                    listen.onViewButtonPress(getItemId(pos));
+                    listen.onViewButtonPress(getItem(pos));
                 }
             });
 
