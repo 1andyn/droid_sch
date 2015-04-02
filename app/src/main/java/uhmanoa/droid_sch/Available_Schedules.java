@@ -3,6 +3,7 @@ package uhmanoa.droid_sch;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -11,6 +12,7 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 
 
 public class Available_Schedules extends ActionBarActivity implements View.OnClickListener,
-    OnBuildTaskComplete, OnViewButtonPress {
+        OnBuildTaskComplete, OnViewButtonPress {
 
     public static final String LOGTAG = "SCHED";
     public static final String CONFIRM_SAVE = "Warning: By clicking ok you will save the selected " +
@@ -85,7 +87,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         sbt.execute();
     }
 
-    private void setBackground(){
+    private void setBackground() {
         Resources res_main = getResources();
         Point pt_resolution = new Point();
         Display dsp = getWindowManager().getDefaultDisplay();
@@ -100,7 +102,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         avail_sched.setBackgroundDrawable(drw_bg);
     }
 
-    private void initLayout(){
+    private void initLayout() {
         lv_item = (ListView) findViewById(R.id.lvScheds);
         btnPrev = (Button) findViewById(R.id.btn_prev);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -119,14 +121,14 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         updateGotoButton();
     }
 
-    private void populateList(ArrayList<Schedule> res){
+    private void populateList(ArrayList<Schedule> res) {
         titles = new ArrayList<String>();
         subtitles = new ArrayList<String>();
 
         schedules = new ArrayList<Schedule>();
 
         int x = 1;
-        for(Schedule s : res) {
+        for (Schedule s : res) {
             titles.add("Sched " + x);
             subtitles.add("Num classes in sched" + s.getCourses().size());
             schedules.add(s);
@@ -139,10 +141,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         // find out how many pages we have
         totalPages = schedules.size() / ITEMS_PER_PAGE;
         if ((schedules.size() % ITEMS_PER_PAGE) != 0)
-            totalPages ++;
+            totalPages++;
     }
 
-    private void populateNextPage(){
+    private void populateNextPage() {
         t1 = new ArrayList<String>(ITEMS_PER_PAGE);
         s1 = new ArrayList<String>(ITEMS_PER_PAGE);
 
@@ -153,7 +155,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             itemsOnPage = titles.size() % ITEMS_PER_PAGE;
 
         for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) +
-                itemsOnPage); i++){
+                itemsOnPage); i++) {
             t1.add(titles.get(i).toString());
             s1.add(subtitles.get(i).toString());
             schedPage.add(schedules.get(i));
@@ -190,7 +192,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.btn_prev:
                 if (currentPage > 0)
                     currentPage--;
@@ -216,7 +218,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
 
                 AlertDialog.Builder pagenum = new AlertDialog.Builder(this)
-                        .setTitle("Go To...")
+                        .setTitle(Html.fromHtml("<font color='#66FFCC'>Go to page..</font>"))
                         .setMessage("Enter page number between 1-" + totalPages)
                         .setView(input)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -237,7 +239,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                 } else {
                                     Toast.makeText(getApplicationContext(), "You must enter a " +
                                             "page number in the valid range from 1 to " +
-                                            totalPages , Toast.LENGTH_SHORT).show();
+                                            totalPages, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         })
@@ -247,17 +249,26 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                 return;
                             }
                         });
-                pagenum.show();
+                Dialog d = pagenum.show();
+                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+                        null, null);
+                View dv = d.findViewById(dividerId);
+                dv.setBackgroundColor(getResources().getColor(R.color.aqua));
 
                 break;
             case R.id.btn_save_selected:
                 AlertDialog.Builder confirm = new AlertDialog.Builder(this)
-                        .setTitle("Confirm?")
+                        .setTitle(Html.fromHtml("<font color='#66FFCC'>Confirm Save</font>"))
                         .setMessage(CONFIRM_SAVE)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                return;
+                                for (Schedule s : schedules) {
+                                    if (s.isChecked()) {
+                                        datasource.saveSched(s);
+                                    }
+                                }
+                                finish();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -266,13 +277,17 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                 return;
                             }
                         });
-                confirm.show();
+                Dialog dg = confirm.show();
+                int did = dg.getContext().getResources().getIdentifier("android:id/titleDivider",
+                        null, null);
+                View v = dg.findViewById(did);
+                v.setBackgroundColor(getResources().getColor(R.color.aqua));
 
                 break;
         }
     }
 
-    private void updateGotoButton(){
+    private void updateGotoButton() {
         btnGoto.setText("Page \t" + (currentPage + 1) + " / " + totalPages);
     }
 
