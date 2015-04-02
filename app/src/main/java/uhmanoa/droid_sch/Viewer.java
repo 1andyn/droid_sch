@@ -210,11 +210,6 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
         }
     }
 
-    @Override
-    public void onViewButtonPress(long id) {
-        //needs to be modified to draw a specific schedule
-        debugVisualize();
-    }
 
     private void mandatoryDataChange() {
         sch_adp.notifyDataSetChanged();
@@ -225,4 +220,8 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
     }
 
 
+    @Override
+    public void onViewButtonPress(Schedule s) {
+        //do nothing for now
+    }
 }

@@ -7,6 +7,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <TextView
+            android:padding="10dp"
+            android:id="@+id/vis_title"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:background="@color/dark_gray"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
         <TableLayout
             android:id="@+id/tableLayout1"
             android:layout_width="match_parent"

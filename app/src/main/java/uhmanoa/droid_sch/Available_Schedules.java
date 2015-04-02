@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -42,6 +43,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     Button btnPrev, btnNext, btnGoto, btnSave;
     TextView tvTitle;
     SchListAdapter adapter;
+    SingletonSchedule ss;
+
 
     ArrayList<Schedule> schedules, schedPage;
     private ArrayList<Star_obj> star_list;
@@ -55,6 +58,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_schedules);
         setBackground();
+
+        ss = SingletonSchedule.getInstance();
 
         star_list = new ArrayList<>();
 
@@ -279,7 +284,14 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     @Override
-    public void onViewButtonPress(long id) {
-
+    public void onViewButtonPress(Schedule s) {
+        ss.setSchedule(s);
+        Intent i = new Intent(this, Visualize.class);
+        Bundle b = new Bundle();
+        b.putInt("SEMESTER", s.getSemester());
+        b.putInt("YEAR", s.getYear());
+        b.putInt("MONTH", month); //not really needed but add anyways for consistency
+        i.putExtras(b);
+        startActivity(i);
     }
 }
