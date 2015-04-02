@@ -284,8 +284,8 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         dv.setBackgroundColor(getResources().getColor(R.color.aqua));
 
         if(prs.getException() != null) {
-            Toast.makeText(Main_menu.this, "Warning, the data check failed. Course data retrieval" +
-                            "will likely fail.",
+            Toast.makeText(Main_menu.this, "Warning: the class availability website did not respond " +
+                            " in a timely manner.",
                     Toast.LENGTH_LONG).show();
         }
         prs = null; //deference
