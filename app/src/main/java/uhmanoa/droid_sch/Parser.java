@@ -88,11 +88,16 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
     @Override
     protected void onProgressUpdate(Integer... progress) {
         super.onProgressUpdate(progress);
-        switch(progress[0]) {
-            case 0: pdialog.setMessage("Retrieving Major List..."); break;
-            case 1: pdialog.setMessage("Retrieving Course data..."); break;
-            case 2: pdialog.setMessage("Retrieving Course data (" + String.valueOf(progress[1]+1)
-                    + "/" + course_urls.size() + ")");
+        switch (progress[0]) {
+            case 0:
+                pdialog.setMessage("Retrieving Major List...");
+                break;
+            case 1:
+                pdialog.setMessage("Retrieving Course data...");
+                break;
+            case 2:
+                pdialog.setMessage("Retrieving Course data (" + String.valueOf(progress[1] + 1)
+                        + "/" + course_urls.size() + ")");
         }
     }
 
@@ -203,7 +208,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                                     crsTitle = crsTitle.substring(0, endIndex);
                                 }
 
-                                crsTitle.trim(); //trim extra spacing if any
+                                crsTitle = crsTitle.trim(); //trim extra spacing if any
 
                                 credits = cells.get(5).text();
 
@@ -221,6 +226,23 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                                     time = cells.get(11).text();
                                     room = cells.get(12).text();
                                     dates = cells.get(13).text();
+                                    //missing data check
+                                    seats = seats.replaceAll("\u00A0", "");
+                                    wlisted = wlisted.replaceAll("\u00A0", "");
+                                    wlava = wlava.replaceAll("\u00A0", "");
+
+                                    if (seats.equals("")) {
+                                        seats = "0";
+                                    }
+
+                                    if (wlisted.equals("")) {
+                                        wlisted = "0";
+                                    }
+
+                                    if (wlava.equals("")) {
+                                        wlava = "0";
+                                    }
+
                                 } else if (cells.size() == 12) {
                                     //only seat available
                                     seats = cells.get(7).text();
@@ -240,9 +262,18 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                             boolean multi = false;
                             if (cells.get(1).text().charAt(0) == 0xA0) {
                                 multi = true;
-                                days2 = cells.get(7).text();
-                                time2 = cells.get(8).text();
-                                room2 = cells.get(9).text();
+                                if (cells.size() == 14) {
+                                    days2 = cells.get(10).text();
+                                    time2 = cells.get(11).text();
+                                    room2 = cells.get(12).text();
+                                } else if (cells.size() == 12) {
+                                    days2 = cells.get(7).text();
+                                    time2 = cells.get(8).text();
+                                    room2 = cells.get(9).text();
+                                } else {
+                                    System.out.println("ERROR, UNIQUE CASE DETECTED!");
+                                    System.out.println("CHECK COURSES FOR: " + className);
+                                }
                             }
 
                             int start1 = 9999, start2 = 9999, end1 = 9999,
@@ -250,11 +281,10 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
 
                             if (!time.equalsIgnoreCase("TBA")
                                     && !time.equals("NULL")) {
-
                                 int times[] = getStartEndTime(time);
                                 start1 = times[0];
                                 end1 = times[1];
-                            } else if (time.equals("TBA")){
+                            } else if (time.equals("TBA")) {
                                 start1 = -1;
                                 end1 = -1;
                             }
@@ -264,7 +294,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                                 int times[] = getStartEndTime(time2);
                                 start2 = times[0];
                                 end2 = times[1];
-                            } else if (time2.equals("TBA")){
+                            } else if (time2.equals("TBA")) {
                                 start2 = -1;
                                 end2 = -1;
                             }
