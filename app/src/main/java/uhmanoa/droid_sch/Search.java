@@ -49,6 +49,8 @@ import java.util.Random;
 public class Search extends ActionBarActivity implements App_const, OnParseTaskComplete,
         OnSearchTaskComplete {
 
+    private ArrayList<String> focList;
+
     // --------DEBUG
     private boolean DEBUG = true;
     // --------DEBUG
@@ -123,6 +125,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
                 String.valueOf(yr), false);
 
+        populateFocArray();
         loadImageResources();
         configureSpinnerData(null, null);
         configureSlidingPanel();
@@ -136,6 +139,28 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         checkCourseData();
     }
 
+
+    private void populateFocArray() {
+        focList = new ArrayList<>();
+        focList.add("FGA");
+        focList.add("FGB");
+        focList.add("FGC");
+        focList.add("FS");
+        focList.add("FW");
+        focList.add("DA");
+        focList.add("DB");
+        focList.add("DH");
+        focList.add("DL");
+        focList.add("DP");
+        focList.add("DS");
+        focList.add("DY");
+        focList.add("HSL");
+        focList.add("NI");
+        focList.add("ETH");
+        focList.add("HAP");
+        focList.add("OC");
+        focList.add("WI");
+    }
 
     private void checkCourseData() {
 
@@ -622,10 +647,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        for (Integer o : SelectedItems) {
-                            Toast.makeText(Search.this, String.valueOf(o),
-                                    Toast.LENGTH_SHORT).show();
-                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -806,8 +827,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
         //time filtering END TIME
 
+        final_results = focusFilter(final_results);
 
-
+        //add results
         for(int x = 0; x < final_results.size(); x++) {
             Course c = final_results.get(x);
             c.setID(uniqueID(true));
@@ -820,6 +842,38 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 Toast.LENGTH_SHORT).show();
 
         sv.clearFocus();
+    }
+
+
+    private ArrayList<Course> focusFilter(ArrayList<Course> input) {
+        ArrayList<Course> results = new ArrayList<>();
+
+        //check each course for focuses
+        for(Course c : input) {
+
+            boolean nomatch = false;
+            ArrayList<String> focuses = c.getFocusReqs();
+
+            //this course doesn't match if the selected focuses are not empty but the course
+            //doesn't fu
+            if(SelectedItems.size() != 0 && focuses.size() == 0) {
+                continue;
+            }
+
+            //go through each select item
+            for(Integer i : SelectedItems) {
+                if(!focuses.contains(focList.get(i))) {
+                    nomatch = true;
+                    break;
+                }
+            }
+
+            if(!nomatch) {
+                results.add(c);
+            }
+        }
+
+        return results;
     }
 
     private int timeConvert(int hr, int min) {
