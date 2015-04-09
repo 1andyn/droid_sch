@@ -6,12 +6,15 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -19,11 +22,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -34,16 +37,23 @@ import android.widget.Toast;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 
-public class Builder extends ActionBarActivity implements App_const {
+public class Builder extends ActionBarActivity implements App_const, OnCheckTaskComplete,
+        OnParseTaskComplete {
 
     // --------DEBUG
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     // --------DEBUG
 
+    private boolean lastLoadSuccess = false;
+
+    private SearchView sv;
+    private int sem; //semester value
+    private int year; //year value
+    private int month; //month value
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
@@ -65,22 +75,44 @@ public class Builder extends ActionBarActivity implements App_const {
     private TimePicker dtp_start;
     private TimePicker dtp_end;
 
+    //Course Data Check Vars
+    PowerManager.WakeLock wl;
+    private Parser p;
+    private CourseCheckTask cct;
+
     // Container Adapter
     private StarListAdapter sobj_adp, desd_adp;
+    protected SQL_DataSource datasource;
 
     private final int sliderHeight = 175;
     private int min_course = -1; //if -1, then use size equal to desired list
-    private int semsester = -1; //this should not be -1, if it is something went wrong
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_builder);
+
+        Bundle extras = getIntent().getExtras();
+        sem = extras.getInt("SEMESTER");
+        year = extras.getInt("YEAR");
+        month = extras.getInt("MONTH");
+
         pt_resolution = new Point();
         al_strobj = new ArrayList<>();
         al_desired = new ArrayList<>();
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
+
+        datasource = new SQL_DataSource(this);
+        datasource.open();
+
+        System.out.println("DEBUG: SEM: " + sem + " YEAR: " + year);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getApplicationContext());
+        lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
+                String.valueOf(year), false);
+
         loadImageResources();
         loadProfiles();
         configureSpinner();
@@ -90,10 +122,61 @@ public class Builder extends ActionBarActivity implements App_const {
         configureListViews();
         handleIntent(getIntent());
         toggle_ViewStub();
+
+        reloadDBData();
+        checkCourseData();
+
+    }
+
+    private void checkCourseData() {
+
+        if (!datasource.courseDataExists(sem, year) || !lastLoadSuccess) {
+            //Retrieve Course Data
+            datasource.clearCourseData(sem, year);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                    getApplicationContext());
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(year), false);
+            editor.commit();
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "PARSEDATA_BUILDER");
+            wl.acquire();
+            p = new Parser(datasource, this, this);
+            p.execute(sem, year, month);
+        }
+        //don't need to do anything if data already exists
+    }
+
+    private void reloadDBData() {
+        ArrayList<Star_obj> so = datasource.getAllStar(sem, year);
+        sobj_adp.clear();
+        for (int x = 0; x < so.size(); x++) {
+            sobj_adp.add(so.get(x));
+        }
+
+        ArrayList<Star_obj> dso = datasource.getAllTempStar(sem, year);
+        desd_adp.clear();
+        for(int x = 0; x < dso.size(); x++) {
+            desd_adp.add(dso.get(x));
+        }
+
+        mandatoryDataChange();
+    }
+
+    @Override
+    protected void onResume() {
+        reloadDBData();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void loadProfiles() {
-        al_profiles = new ArrayList<String>();
+        al_profiles = new ArrayList<>();
         al_profiles.add("Default Profile");
         cfg_settings_from_profile();
     }
@@ -102,26 +185,27 @@ public class Builder extends ActionBarActivity implements App_const {
         //Set up Dialog settings from Profile settings
         en_start_tp = false; //stub
         en_end_tp = false; //stub
+        en_min_np = false; //stub
     }
 
     private void configureSpinner() {
-            spinner = (Spinner) findViewById(R.id.major_spinner);
-            spinner_data = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,
-                    al_profiles);
-            spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(spinner_data);
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> parent, View view,
-                                           int pos, long id) {
-                    // An item was selected. You can retrieve the selected item using
-                    Toast.makeText(Builder.this, "Profile selected: " + pos + " with Id: " + id,
-                            Toast.LENGTH_SHORT).show();
-                }
+        spinner = (Spinner) findViewById(R.id.major_spinner);
+        spinner_data = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+                al_profiles);
+        spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinner_data);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                // An item was selected. You can retrieve the selected item using
+                Toast.makeText(Builder.this, "Profile selected: " + pos + " with Id: " + id,
+                        Toast.LENGTH_SHORT).show();
+            }
 
-                public void onNothingSelected(AdapterView<?> parent) {
-                    // Another interface callback
-                }
-            });
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
 
     private void configureListViews() {
@@ -224,13 +308,17 @@ public class Builder extends ActionBarActivity implements App_const {
             @Override
             public void onClick(View v) {
 
-                if(desd_adp.getCount() < 2) {
+                if (desd_adp.getCount() < 2) {
                     Toast.makeText(Builder.this, "Please add atleast two courses.",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Builder.this, "Building Schedules",
-                            Toast.LENGTH_SHORT).show();
-                    //do nothing else for now
+                    Intent i = new Intent(Builder.this, Available_Schedules.class);
+                    Bundle b = new Bundle();
+                    b.putInt("SEMESTER", sem);
+                    b.putInt("YEAR", year);
+                    b.putInt("MONTH", month);
+                    i.putExtras(b);
+                    startActivity(i);
                 }
             }
         });
@@ -240,7 +328,7 @@ public class Builder extends ActionBarActivity implements App_const {
     private Star_obj getResultById(long id) {
         for (int x = 0; x < al_strobj.size(); x++) {
             Long temp = al_strobj.get(x).getID();
-            if(temp.equals(id)) {
+            if (temp.equals(id)) {
                 return al_strobj.get(x);
             }
         }
@@ -266,13 +354,14 @@ public class Builder extends ActionBarActivity implements App_const {
         return false;
     }
 
-    private void addDesiredFromStar(long id){
-        Star_obj resd =  getResultById(id);
+    private void addDesiredFromStar(long id) {
+        Star_obj resd = getResultById(id);
         Star_obj so = new Star_obj(resd.getCourse(), resd.getCourseTitle(), resd.getCRN(), id,
-                resd.getSemester());
+                resd.getSemester(), resd.getYear());
 
-        if(so.isClass()) {
-            if(!crnExists(so.getCRN())) {
+        if (so.isClass()) {
+            if (!crnExists(so.getCRN())) {
+                so.setID(datasource.saveTStar(so));
                 desd_adp.add(so);
             } else {
                 Toast.makeText(Builder.this,
@@ -280,7 +369,8 @@ public class Builder extends ActionBarActivity implements App_const {
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            if(!crsExists(so.getCourse())) {
+            if (!crsExists(so.getCourse())) {
+                so.setID(datasource.saveTStar(so));
                 desd_adp.add(so);
             } else {
                 Toast.makeText(Builder.this, "Course already exists in Course List",
@@ -295,6 +385,7 @@ public class Builder extends ActionBarActivity implements App_const {
             Long temp = al_strobj.get(x).getID();
             if (temp.equals(id)) {
                 if (DEBUG) System.out.println("Deleting " + id + " " + al_strobj.get(x).getCRN());
+                datasource.deleteStar(id);
                 sobj_adp.remove(al_strobj.get(x));
             }
         }
@@ -305,6 +396,7 @@ public class Builder extends ActionBarActivity implements App_const {
             Long temp = al_desired.get(x).getID();
             if (temp.equals(id)) {
                 if (DEBUG) System.out.println("Deleting " + id + " " + al_desired.get(x).getCRN());
+                datasource.deleteTStar(id);
                 desd_adp.remove(al_desired.get(x));
             }
         }
@@ -330,9 +422,13 @@ public class Builder extends ActionBarActivity implements App_const {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(Builder.this, "Search for: " + query,
-                    Toast.LENGTH_SHORT).show();
-            //search();
+            if (query.length() < 3) {
+                Toast.makeText(Builder.this, "Please enter atleast 3 characters.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                cct = new CourseCheckTask(this, datasource, this, sem, year);
+                cct.execute(query);
+            }
         }
     }
 
@@ -343,11 +439,10 @@ public class Builder extends ActionBarActivity implements App_const {
         //Config ActionBar's Search Box
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
+        sv = (SearchView) menu.findItem(R.id.search).getActionView();
+        sv.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
+        sv.setIconifiedByDefault(true);
 
         return true;
     }
@@ -381,7 +476,7 @@ public class Builder extends ActionBarActivity implements App_const {
             case R.id.action_timeblock:
                 return true;
             case R.id.action_min:
-                if(desd_adp.getCount() >= 2) {
+                if (desd_adp.getCount() >= 2) {
                     Dialog diag_min = createMinDialog();
                 } else {
                     Toast.makeText(Builder.this, "Please add atleast two courses before" +
@@ -389,21 +484,9 @@ public class Builder extends ActionBarActivity implements App_const {
                             Toast.LENGTH_SHORT).show();
                 }
                 return true;
-            case R.id.action_DEBUG_ADD_STAR:
-                DEBUG_add_star();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void DEBUG_add_star() {
-        Random r = new Random(System.currentTimeMillis());
-        int crn = 10000 + r.nextInt(20000); //Randon CRN Number
-        Star_obj so = new Star_obj("TEST COURSE", "THIS IS A TEST COURSE", crn, uniqueID(), 1);
-
-        al_strobj.add(so);
-        mandatoryDataChange();
     }
 
     private long uniqueID() {
@@ -411,11 +494,11 @@ public class Builder extends ActionBarActivity implements App_const {
         boolean unique = false; // Initialize Unique to False
         while (!unique) {
             boolean match = false; // Reset Match Flag to False
-            int size = al_strobj.size();
+            int size = al_desired.size();
             for (int x = 0; x < size; x++) {
                 // Iterate al_strobj and check if there's an existing match to the ID
                 Long cmp;
-                 cmp = al_strobj.get(x).getID();
+                cmp = al_desired.get(x).getID();
                 // If Match Exist, set match to true
                 if (cmp.equals(id)) {
                     //Match found
@@ -555,7 +638,7 @@ public class Builder extends ActionBarActivity implements App_const {
 
         //Load previous settings
         en_min.setChecked(en_min_np);
-        if(min_course == -1) {
+        if (min_course == -1) {
             min_pick.setValue(desd_adp.getCount());
         } else {
             min_pick.setValue(min_course);
@@ -597,4 +680,36 @@ public class Builder extends ActionBarActivity implements App_const {
         Dialog dlg = builder.show();
         return builder.create();
     }
+
+    @Override
+    public void onCheckTaskComplete() {
+        Star_obj match = cct.getMatch();
+        if (match == null) {
+            Toast.makeText(this, "No courses matched the input, try again.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            match.setID(uniqueID());
+            match.setID(datasource.saveTStar(match));
+            desd_adp.add(match);
+            mandatoryDataChange();
+        }
+        sv.clearFocus();
+    }
+
+    @Override
+    public void onParseTaskComplete(IOException e) {
+        if (e != null) {
+            Toast.makeText(this, "Unable to retrieve course data, try again later.",
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            wl.release();
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                    getApplicationContext());
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(year), true);
+            editor.commit();
+        }
+    }
+
 }

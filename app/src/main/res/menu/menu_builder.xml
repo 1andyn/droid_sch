@@ -25,9 +25,4 @@
         android:orderInCategory="100"
         android:title="@string/menu_tblock"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_DEBUG_ADD_STAR"
-        android:orderInCategory="100"
-        android:title="DEBUG: ADD DEBUG STARRED OBJECT"
-        app:showAsAction="never" />
 </menu>

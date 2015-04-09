@@ -24,7 +24,7 @@ public class Course {
     /**
      * Credit hours
      */
-    private int credits;
+    private String credits;
     /**
      * Course professor
      */
@@ -102,6 +102,11 @@ public class Course {
     Used to hide Checkbox for Schedule Item Purposes
     * */
 
+    private int year = 2015;
+
+    private int semester;
+
+    private String major = "";
 
     /**
      * Empty constructor
@@ -147,13 +152,15 @@ public class Course {
      * @param professor Instructor for the course
      * @param fr        Focus requirements for the course, can be 'null.'
      */
-    public Course(String crs, String title, int crn, int credits, String professor, ArrayList<String> fr) {
+    public Course(String crs, String title, int crn, String credits, String professor,
+                  ArrayList<Character> d1, ArrayList<String> fr) {
         initValues();
         this.course = crs;
         this.title = title;
         this.crn = crn;
         this.credits = credits;
         this.professor = professor;
+        this.days1 = d1;
         this.focusReqs = fr;
     }
 
@@ -173,7 +180,7 @@ public class Course {
      * @param end1      End time of the course
      * @param room1     Room the class is held in
      */
-    public Course(String crs, String title, int crn, int credits, String professor,
+    public Course(String crs, String title, int crn, String credits, String professor,
                   ArrayList<Character> days1, int start1, int end1, String room1, int sec,
                   int seats, int wlist, int wlist_a, String date, String req) {
         initValues();
@@ -212,7 +219,7 @@ public class Course {
      * @param room1     Room the first segment of class is held in
      * @param room2     Room the second segment of class is held in
      */
-    public Course(String crs, String title, int crn, int credits, String professor,
+    public Course(String crs, String title, int crn, String credits, String professor,
                   ArrayList<Character> days1, ArrayList<Character> days2, int start1, int start2,
                   int end1, int end2, String room1, String room2, int sec, int seats, int wlist,
                   int wlist_a, String date, String req) {
@@ -246,7 +253,7 @@ public class Course {
         this.course = "";
         this.title = "";
         this.crn = 9999;
-        this.credits = 9999;
+        this.credits = "9999";
         this.professor = "";
         this.days1 = null;
         this.days2 = null;
@@ -333,7 +340,9 @@ public class Course {
      */
     public boolean timeOverlaps(int s1, int e1, int os1, int oe1) {
 		/* one class starts after the other ends */
-        if (e1 < os1 || s1 > oe1)
+
+        //if time == -1 then it is TBA and assumed to be an ONLINE course
+        if (e1 < os1 || s1 > oe1 )
             return false;
 
         return true;
@@ -386,10 +395,19 @@ public class Course {
     }
 
     public String getTimeString(boolean sec) {
+
         if(sec) {
-            return (getStdTime(getStart2()) + "-" + getStdTime(getEnd2()));
+            if(getStart2() == -1) {
+                return "TBA";
+            } else {
+                return (getStdTime(getStart2()) + "-" + getStdTime(getEnd2()));
+            }
         } else {
-            return (getStdTime(getStart1()) + "-" + getStdTime(getEnd1()));
+            if(getStart1() == -1) {
+                return "TBA";
+            } else {
+                return (getStdTime(getStart1()) + "-" + getStdTime(getEnd1()));
+            }
         }
     }
 
@@ -430,7 +448,7 @@ public class Course {
     }
 
     private String getStdTime(int t) {
-        String theTime = "99:99";
+        String theTime;
         String temp;
         boolean am = false;
 
@@ -459,19 +477,18 @@ public class Course {
      * @return True if course is valid. False if information is missing
      */
     public boolean isInvalid() {
-        if (getTitle() != "" && getCrn() != 9999 && getCredits() != 9999 &&
-                getProfessor() != "" && getDays1() != null &&
-                getStart1() != 9999 && getEnd1() != 9999 && getRoom1() != "") {
+        if (!getTitle().equals("") && getCrn() != 9999 && !getCredits().equals("9999") &&
+                !getProfessor().equals("") && getDays1() != null &&
+                getStart1() != 9999 && getEnd1() != 9999 && !getRoom1().equals("")) {
             if (getDays2() == null && getStart2() == 9999 && getEnd2() == 9999 &&
-                    getRoom2() == "")
+                    getRoom2().equals(""))
                 return false;
             if (getDays2() != null && getStart2() != 9999 && getEnd2() != 9999 &&
-                    getRoom2() != "")
+                    !getRoom2().equals(""))
                 return false;
         }
 
         return true;
-
     }
 
     /*	Setters	*/
@@ -487,7 +504,7 @@ public class Course {
         this.crn = crn;
     }
 
-    public void setCredits(int credits) {
+    public void setCredits(String credits) {
         this.credits = credits;
     }
 
@@ -501,7 +518,7 @@ public class Course {
      */
     public void setFocusReqs(ArrayList<String> f) {
         if (this.focusReqs == null)
-            this.focusReqs = new ArrayList<String>();
+            this.focusReqs = new ArrayList<>();
         else
             this.focusReqs.clear();
 
@@ -595,7 +612,7 @@ public class Course {
      */
     public void setDays1(ArrayList<Character> days) {
         if (this.days1 == null)
-            this.days1 = new ArrayList<Character>();
+            this.days1 = new ArrayList<>();
         else
             this.days1.clear();
 
@@ -617,7 +634,7 @@ public class Course {
         }
 
         if (this.days2 == null)
-            this.days2 = new ArrayList<Character>();
+            this.days2 = new ArrayList<>();
         else
             this.days2.clear();
 
@@ -644,7 +661,7 @@ public class Course {
      */
     public void addFocusReq(String r) {
         if (focusReqs == null)
-            focusReqs = new ArrayList<String>();
+            focusReqs = new ArrayList<>();
 
         r = r.toUpperCase();
         if (!focusReqs.contains(r))
@@ -660,7 +677,7 @@ public class Course {
     public void addDay1(char d) {
 		/* initialize array if null */
         if (days1 == null)
-            days1 = new ArrayList<Character>();
+            days1 = new ArrayList<>();
 
         d = Character.toUpperCase(d);
         if (!days1.contains(d))
@@ -691,7 +708,7 @@ public class Course {
     public void addDay2(char d) {
 		/* initialize array if null */
         if (days2 == null)
-            days2 = new ArrayList<Character>();
+            days2 = new ArrayList<>();
 
         d = Character.toUpperCase(d);
         if (!days2.contains(d))
@@ -720,7 +737,7 @@ public class Course {
      */
     public void addReq(String r) {
         if (this.focusReqs == null)
-            this.focusReqs = new ArrayList<String>();
+            this.focusReqs = new ArrayList<>();
 
         this.focusReqs.add(r);
     }
@@ -738,7 +755,7 @@ public class Course {
         return crn;
     }
 
-    public int getCredits() {
+    public String getCredits() {
         return credits;
     }
 
@@ -856,6 +873,24 @@ public class Course {
 
     public boolean hasLab() {
         return !(this.getStart2() == 9999);
+    }
+
+    public void setSemester(int sem) {
+        semester = sem;
+    }
+
+    public int getSemester() {return semester;}
+
+    public int getYear() { return year;}
+
+    public void setYear(int yr) { year = yr;}
+
+    public void setMajor(String m) {
+        major = m;
+    }
+
+    public String getMajor() {
+        return major;
     }
 
 }

@@ -1,19 +1,19 @@
 package uhmanoa.droid_sch;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,24 +26,30 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import uhmanoa.droid_sch.uhmanoa.adapters.Sched_Adapter;
 
-
-public class Available_Schedules extends ActionBarActivity implements View.OnClickListener{
+public class Available_Schedules extends ActionBarActivity implements View.OnClickListener,
+        OnBuildTaskComplete, OnViewButtonPress {
 
     public static final String LOGTAG = "SCHED";
     public static final String CONFIRM_SAVE = "Warning: By clicking ok you will save the selected " +
             "schedules and discard all other schedules.  Are you sure you want to continue?";
     public static final int ITEMS_PER_PAGE = 5;
 
+    private int sem, year, month;
+
     ArrayList<String> titles, t1;
     ArrayList<String> subtitles, s1;
     ListView lv_item;
     Button btnPrev, btnNext, btnGoto, btnSave;
     TextView tvTitle;
-    Sched_Adapter adapter;
+    SchListAdapter adapter;
+    SingletonSchedule ss;
+
 
     ArrayList<Schedule> schedules, schedPage;
+    private ArrayList<Star_obj> star_list;
+    private SQL_DataSource datasource;
+    private ScheduleBuildTask sbt;
 
     int totalPages, currentPage;
 
@@ -51,15 +57,35 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_schedules);
-
         setBackground();
-        populateList();
-        initLayout();
-        populateNextPage();
 
+        ss = SingletonSchedule.getInstance();
+
+        star_list = new ArrayList<>();
+
+        Bundle extras = getIntent().getExtras();
+        sem = extras.getInt("SEMESTER");
+        year = extras.getInt("YEAR");
+        month = extras.getInt("MONTH");
+
+        datasource = new SQL_DataSource(this);
+        datasource.open();
+
+        loadStarObjects();
+        runBuildTask();
     }
 
-    private void setBackground(){
+    private void loadStarObjects() {
+        star_list = datasource.getAllTempStar(sem, year);
+    }
+
+    private void runBuildTask() {
+        sbt = new ScheduleBuildTask(Available_Schedules.this, datasource,
+                Available_Schedules.this, sem, year, star_list);
+        sbt.execute();
+    }
+
+    private void setBackground() {
         Resources res_main = getResources();
         Point pt_resolution = new Point();
         Display dsp = getWindowManager().getDefaultDisplay();
@@ -74,7 +100,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         avail_sched.setBackgroundDrawable(drw_bg);
     }
 
-    private void initLayout(){
+    private void initLayout() {
         lv_item = (ListView) findViewById(R.id.lvScheds);
         btnPrev = (Button) findViewById(R.id.btn_prev);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -89,30 +115,22 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
         btnPrev.setEnabled(false);
 
-        tvTitle.setText("Your search generated " + titles.size() + " schedules.");
+        tvTitle.setText("Your courses generated " + titles.size() + " schedules.");
         updateGotoButton();
     }
 
-    private void populateList(){
-        titles = new ArrayList<String>();
-        subtitles = new ArrayList<String>();
+    private void populateList(ArrayList<Schedule> res) {
+        titles = new ArrayList<>();
+        subtitles = new ArrayList<>();
 
-        schedules = new ArrayList<Schedule>();
+        schedules = new ArrayList<>();
 
-        for (int i = 0; i < 17; i++){
-            titles.add("Sched" + i);
-            subtitles.add("Num classes in sched " + i);
-            Schedule s = new Schedule();
-            for (int j = 0; j < 4; j++) {
-                ArrayList<String> days = new ArrayList<String>();
-                days.add("M");
-                days.add("W");
-                days.add("F");
-                Course c = new Course("EE" + j, "Stuff", 39390 + j, 3, "Professor " + j,
-                        days);// 1230 + j, 1320+ j, "POST" + j);
-                s.addCourse(c);
-            }
+        int x = 1;
+        for (Schedule s : res) {
+            titles.add("Sched " + x);
+            subtitles.add("Num classes in sched" + s.getCourses().size());
             schedules.add(s);
+            x++;
         }
 
         totalPages = 0;
@@ -121,27 +139,28 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         // find out how many pages we have
         totalPages = schedules.size() / ITEMS_PER_PAGE;
         if ((schedules.size() % ITEMS_PER_PAGE) != 0)
-            totalPages ++;
+            totalPages++;
     }
 
-    private void populateNextPage(){
-        t1 = new ArrayList<String>(ITEMS_PER_PAGE);
-        s1 = new ArrayList<String>(ITEMS_PER_PAGE);
+    private void populateNextPage() {
+        t1 = new ArrayList<>(ITEMS_PER_PAGE);
+        s1 = new ArrayList<>(ITEMS_PER_PAGE);
 
-        schedPage = new ArrayList<Schedule>(ITEMS_PER_PAGE);
+        schedPage = new ArrayList<>(ITEMS_PER_PAGE);
 
         int itemsOnPage = ITEMS_PER_PAGE;
         if (currentPage == totalPages - 1)
             itemsOnPage = titles.size() % ITEMS_PER_PAGE;
 
-        for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) + itemsOnPage); i++){
+        for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) +
+                itemsOnPage); i++) {
             t1.add(titles.get(i).toString());
             s1.add(subtitles.get(i).toString());
             schedPage.add(schedules.get(i));
         }
 
         Log.e(LOGTAG, "Size! " + schedules.size());
-        adapter = new Sched_Adapter((Activity) this, schedPage);
+        adapter = new SchListAdapter(this, R.layout.sch_view, schedPage, this);
         lv_item.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -151,7 +170,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_available__schedules, menu);
         return true;
     }
 
@@ -172,7 +190,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.btn_prev:
                 if (currentPage > 0)
                     currentPage--;
@@ -198,7 +216,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
 
                 AlertDialog.Builder pagenum = new AlertDialog.Builder(this)
-                        .setTitle("Go To...")
+                        .setTitle(Html.fromHtml("<font color='#66FFCC'>Go to page..</font>"))
                         .setMessage("Enter page number between 1-" + totalPages)
                         .setView(input)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -217,7 +235,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                         btnPrev.setEnabled(true);
                                     populateNextPage();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "You must enter a page number in the valid range from 1 to " + totalPages , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "You must enter a " +
+                                            "page number in the valid range from 1 to " +
+                                            totalPages, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         })
@@ -227,17 +247,26 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                 return;
                             }
                         });
-                pagenum.show();
+                Dialog d = pagenum.show();
+                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+                        null, null);
+                View dv = d.findViewById(dividerId);
+                dv.setBackgroundColor(getResources().getColor(R.color.aqua));
 
                 break;
             case R.id.btn_save_selected:
                 AlertDialog.Builder confirm = new AlertDialog.Builder(this)
-                        .setTitle("Confirm?")
+                        .setTitle(Html.fromHtml("<font color='#66FFCC'>Confirm Save</font>"))
                         .setMessage(CONFIRM_SAVE)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                return;
+                                for (Schedule s : schedules) {
+                                    if (s.isChecked()) {
+                                        datasource.saveSched(s);
+                                    }
+                                }
+                                finish();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -246,13 +275,35 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                 return;
                             }
                         });
-                confirm.show();
+                Dialog dg = confirm.show();
+                int did = dg.getContext().getResources().getIdentifier("android:id/titleDivider",
+                        null, null);
+                View v = dg.findViewById(did);
+                v.setBackgroundColor(getResources().getColor(R.color.aqua));
 
                 break;
         }
     }
 
-    private void updateGotoButton(){
+    private void updateGotoButton() {
         btnGoto.setText("Page \t" + (currentPage + 1) + " / " + totalPages);
+    }
+
+    @Override
+    public void onBuildTaskComplete() {
+        populateList(sbt.getResults());
+        initLayout();
+        populateNextPage();
+    }
+
+    @Override
+    public void onViewButtonPress(Schedule s) {
+        ss.setSchedule(s);
+        Intent i = new Intent(this, Visualize.class);
+        Bundle b = new Bundle();
+        b.putInt("SEMESTER", s.getSemester());
+        b.putInt("YEAR", s.getYear());
+        i.putExtras(b);
+        startActivity(i);
     }
 }

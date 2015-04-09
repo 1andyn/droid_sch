@@ -11,7 +11,7 @@
         android:id="@+id/textView" />
     <View
         android:focusable="false"
-        android:layout_width="280dp"
+        android:layout_width="fill_parent"
         android:layout_height="3dp"
         android:padding="5dp"
         android:background="@color/dark_aqua"/>

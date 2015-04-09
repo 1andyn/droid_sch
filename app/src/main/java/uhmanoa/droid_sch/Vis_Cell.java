@@ -15,8 +15,8 @@ public class Vis_Cell {
     private int time_case = 0;
 
     public Vis_Cell(int t, int m, int b, long x, long y, long z, int vcase) {
-        height_container = new ArrayList<Integer>();
-        color_container = new ArrayList<Long>();
+        height_container = new ArrayList<>();
+        color_container = new ArrayList<>();
         height_container.add(t);
         height_container.add(m);
         height_container.add(b);

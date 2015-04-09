@@ -11,15 +11,20 @@ import java.util.ArrayList;
  *
  */
 public class Schedule {
-    private int sid;
+    private long sid;
 	private ArrayList<Course> schedule;
     private int semester;
+    private int year;
+    private boolean checked = false; //always initally unchecked
 	
 	/** 
 	 * Empty constructor.
 	 */
-	public Schedule(){
-		schedule = new ArrayList<Course>();
+	public Schedule(long id, int yr, int sem){
+        sid = id;
+		year = yr;
+        semester = sem;
+        schedule = new ArrayList<>();
 	}
 	
 	/**
@@ -28,7 +33,11 @@ public class Schedule {
 	 * @param s Existing schedule of courses to be copied.
 	 */
 	public Schedule(Schedule s){
-		this();
+		this.sid = s.getID();
+        this.year = s.getYear();
+        this.semester = s.getSemester();
+        schedule = new ArrayList<>();
+        checked = false; //alaways initially unchecked
 		for (Course c : s.getCourses()){
 			schedule.add(c);
 		}
@@ -57,17 +66,25 @@ public class Schedule {
 			}
 	}
 
-    public void setID(int pId) {
+    public void setID(long pId) {
         sid = pId;
     }
 
-    public int getID() {
+    public long getID() {
         return sid;
     }
 
     public void setSemester(int pSem) { semester = pSem; }
 
     public int getSemester() { return semester; }
+
+    public void setYear(int yr) {
+        year = yr;
+    }
+
+    public int getYear() {
+        return year;
+    }
 
 	/**
 	 * Display the list of courses in the schedule.
@@ -82,6 +99,9 @@ public class Schedule {
         if(getCourses().size() == 0) return 0;
         for(Course c: getCourses()) {
             int temp = c.getStart1();
+            if(c.getStart1() == -1 || c.getStart2() == -1) {
+                continue;
+            }
             if(c.getStart2() != 9999) {
                 int temp2 = c.getStart2();
                 temp = Math.min(temp, temp2);
@@ -103,6 +123,14 @@ public class Schedule {
             time = Math.max(time, temp);
         }
         return time;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean chk) {
+        checked = chk;
     }
 
 }

@@ -6,12 +6,15 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Display;
@@ -20,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,17 +40,29 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 
-public class Search extends ActionBarActivity implements App_const {
+public class Search extends ActionBarActivity implements App_const, OnParseTaskComplete,
+        OnSearchTaskComplete {
+
+    private ArrayList<String> focList;
 
     // --------DEBUG
     private boolean DEBUG = true;
     // --------DEBUG
 
+    private static String pref_file = "PREF_FILE";
+
+    private SearchView sv;
+    private boolean lastLoadSuccess = false;
+    private String srch_key = "";
+    private int sem;
+    private int yr;
+    private int month;
     private Drawable drw_bg;
     private Resources res_srch;
     private Point pt_resolution;
@@ -57,10 +73,13 @@ public class Search extends ActionBarActivity implements App_const {
     private ViewStub empty_star;
     private ArrayList<Star_obj> al_strobj;
     private ArrayList<Course> al_course;
+    private ArrayList<String> mjr_list;
+    private ArrayList<String> full_mjr_list;
     private ArrayAdapter<CharSequence> spinner_data;
     private boolean en_start_tp, en_end_tp = false;
     private int start_hr, end_hr, start_min, end_min = 0;
     private ListView lv_results, lv_sobj;
+    PowerManager.WakeLock wl;
 
     // Dialog for Timer Picker
     private CheckBox en_start;
@@ -72,26 +91,122 @@ public class Search extends ActionBarActivity implements App_const {
     private StarListAdapter sobj_adp;
     private ResultListAdapter crs_adp;
 
+    protected SQL_DataSource datasource;
+    private Parser p;
+    private SearchTask st;
+
     private final int sliderHeight = 175;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        Bundle extras = getIntent().getExtras();
+        sem = extras.getInt("SEMESTER");
+        yr = extras.getInt("YEAR");
+        month = extras.getInt("MONTH");
+
         pt_resolution = new Point();
-        SelectedItems = new ArrayList<Integer>();
-        al_strobj = new ArrayList<Star_obj>();
-        al_course = new ArrayList<Course>();
+        SelectedItems = new ArrayList<>();
+        al_strobj = new ArrayList<>();
+        al_course = new ArrayList<>();
+
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
+
+        datasource = new SQL_DataSource(this);
+        datasource.open();
+
+        System.out.println("DEBUG: SEM: " + sem + " YEAR: " + yr);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getApplicationContext());
+        lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
+                String.valueOf(yr), false);
+
+        populateFocArray();
         loadImageResources();
-        configureSpinner();
+        configureSpinnerData(null, null);
         configureSlidingPanel();
         configureViewStubs();
         configureListeners();
         configureListViews();
         handleIntent(getIntent());
         toggle_ViewStub();
+
+        reloadDBData();
+        checkCourseData();
+    }
+
+
+    private void populateFocArray() {
+        focList = new ArrayList<>();
+        focList.add("FGA");
+        focList.add("FGB");
+        focList.add("FGC");
+        focList.add("FS");
+        focList.add("FW");
+        focList.add("DA");
+        focList.add("DB");
+        focList.add("DH");
+        focList.add("DL");
+        focList.add("DP");
+        focList.add("DS");
+        focList.add("DY");
+        focList.add("HSL");
+        focList.add("NI");
+        focList.add("ETH");
+        focList.add("HAP");
+        focList.add("OC");
+        focList.add("WI");
+    }
+
+    private void checkCourseData() {
+
+        if(!datasource.courseDataExists(sem, yr) || !lastLoadSuccess ) {
+
+            //Retrieve Course Data
+            datasource.clearCourseData(sem, yr);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                    getApplicationContext());
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), false);
+            editor.commit();
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "PARSEDATA_SEARCH");
+            wl.acquire();
+            p = new Parser(datasource, this, this);
+            p.execute(sem, yr,month);
+
+        } else {
+            ArrayList<ArrayList<String>> data = datasource.getMajorLists(sem, yr);
+            configureSpinnerData(data.get(0), data.get(1));
+        }
+
+    }
+
+    private void reloadDBData() {
+        ArrayList<Star_obj> so = datasource.getAllStar(sem, yr);
+        sobj_adp.clear();
+        for(int x = 0; x < so.size(); x++) {
+            sobj_adp.add(so.get(x));
+        }
+        mandatoryDataChange();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        reloadDBData();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
     }
 
     private void configureListViews() {
@@ -143,6 +258,7 @@ public class Search extends ActionBarActivity implements App_const {
             public void onClick(View v) {
                 Toast.makeText(Search.this, "Cleared starred list",
                         Toast.LENGTH_SHORT).show();
+                datasource.deleteAllStar();
                 sobj_adp.clear();
                 sobj_adp.clearCheckedList();
                 mandatoryDataChange();
@@ -232,7 +348,8 @@ public class Search extends ActionBarActivity implements App_const {
         if(isclass) {
             if(!crnExists(crs.getCrn())) {
                 Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), crs.getCrn(),
-                        uniqueID(false), semester.fall.ordinal());
+                        uniqueID(false), sem, yr);
+                so.setID(datasource.saveStar(so));
                 sobj_adp.add(so);
             } else {
                 Toast.makeText(Search.this,
@@ -242,7 +359,8 @@ public class Search extends ActionBarActivity implements App_const {
         } else {
             if(!crsExists(crs.getCourse())) {
                 Star_obj so = new Star_obj(crs.getCourse(), crs.getTitle(), -1,
-                        uniqueID(false), semester.fall.ordinal());
+                        uniqueID(false), sem, yr);
+                so.setID(datasource.saveStar(so));
                 sobj_adp.add(so);
             } else {
                 Toast.makeText(Search.this, "Course already exists in Starred List",
@@ -257,6 +375,7 @@ public class Search extends ActionBarActivity implements App_const {
             Long temp = al_strobj.get(x).getID();
             if (temp.equals(id)) {
                 if (DEBUG) System.out.println("Deleting " + id + " " + al_strobj.get(x).getCRN());
+                datasource.deleteStar(id);
                 sobj_adp.remove(al_strobj.get(x));
             }
         }
@@ -267,7 +386,7 @@ public class Search extends ActionBarActivity implements App_const {
         boolean unique = false; // Initialize Unique to False
         while (!unique) {
             boolean match = false; // Reset Match Flag to False
-            int size = 0;
+            int size;
             if(main_list) {
                 size = al_course.size();
             } else {
@@ -303,8 +422,8 @@ public class Search extends ActionBarActivity implements App_const {
         lv_sobj.invalidateViews();
         lv_results.invalidateViews();
         lv_sobj.refreshDrawableState();
-        lv_sobj.setAdapter(sobj_adp);
         lv_results.refreshDrawableState();
+        lv_sobj.setAdapter(sobj_adp);
         lv_results.setAdapter(crs_adp);
         toggle_ViewStub();
     }
@@ -317,9 +436,14 @@ public class Search extends ActionBarActivity implements App_const {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(Search.this, "Search for: " + query,
-                    Toast.LENGTH_SHORT).show();
-            //search();
+            if(query.length() < 3) {
+            Toast.makeText(Search.this, "Please enter atleast 3 characters.",
+                    Toast.LENGTH_LONG).show();
+            } else {
+                st = new SearchTask(this, datasource, this, sem, yr);
+                st.execute(query, srch_key);
+            }
+            sv.clearFocus();
         }
     }
 
@@ -331,27 +455,51 @@ public class Search extends ActionBarActivity implements App_const {
         //Config ActionBar's Search Box
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
+        sv = (SearchView) menu.findItem(R.id.search).getActionView();
+        sv.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
+        sv.setIconifiedByDefault(true);
 
         return true;
     }
 
+    private void configureSpinnerData(ArrayList<String> full, ArrayList<String> mjr) {
+        mjr_list = new ArrayList<>();
+        full_mjr_list = new ArrayList<>();
+
+        full_mjr_list.add("Select a Major"); //initial
+        mjr_list.add("NONE"); //initial
+
+        if(full != null) {
+            for (String s : full) {
+                full_mjr_list.add(s);
+            }
+        }
+
+        if(mjr != null) {
+            for (String s : mjr) {
+                mjr_list.add(s);
+            }
+        }
+
+        configureSpinner();
+
+    }
+
     protected void configureSpinner() {
-        spinner = (Spinner) findViewById(R.id.major_spinner);
-        spinner_data = ArrayAdapter.createFromResource(this,
-                R.array.major_list, android.R.layout.simple_spinner_item);
+        if(spinner == null) {
+            spinner = (Spinner) findViewById(R.id.major_spinner);
+        }
+
+        spinner_data = new ArrayAdapter(this, android.R.layout.simple_spinner_item,
+                full_mjr_list.toArray());
+
         spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinner_data);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                // An item was selected. You can retrieve the selected item using
-                Toast.makeText(Search.this, "Major selected: " + pos + " with Id: " + id,
-                        Toast.LENGTH_SHORT).show();
+                srch_key = mjr_list.get(pos);
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -400,61 +548,23 @@ public class Search extends ActionBarActivity implements App_const {
             case R.id.action_time_fil:
                 Dialog diag_time = createTimeDialog();
                 return true;
-            case R.id.action_debug_add:
-                addDebugResults();
-                return true;
             case R.id.action_clear_results:
                 crs_adp.clear();
                 crs_adp.clearCheckedList();
                 mandatoryDataChange();
+                return true;
+            case R.id.action_force_fil:
+                if(srch_key.equals("NONE")) {
+                    Toast.makeText(this, "Please select a Major to use this function.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    st = new SearchTask(this, datasource, this, sem, yr);
+                    st.execute("", srch_key);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    //DEBUG
-    private void addDebugResults() {
-        Random r = new Random(System.currentTimeMillis());
-        int crn = 10000 + r.nextInt(20000); //Randon CRN Number
-        ArrayList<Character> days1 = new ArrayList<Character>();
-        days1.add('M');
-        days1.add('W');
-        days1.add('F');
-
-        ArrayList<Character> days2 = new ArrayList<Character>();
-        days2.add('R');
-
-        ArrayList<String> fr = new ArrayList<String>();
-        fr.add("WI");
-        fr.add("NI");
-
-        Course debug;
-
-        int rand = randValue();
-        switch (rand) {
-            case 1:
-                debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, 920, 1030, "SAKAM D101", 1, 10, 0, 10, "3/3 to 4/27",
-                        "MATH CLASS ");
-                break;
-            case 0:
-                debug = new Course("ICS 314", "Software Engineering I", 51804, 3,
-                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1320, "SAKAM D101",
-                        "HOLM 243", 2, 20, 0, 10, "1/3 to 4/27",
-                        "MATH CLASS ");
-
-                break;
-            default:
-                debug = new Course("ICS 314", "Software Engineering I", crn, 3,
-                        "B Auernheimer", days1, days2, 930, 1130, 1020, 1220, "SAKAM D101",
-                        "HOLM 243", 3, 0, 3, 7, "4/3 to 5/27",
-                        "MATH CLASS ");
-                debug.setFocusReqs(fr);
-                break;
-        }
-        debug.setID(uniqueID(true));
-        al_course.add(debug);
-        mandatoryDataChange();
     }
 
     protected void acquireResolution() {
@@ -509,7 +619,7 @@ public class Search extends ActionBarActivity implements App_const {
 
     public Dialog createFilterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
-        final ArrayList<Integer> SelectedOriginal = new ArrayList<Integer>();
+        final ArrayList<Integer> SelectedOriginal = new ArrayList<>();
         //Deep Copy
         Iterator<Integer> it = SelectedItems.iterator();
         for (Integer i : SelectedItems) {
@@ -537,10 +647,6 @@ public class Search extends ActionBarActivity implements App_const {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        for (Integer o : SelectedItems) {
-                            Toast.makeText(Search.this, String.valueOf(o),
-                                    Toast.LENGTH_SHORT).show();
-                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -638,6 +744,141 @@ public class Search extends ActionBarActivity implements App_const {
 
         Dialog dlg = builder.show();
         return builder.create();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        datasource.close();
+    }
+
+    @Override
+    public void onParseTaskComplete(IOException e) {
+        if(e != null) {
+            Toast.makeText(this, "Unable to retrieve course data, try again later.",
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
+        reloadDBData();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        wl.release();
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), true);
+        editor.commit();
+
+    }
+
+    @Override
+    public void onSearchTaskComplete() {
+        //clear search display
+        crs_adp.clear();
+        crs_adp.clearCheckedList();
+        mandatoryDataChange();
+        populateResults(st.getResults());
+
+    }
+
+    private void populateResults(ArrayList<Course> results) {
+
+        ArrayList<Course> final_results = results;
+
+        //time filtering START TIME
+        if(en_start_tp) {
+            final_results = new ArrayList<>();
+            int time = timeConvert(start_hr, start_min);
+            for(Course c : results) {
+                if(c.getStart2() == 9999) {
+                    //only check first day
+                    if(c.getStart1() >= time) {
+                        final_results.add(c);
+                    }
+                } else {
+                    if(c.getStart1() >= time &&
+                            c.getStart2() >= time) {
+                        final_results.add(c);
+                    }
+                }
+            }
+        }
+
+        //time filtering END TIME
+        if(en_end_tp) {
+            ArrayList<Course> temp = new ArrayList<>();
+            int time = timeConvert(end_hr, end_min);
+            for(Course c : final_results) {
+                if(c.getStart2() == 9999) {
+                    //only check first day
+                    if(c.getEnd1() <= time) {
+                        temp.add(c);
+                    }
+                } else {
+                    if(c.getEnd1() <= time &&
+                            c.getEnd2() <= time) {
+                        temp.add(c);
+                    }
+                }
+            }
+            final_results = temp;
+        }
+
+        //time filtering END TIME
+
+        final_results = focusFilter(final_results);
+
+        //add results
+        for(int x = 0; x < final_results.size(); x++) {
+            Course c = final_results.get(x);
+            c.setID(uniqueID(true));
+            crs_adp.add(c);
+        }
+
+        //Update Display
+        mandatoryDataChange();
+        Toast.makeText(Search.this, final_results.size() + " results found.",
+                Toast.LENGTH_SHORT).show();
+
+        sv.clearFocus();
+    }
+
+
+    private ArrayList<Course> focusFilter(ArrayList<Course> input) {
+        ArrayList<Course> results = new ArrayList<>();
+
+        //check each course for focuses
+        for(Course c : input) {
+
+            boolean nomatch = false;
+            ArrayList<String> focuses = c.getFocusReqs();
+
+            //this course doesn't match if the selected focuses are not empty but the course
+            //doesn't fu
+            if(SelectedItems.size() != 0 && focuses.size() == 0) {
+                continue;
+            }
+
+            //go through each select item
+            for(Integer i : SelectedItems) {
+                if(!focuses.contains(focList.get(i))) {
+                    nomatch = true;
+                    break;
+                }
+            }
+
+            if(!nomatch) {
+                results.add(c);
+            }
+        }
+
+        return results;
+    }
+
+    private int timeConvert(int hr, int min) {
+        int full_hr = hr * 100;
+        return full_hr + min;
     }
 
 }

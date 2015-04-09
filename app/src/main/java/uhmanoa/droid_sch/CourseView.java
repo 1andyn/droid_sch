@@ -32,7 +32,7 @@ public class CourseView extends LinearLayout implements App_const{
 
         tvCrn.setText(ModifySpacingString(String.valueOf(crs.getCrn()), ViewStringCat.crn));
         tvCrs.setText(ModifySpacingString(crs.getCourse(),ViewStringCat.course));
-        tvTitle.setText(ModifySpacingString(crs.getTitle(),ViewStringCat.title));
+        tvTitle.setText(ModifySpacingString(crs.getTitle(), ViewStringCat.title));
 
         // Course Specific Data
         tvProf = (TextView) findViewById(R.id.tv_prof);
@@ -61,12 +61,17 @@ public class CourseView extends LinearLayout implements App_const{
         tvDay.setText(ModifySpacingString(String.valueOf(crs.getDayString(false)),
                 ViewStringCat.day));
         tvLoc.setText(ModifySpacingString(String.valueOf(crs.getRoom1()), ViewStringCat.loc));
-        tvStart.setText(ModifySpacingString(String.valueOf(crs.getStartString(false)),
-                ViewStringCat.time));
-        tvEnd.setText(ModifySpacingString(String.valueOf(crs.getEndString(false)),
-                ViewStringCat.time));
+        if(crs.getStart1() == -1) {
+            tvStart.setText(ModifySpacingString("TBA", ViewStringCat.time));
+            tvEnd.setText(ModifySpacingString("TBA", ViewStringCat.time));
+        } else {
+            tvStart.setText(ModifySpacingString(String.valueOf(crs.getStartString(false)),
+                    ViewStringCat.time));
+            tvEnd.setText(ModifySpacingString(String.valueOf(crs.getEndString(false)),
+                    ViewStringCat.time));
+        }
 
-        tvCred.setText(String.valueOf(crs.getCredits()));
+        tvCred.setText(crs.getCredits());
         tvSec.setText(ModifySpacingString(String.valueOf(crs.getSection()),
                 ViewStringCat.sect));
 
@@ -74,7 +79,10 @@ public class CourseView extends LinearLayout implements App_const{
         tvWait.setText(String.valueOf(crs.getWaitlisted()));
         tvWaita.setText(String.valueOf(crs.getWait_avail()));
         tvDates.setText(crs.getDates());
-        tvPreq.setText(crs.getPrereq());
+
+        // not going to have preq for now
+        tvPreq.setVisibility(View.GONE);
+        //tvPreq.setText(crs.getPrereq());
         tvFoc.setText(crs.getFocusReqString());
 
         /* This check sees if there is a second day, if not it hides it */
@@ -96,14 +104,18 @@ public class CourseView extends LinearLayout implements App_const{
             tvDay2.setVisibility(View.GONE);
         } else {
             tvLoc2.setText(ModifySpacingString(String.valueOf(crs.getRoom2()), ViewStringCat.loc));
-            tvStart2.setText(ModifySpacingString(String.valueOf(crs.getStartString(true)),
-                    ViewStringCat.time));
-            tvEnd2.setText(ModifySpacingString(String.valueOf(crs.getEndString(true)),
-                    ViewStringCat.time));
+            if(crs.getStart1() == -1) {
+                tvStart2.setText(ModifySpacingString(String.valueOf(crs.getStartString(true)),
+                        ViewStringCat.time));
+                tvEnd2.setText(ModifySpacingString(String.valueOf(crs.getEndString(true)),
+                        ViewStringCat.time));
+            } else {
+                tvStart2.setText(ModifySpacingString("TBA", ViewStringCat.time));
+                tvEnd2.setText(ModifySpacingString("TBA", ViewStringCat.time));
+            }
             tvDay2.setText(ModifySpacingString(String.valueOf(crs.getDayString(true)),
                     ViewStringCat.day));
         }
-
     }
 
     public void setObj(Course pcrs) {

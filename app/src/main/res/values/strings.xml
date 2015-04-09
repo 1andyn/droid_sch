@@ -71,171 +71,14 @@
         <item>(DH)  Diversification-Humanities</item>
         <item>(DL)  Diversification-Literatures</item>
         <item>(DP)  Diversification-Physical Science</item>
-        <item>(DS)  Diversification-Laboratory (science)</item>
+        <item>(DS) Diversification-Social Science</item>
+        <item>(DY)  Diversification-Laboratory (science)</item>
         <item>(HSL) Hawaiian or Second Language</item>
         <item>(NI)  Non-introductory Course</item>
         <item>(ETH) Contemporary Ethical Issues</item>
         <item>(HAP) Hawaiian, Asian, Pacific Issues</item>
         <item>(OC)  Oral Communication</item>
         <item>(WI)  Writing Intensive</item>
-    </string-array>
-
-    <!--
-    String Array for Majors (used with Spinner)
-    This information is HARD CODED, perhaps a dynamic solution could be created (?)
-    -->
-
-    <string-array name="major_list">
-        <item>Filter by Major (None Selected)</item>
-        <item>Academy for Creative Media (ACM)</item>
-        <item>Accounting (ACC)</item>
-        <item>Aerospace Studies (AS)</item>
-        <item>American Studies (AMST)</item>
-        <item>Anatomy (ANAT)</item>
-        <item>Animal Science (ANSC)</item>
-        <item>Anthropology (ANTH)</item>
-        <item>Arabic (ARAB)</item>
-        <item>Architecture (ARCH)</item>
-        <item>Art (ART)</item>
-        <item>Asian Studies (ASAN)</item>
-        <item>Astronomy (ASTR)</item>
-        <item>Biochemistry (BIOC)</item>
-        <item>Bioengineering (BE)</item>
-        <item>Biology (BIOL)</item>
-        <item>Biomedical Science (BIOM)</item>
-        <item>Botany (BOT)</item>
-        <item>Business (BUS)</item>
-        <item>Business Law (BLAW)</item>
-        <item>Cambodian (CAM)</item>
-        <item>Cell and Molecular Biology (CMB)</item>
-        <item>Chamorro (CHAM)</item>
-        <item>Chemistry (CHEM)</item>
-        <item>Chinese Language &amp; Literature (CHN)</item>
-        <item>Civil &amp; Environmental Engr (CEE)</item>
-        <item>Communication (COM)</item>
-        <item>Communication &amp; Info Sciences (CIS)</item>
-        <item>Communication Sci &amp; Disorders (CSD)</item>
-        <item>Communicology (COMG)</item>
-        <item>Curriculum Studies (EDCS)</item>
-        <item>Dance (DNCE)</item>
-        <item>Dental Hygiene (DH)</item>
-        <item>Developmental &amp; Repro Biology (DRB)</item>
-        <item>Disability Studies (DIS)</item>
-        <item>East Asian Languages &amp; Lit (EALL)</item>
-        <item>Economics (ECON)</item>
-        <item>Educational Administration (EDEA)</item>
-        <item>Educational Foundations (EDEF)</item>
-        <item>Educational Psychology (EDEP)</item>
-        <item>Educational Technology (ETEC)</item>
-        <item>Electrical Engineering (EE)</item>
-        <item>Engineering, Interdisciplinary (ENGR)</item>
-        <item>English (ENG)</item>
-        <item>English as a Second Language (ESL)</item>
-        <item>English Language Institute (ELI)</item>
-        <item>Ethnic Studies (ES)</item>
-        <item>Family Medicine &amp; Comm Health (FMCH)</item>
-        <item>Family Resources (FAMR)</item>
-        <item>Fashion Design Textiles &amp; Mdsg (FDM)</item>
-        <item>Filipino (FIL)</item>
-        <item>Finance (FIN)</item>
-        <item>Food Science &amp; Human Nutrition (FSHN)</item>
-        <item>French (FR)</item>
-        <item>Geography (GEOG)</item>
-        <item>Geology &amp; Geophysics (GG)</item>
-        <item>Geriatric Medicine (GERI)</item>
-        <item>German (GER)</item>
-        <item>Greek (GRK)</item>
-        <item>Hawaiian (HAW)</item>
-        <item>Hawaiian Studies (HWST)</item>
-        <item>Hindi (HNDI)</item>
-        <item>History (HIST)</item>
-        <item>Honors (HON)</item>
-        <item>Human Resources Mgt (HRM)</item>
-        <item>Ilokano (ILO)</item>
-        <item>Indo-Pacific Languages (IP)</item>
-        <item>Indonesian (IND)</item>
-        <item>Information Technology Mgt (ITM)</item>
-        <item>Information&amp; Computer Sciences (ICS)</item>
-        <item>Institute for Teacher Educatn (ITE)</item>
-        <item>Interdisciplinary Studies (IS)</item>
-        <item>Internatl Cultural Studies (CUL)</item>
-        <item>Italian (ITAL)</item>
-        <item>Japanese Language &amp; Literature (JPN)</item>
-        <item>Journalism (JOUR)</item>
-        <item>Kinesiology &amp; Rehab Science (KRS)</item>
-        <item>Korean (KOR)</item>
-        <item>Lang &amp; Lit Europe &amp; Americas (LLEA)</item>
-        <item>Latin (LATN)</item>
-        <item>Latin Amer &amp; Iberian Studies (LAIS)</item>
-        <item>Law (LAW)</item>
-        <item>Law-Environmental (LWEV)</item>
-        <item>Law-Journals and Teams (LWJT)</item>
-        <item>Law-Legal Writing (LWLW)</item>
-        <item>Law-Pacific and Asian (LWPA)</item>
-        <item>Library &amp; Information Science (LIS)</item>
-        <item>Linguistics (LING)</item>
-        <item>Management (MGT)</item>
-        <item>Maori (MAO)</item>
-        <item>Marine Biology (MBIO)</item>
-        <item>Marketing (MKT)</item>
-        <item>Mathematics (MATH)</item>
-        <item>Mechanical Engineering (ME)</item>
-        <item>Medical Education (MDED)</item>
-        <item>Medical Technology (MEDT)</item>
-        <item>Medicine (MED)</item>
-        <item>Meteorology (MET)</item>
-        <item>Microbiology (MICR)</item>
-        <item>Military Science &amp; Leadership (MSL)</item>
-        <item>Molecular and Cell Biology (MCB)</item>
-        <item>Molecular Biosci &amp; Bioengr (MBBE)</item>
-        <item>Music (MUS)</item>
-        <item>Native Hawaiian Health (NHH)</item>
-        <item>Natural Res &amp; Environmtl Mgt (NREM)</item>
-        <item>Nursing (NURS)</item>
-        <item>Obstetrics &amp; Gynecology (OBGN)</item>
-        <item>Ocean &amp; Resources Engineering (ORE)</item>
-        <item>Oceanography (OCN)</item>
-        <item>Pacific Islands Studies (PACS)</item>
-        <item>Pathology (PATH)</item>
-        <item>Peace and Conflict Education (PACE)</item>
-        <item>Pediatrics (PED)</item>
-        <item>Persian (PERS)</item>
-        <item>Pharmacology (PHRM)</item>
-        <item>Philosophy (PHIL)</item>
-        <item>Physics (PHYS)</item>
-        <item>Physiology (PHYL)</item>
-        <item>Plant &amp; Environmtl Protect Sci (PEPS)</item>
-        <item>Political Science (POLS)</item>
-        <item>Portuguese (PORT)</item>
-        <item>Psychiatry (PSTY)</item>
-        <item>Psychology (PSY)</item>
-        <item>Public Administration (PUBA)</item>
-        <item>Public Health (PH)</item>
-        <item>Public Policy Center (PPC)</item>
-        <item>Real Estate (RE)</item>
-        <item>Religion (REL)</item>
-        <item>Russian (RUS)</item>
-        <item>Samoan (SAM)</item>
-        <item>Sanskrit (SNSK)</item>
-        <item>Second Language Studies (SLS)</item>
-        <item>Social Science (SOCS)</item>
-        <item>Social Work (SW)</item>
-        <item>Sociology (SOC)</item>
-        <item>Spanish (SPAN)</item>
-        <item>Special Education (SPED)</item>
-        <item>Surgery (SURG)</item>
-        <item>Tahitian (TAHT)</item>
-        <item>Thai (THAI)</item>
-        <item>Theatre (THEA)</item>
-        <item>Tongan (TONG)</item>
-        <item>Translation &amp; Interpretation (TI)</item>
-        <item>Travel Industry Management (TIM)</item>
-        <item>Tropical Med &amp; Medcl Micro (TRMD)</item>
-        <item>Tropical Plant &amp; Soil Sciences (TPSS)</item>
-        <item>Urban &amp; Regional Planning (PLAN)</item>
-        <item>Vietnamese (VIET)</item>
-        <item>Women\'s Studies (WS)</item>
-        <item>Zoology (ZOOL)</item>
     </string-array>
 
     <string name="title_activity_builder">Add courses to Start!</string>
@@ -249,7 +92,7 @@
 
     <string name="previous">&lt;</string>
     <string name="next">></string>
-    <string name="txt_num_sched">&lt;number of schedules></string>
+    <string name="txt_num_sched">Currently building Schedules…</string>
     <string name="bt_txt_save_sel">Save Selected</string>
     <string name="txt_avail_sched_subtitle">Select the schedule(s) you would like to save.</string>
     <string name="title_activity_preferences">Preferences</string>

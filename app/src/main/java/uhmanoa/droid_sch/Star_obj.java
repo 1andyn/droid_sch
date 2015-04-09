@@ -9,16 +9,25 @@ public class Star_obj {
     private int CRN;
     private long ID; // Incase user for some reason stars both a course and class
     private int Semester;
+    private int Year = 2015;
     private boolean checked = false;
 
     //Constructor
-    public Star_obj(String pCrsname, String pCrsTitle, int pCRN, long pID, int pSem) {
+    public Star_obj(String pCrsname, String pCrsTitle, int pCRN, long pID, int pSem, int yr) {
         ID = pID;
         CRN = pCRN;
         Semester = pSem;
         course_name = pCrsname;
         course_title = pCrsTitle;
+        Year = yr;
+    }
 
+    public void setID(long pid) {
+        ID = pid;
+    }
+
+    public int getYear() {
+        return Year;
     }
 
     public int getCRN() {

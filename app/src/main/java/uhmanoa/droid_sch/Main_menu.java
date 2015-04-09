@@ -1,6 +1,9 @@
 package uhmanoa.droid_sch;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -8,6 +11,8 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.Display;
 import android.view.Menu;
 import android.view.View;
@@ -17,13 +22,24 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
-public class Main_menu extends Activity {
+public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
     private Drawable drw_bg;
     private Resources res_main;
     private Point pt_resolution;
     private ArrayList<Button> arraylst_btn;
+    private ArrayList<Boolean> available;
+    private int curr_year, curr_year2;
+    final int FALL = 0;
+    final int SPRING = 1;
+    final int SUMMER = 2;
+    private ProgressDialog pg;
+    ParserDataCheck prs;
+    Dialog d;
+    protected SQL_DataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +48,39 @@ public class Main_menu extends Activity {
         pt_resolution = new Point();
         loadImageResources();
         populate_btncontainer();
+        pg = new ProgressDialog(Main_menu.this);
+        pg.setMessage("Checking course data availability...");
+        pg.setCancelable(false);
+        Calendar curr_time = Calendar.getInstance();
+        curr_year = curr_time.get(Calendar.YEAR);
+        datasource = new SQL_DataSource(this);
+        datasource.open();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        datasource.close();
+        super.onPause();
     }
 
     protected void populate_btncontainer() {
-        arraylst_btn = new ArrayList<Button>();
+
+        arraylst_btn = new ArrayList<>();
+        available = new ArrayList<>();
         arraylst_btn.add((Button) findViewById(R.id.bt_create));
         arraylst_btn.add((Button) findViewById(R.id.bt_view));
         arraylst_btn.add((Button) findViewById(R.id.bt_search));
         arraylst_btn.add((Button) findViewById(R.id.bt_pref));
         arraylst_btn.add((Button) findViewById(R.id.bt_exit));
+
         configureBtnListeners();
     }
 
@@ -50,17 +90,21 @@ public class Main_menu extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent switchSearch = new Intent(Main_menu.this, Builder.class);
-                        startActivity(switchSearch);
+                        try {
+                            d = createSemesterDialog(0);
+                        } catch (Exception e) {
+                            Toast.makeText(Main_menu.this, "Unable to access course data online, try again later.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
         arraylst_btn.get(App_const.buttons.view.ordinal()).setOnClickListener(
                 new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent switchSearch = new Intent(Main_menu.this, Viewer.class);
-                                startActivity(switchSearch);
+                    @Override
+                    public void onClick(View view) {
+                        switchActivity(1, -1); //semester doesn't matter for viewer,
+                        //it will show all results regardless
                     }
                 });
 
@@ -68,8 +112,12 @@ public class Main_menu extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent switchSearch = new Intent(Main_menu.this, Search.class);
-                        startActivity(switchSearch);
+                        try {
+                            d = createSemesterDialog(2);
+                        } catch (Exception e) {
+                            Toast.makeText(Main_menu.this, "Unable to access course data online, try again later.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
@@ -79,6 +127,7 @@ public class Main_menu extends Activity {
                     public void onClick(View view) {
                         Intent prefIntent = new Intent(Main_menu.this, Preferences.class);
                         startActivity(prefIntent);
+
                     }
                 });
 
@@ -127,8 +176,119 @@ public class Main_menu extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main_menu, menu);
         return true;
     }
 
+
+    private String[] calculateSemString() {
+
+        Calendar rightNow = Calendar.getInstance();
+        int month = rightNow.get(Calendar.MONTH);
+        int yr, yr2;
+        //yr = fall, yr2 = spring, summer
+
+        //ALWAYS USE CURRENT YEAR FOR FALL (might be unavail)
+        //If month is BEFORE SEPTEMBER,
+        // USE CURRENT YEAR SPRING, CURRENT YEAR SUMMER
+        // ELSE USE NEXT YEARS'S SPRING/SUMMER for YEAR
+
+        int current_year = rightNow.get(Calendar.YEAR);
+        yr = current_year;
+
+        if (month <= Calendar.SEPTEMBER) {
+            yr2 = current_year;
+        } else {
+            yr2 = current_year + 1;
+        }
+
+        curr_year2 = yr2;
+
+        List<String> lst = new ArrayList<>();
+        String fall = "FALL " + String.valueOf(yr);
+        lst.add(fall);
+        String spring = "SPRING " + String.valueOf(yr2);
+        lst.add(spring);
+        String summer = "SUMMER " + String.valueOf(yr2);
+        lst.add(summer);
+
+        String[] semesters = lst.toArray(new String[lst.size()]);
+        return semesters;
+    }
+
+    private void checkAvailability() {
+        prs = new ParserDataCheck(pg, this);
+        prs.execute(curr_year, FALL, curr_year2, SPRING, curr_year2, SUMMER);
+
+    }
+
+    private void switchActivity(int activity, int sem) {
+        Intent i;
+        switch (activity) {
+            case 0:
+                i = new Intent(Main_menu.this, Builder.class);
+                break;
+            case 1:
+                i = new Intent(Main_menu.this, Viewer.class);
+                break;
+            case 2:
+                i = new Intent(Main_menu.this, Search.class);
+                break;
+            default:
+                i = new Intent(Main_menu.this, Builder.class);
+                break; //
+        }
+        Bundle b = new Bundle();
+        Calendar rightNow = Calendar.getInstance();
+        int month = rightNow.get(Calendar.MONTH);
+        int current_year = rightNow.get(Calendar.YEAR);
+        b.putInt("SEMESTER", sem);
+        b.putInt("YEAR", current_year);
+        b.putInt("MONTH", month);
+        i.putExtras(b);
+        startActivity(i);
+    }
+
+    private Dialog createSemesterDialog(int button) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main_menu.this);
+
+        String data[] = calculateSemString();
+        checkAvailability();
+
+        final int activity = button;
+        builder.setTitle(Html.fromHtml("<font color='#66FFCC'>Choose a Semester</font>"))
+                .setItems(data, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+
+                        //vieeer activity doesn't need internet
+                        if (available.get(which) == false) {
+                            Toast.makeText(Main_menu.this, "Course data is currently " +
+                                            "unavailable for that semester.",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            switchActivity(activity, which);
+                        }
+                    }
+                });
+
+        return builder.create();
+    }
+
+    @Override
+    public void onCheckTaskComplete() {
+        available = prs.getDataStatus();
+        d.show();
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+                null, null);
+        View dv = d.findViewById(dividerId);
+        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
+
+        if(prs.getException() != null) {
+            Toast.makeText(Main_menu.this, "Warning: the class availability website did not respond " +
+                            " in a timely manner.",
+                    Toast.LENGTH_LONG).show();
+        }
+        prs = null; //deference
+    }
 }
