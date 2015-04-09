@@ -90,7 +90,17 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
         publishProgress(1);
         parseCourseData(params[0], use_yr);
         //Parse Course Data
-        return 1;
+
+        int wait_req = course_urls.size();
+        while(prog < wait_req) {
+            try {
+                Thread.sleep(1000);
+                //sleep for one second
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+            return 1;
     }
 
     @Override
@@ -142,9 +152,10 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
     }
 
     private void parseCourseData(int sem, int year) {
+        
         ExecutorService es = Executors.newFixedThreadPool(course_urls.size());
         for (int x = 0; x < course_urls.size(); x++) {
-            es.submit(new ParserThread(datasource, course_urls.get(x), sem, year));
+            es.submit(new ParserThread(datasource, course_urls.get(x), sem, year, this));
         }
         es.shutdown();
     }

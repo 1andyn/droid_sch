@@ -20,12 +20,15 @@ public class ParserThread implements Callable<Void> {
     private int semester;
     private String url;
     private SQL_DataSource datasource;
+    private OnParseThreadComplete listener;
 
-    public ParserThread (SQL_DataSource ds, String ur, int sem, int yr) {
+    public ParserThread (SQL_DataSource ds, String ur, int sem, int yr,
+                         OnParseThreadComplete listen) {
         url = ur;
         datasource = ds;
         year = yr;
         semester = sem;
+        listener = listen;
     }
 
     private void parseCourseData(String url, int sem, int year) {
@@ -111,6 +114,7 @@ public class ParserThread implements Callable<Void> {
                             if (!abbrs.isEmpty()) teacher = abbrs.get(0).attr("title");
 
                             // Upcoming Semester
+                            System.out.println("Actual Size: " + cells.size());
                             if (cells.size() == 14) {
                                 //seat data is available
                                 seats = cells.get(7).text();
@@ -387,6 +391,7 @@ public class ParserThread implements Callable<Void> {
     @Override
     public Void call() throws Exception {
         parseCourseData(url, semester, year);
+        listener.onParseThreadComplete();
         return null;
     }
 }
