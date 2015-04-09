@@ -50,7 +50,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
     @Override
     protected Integer doInBackground(Integer... params) {
         //0 = SEMESTER, 1 = YEAR, 2 = MONTH
-
+        long startTime = System.currentTimeMillis();
         int year = params[1];
         int year2 = year;
         if (params[2] >= Calendar.SEPTEMBER) {
@@ -81,6 +81,11 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
 
         publishProgress(1);
         parseCourseData(params[0], use_yr);
+
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println("RUNTIME: " + elapsedTime);
+
         //Parse Course Data
         return 1;
     }
