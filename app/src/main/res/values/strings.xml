@@ -254,4 +254,33 @@
     <string name="txt_avail_sched_subtitle">Select the schedule(s) you would like to save.</string>
     <string name="title_activity_preferences">Preferences</string>
 
+    <!-- Strings for Preferences Activity -->
+    <!-- Days off section -->
+    <string name="days_off">Days Off:</string>
+    <string name="chk_m">M</string>
+    <string name="chk_t">T</string>
+    <string name="chk_w">W</string>
+    <string name="chk_r">R</string>
+    <string name="chk_f">F</string>
+    <string name="chk_s">S</string>
+
+    <!-- Times off section -->
+    <string name="times_off">Times Off:</string>
+    <string name="plus">+</string>
+    <string name="start">Start:</string>
+    <string name="start_hint">(start)</string>
+    <string name="end">End:</string>
+    <string name="end_hint">(end)</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+
+    <!-- Other preferences section -->
+    <string name="earliest_start">Earliest start time:</string>
+    <string name="start_end_hint">(time)</string>
+    <string name="latest_end">Latest end time:</string>
+    <string name="minimum_break">Minimum break time:</string>
+    <string name="maximum_break">Maximum break time:</string>
+    <string name="break_hint">(in minutes)</string>
+    <string name="save">Save</string>
+
 </resources>

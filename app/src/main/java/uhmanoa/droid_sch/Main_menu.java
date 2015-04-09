@@ -77,8 +77,8 @@ public class Main_menu extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(Main_menu.this, "Preferences Button Pressed",
-                                Toast.LENGTH_SHORT).show();
+                        Intent prefIntent = new Intent(Main_menu.this, Preferences.class);
+                        startActivity(prefIntent);
                     }
                 });
 
