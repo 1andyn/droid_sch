@@ -57,6 +57,11 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
 
     @Override
     protected Integer doInBackground(Integer... params) {
+        //DEBUG DELETE LATER
+        long startTime = System.currentTimeMillis();
+        //DEBUG DELETE LATER
+
+
         //0 = SEMESTER, 1 = YEAR, 2 = MONTH
 
         int year = params[1];
@@ -88,18 +93,30 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
         parseMajorData(webURL, params[0], use_yr);
 
         publishProgress(1);
-        parseCourseData(params[0], use_yr);
+
         //Parse Course Data
 
         int wait_req = course_urls.size();
+        ExecutorService es = parseCourseData(params[0], use_yr);
         while(prog < wait_req) {
             try {
-                Thread.sleep(1000);
-                //sleep for one second
+                if(es.isTerminated()) {
+                    break;
+                } else {
+                    Thread.sleep(1000);                 //sleep for one second
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        //DEBUG DELETE LATER
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println("RUNTIME: " +elapsedTime);
+        //DEBUG DELETE LATER
+
             return 1;
     }
 
@@ -151,13 +168,15 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
 
     }
 
-    private void parseCourseData(int sem, int year) {
-        int thread_lim = Runtime.getRuntime().availableProcessors();
-        ExecutorService es = Executors.newFixedThreadPool(thread_lim);
+    private ExecutorService parseCourseData(int sem, int year) {
+       // int thread_lim = Runtime.getRuntime().availableProcessors();
+        //System.out.println("POOL SIZE:" + thread_lim);
+        ExecutorService es = Executors.newFixedThreadPool(5); //five threads limit
         for (int x = 0; x < course_urls.size(); x++) {
             es.submit(new ParserThread(datasource, course_urls.get(x), sem, year, this));
         }
         es.shutdown();
+        return es;
     }
 
     @Override

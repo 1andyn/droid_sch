@@ -114,7 +114,6 @@ public class ParserThread implements Callable<Void> {
                             if (!abbrs.isEmpty()) teacher = abbrs.get(0).attr("title");
 
                             // Upcoming Semester
-                            System.out.println("Actual Size: " + cells.size());
                             if (cells.size() == 14) {
                                 //seat data is available
                                 seats = cells.get(7).text();
@@ -149,6 +148,7 @@ public class ParserThread implements Callable<Void> {
                                 room = cells.get(10).text();
                                 dates = cells.get(11).text();
                             } else {
+                                System.out.println("SIZE: " + cells.size());
                                 System.out.println("ERROR, UNIQUE CASE DETECTED!");
                                 System.out.println("CHECK COURSES FOR: " + className);
                             }
@@ -160,15 +160,16 @@ public class ParserThread implements Callable<Void> {
                         boolean multi = false;
                         if (cells.get(1).text().charAt(0) == 0xA0) {
                             multi = true;
-                            if (cells.size() == 14) {
+                            if (cells.size() == 13) {
                                 days2 = cells.get(10).text();
                                 time2 = cells.get(11).text();
                                 room2 = cells.get(12).text();
-                            } else if (cells.size() == 12) {
-                                days2 = cells.get(7).text();
-                                time2 = cells.get(8).text();
-                                room2 = cells.get(9).text();
+                            } else if (cells.size() == 11) {
+                                days2 = (cells.get(7).text());
+                                time2 = (cells.get(8).text());
+                                room2 = (cells.get(9).text());
                             } else {
+                                System.out.println("SIZE (2): " + cells.size());
                                 System.out.println("ERROR, UNIQUE CASE DETECTED!");
                                 System.out.println("CHECK COURSES FOR: " + className);
                             }
