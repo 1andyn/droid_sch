@@ -162,6 +162,23 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         focList.add("WI");
     }
 
+    private void forceCheckCourseData() {
+        //Retrieve Course Data
+        datasource.clearCourseData(sem, yr);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), false);
+        editor.commit();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "PARSEDATA_BUILDER");
+        wl.acquire();
+        p = new Parser(datasource, this, this);
+        p.execute(sem, yr, month);
+        //don't need to do anything if data already exists
+    }
+
     private void checkCourseData() {
 
         if(!datasource.courseDataExists(sem, yr) || !lastLoadSuccess ) {
@@ -381,6 +398,32 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         }
     }
 
+    private void handleRefresh() {
+        AlertDialog.Builder confirm = new AlertDialog.Builder(Search.this)
+                .setTitle(Html.fromHtml("<font color='#66FFCC'>Refresh Confirmation</font>"))
+                .setMessage("Are you sure you want to refresh course data? (This may take a while)")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(Search.this, "Refreshing Course Data",
+                                Toast.LENGTH_SHORT).show();
+                        forceCheckCourseData();
+                        return;
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                });
+        Dialog d = confirm.show();
+        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+                null, null);
+        View dv = d.findViewById(dividerId);
+        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
+    }
+
     private long uniqueID(boolean main_list) {
         long id = 0;
         boolean unique = false; // Initialize Unique to False
@@ -561,6 +604,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                     st = new SearchTask(this, datasource, this, sem, yr);
                     st.execute("", srch_key);
                 }
+                return true;
+            case R.id.force_update:
+                handleRefresh();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

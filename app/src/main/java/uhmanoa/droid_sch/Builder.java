@@ -48,6 +48,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private boolean DEBUG = false;
     // --------DEBUG
 
+    private SingletonOptions sgo;
+
+
     private boolean lastLoadSuccess = false;
 
     private SearchView sv;
@@ -103,6 +106,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
         desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
 
+        sgo = SingletonOptions.getInstance();
+
         datasource = new SQL_DataSource(this);
         datasource.open();
 
@@ -157,7 +162,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
         ArrayList<Star_obj> dso = datasource.getAllTempStar(sem, year);
         desd_adp.clear();
-        for(int x = 0; x < dso.size(); x++) {
+        for (int x = 0; x < dso.size(); x++) {
             desd_adp.add(dso.get(x));
         }
 
@@ -318,11 +323,25 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     b.putInt("YEAR", year);
                     b.putInt("MONTH", month);
                     i.putExtras(b);
+
+                    //configure SingletonOptions
+                    configBuilderOptions();
+
                     startActivity(i);
                 }
             }
         });
 
+    }
+
+    private void configBuilderOptions() {
+        sgo.setEn_EndTime(timeConvert(end_hr, end_min), en_end_tp);
+        sgo.setEn_StartTime(timeConvert(start_hr, start_min), en_start_tp);
+        if(en_min_np) {
+            sgo.setMinCrs(min_course);
+        } else {
+            sgo.setMinCrs(-1);
+        }
     }
 
     private Star_obj getResultById(long id) {
@@ -710,6 +729,11 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(year), true);
             editor.commit();
         }
+    }
+
+    private int timeConvert(int hr, int min) {
+        int full_hr = hr * 100;
+        return full_hr + min;
     }
 
 }
