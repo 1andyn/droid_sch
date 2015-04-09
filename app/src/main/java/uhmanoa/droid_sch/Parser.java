@@ -262,11 +262,11 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                             boolean multi = false;
                             if (cells.get(1).text().charAt(0) == 0xA0) {
                                 multi = true;
-                                if (cells.size() == 14) {
+                                if (cells.size() == 13) {
                                     days2 = cells.get(10).text();
                                     time2 = cells.get(11).text();
                                     room2 = cells.get(12).text();
-                                } else if (cells.size() == 12) {
+                                } else if (cells.size() == 11) {
                                     days2 = cells.get(7).text();
                                     time2 = cells.get(8).text();
                                     room2 = cells.get(9).text();
