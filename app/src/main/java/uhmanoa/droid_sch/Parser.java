@@ -152,8 +152,8 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
     }
 
     private void parseCourseData(int sem, int year) {
-        
-        ExecutorService es = Executors.newFixedThreadPool(course_urls.size());
+        int thread_lim = Runtime.getRuntime().availableProcessors();
+        ExecutorService es = Executors.newFixedThreadPool(thread_lim);
         for (int x = 0; x < course_urls.size(); x++) {
             es.submit(new ParserThread(datasource, course_urls.get(x), sem, year, this));
         }
