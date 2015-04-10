@@ -26,13 +26,14 @@
         android:title="@string/menu_fil"
         app:showAsAction="never" />
     <item
-        android:id="@+id/force_update"
-        android:orderInCategory="100"
-        android:title="@string/force_update"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_clear_results"
         android:orderInCategory="100"
         android:title="@string/res_clear"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/force_update"
+        android:orderInCategory="100"
+        android:title="@string/force_update"
+        app:showAsAction="never" />
+
 </menu>
