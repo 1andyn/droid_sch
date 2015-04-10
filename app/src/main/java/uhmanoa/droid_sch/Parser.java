@@ -141,7 +141,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
             publishProgress(2, x);
             try {
                 String web_url = course_urls.get(x);
-                Document doc = Jsoup.connect(web_url).timeout(10000).get();
+                Document doc = Jsoup.connect(web_url).timeout(60000).get();
                 String mjr = web_url.substring(web_url.indexOf("&s=") + 3, web_url.length());
 
                 Element table = doc.select("tbody").get(0); //get first table
@@ -186,11 +186,15 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                     Elements nextRowCol = null;
 
                     //Checks if Next Row Is a Secondary Row
-                    if (z < row_count) {
+                    if (z < row_count - 1) {
                         nextRow = rows.get(z + 1);
                         nextRowCol = nextRow.select("td");
-                        if (nextRowCol.get(1).text().charAt(0) == 0xA0) {
-                            exists = true;
+                        if(nextRowCol.size() < 11) {
+                            exists = false;
+                        } else {
+                            if (nextRowCol.get(1).text().charAt(0) == 0xA0) {
+                                exists = true;
+                            }
                         }
                     }
 
