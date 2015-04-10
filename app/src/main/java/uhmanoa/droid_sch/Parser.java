@@ -130,7 +130,8 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                 break;
             case 2:
                 prog++;
-                pdialog.setMessage("Downloading Course data...Please wait.");
+                pdialog.setMessage("Downloading Course data (" + String.valueOf(course_urls.size() -
+                cdl.getCount()) + "/" + String.valueOf(course_urls.size()) + ")");
                 break;
         }
     }
