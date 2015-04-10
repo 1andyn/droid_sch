@@ -13,18 +13,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 
 public class ParserThread implements Callable<Void> {
 
+    private CountDownLatch clatch;
     private int year;
     private int semester;
     private String url;
     private SQL_DataSource datasource;
-    public ParserThread(SQL_DataSource ds, String ur, int sem, int yr) {
+    public ParserThread(SQL_DataSource ds, String ur, int sem, int yr,
+                        CountDownLatch cdl) {
         url = ur;
         datasource = ds;
         year = yr;
         semester = sem;
+        clatch = cdl;
     }
 
     private void parseCourseData(String url, int sem, int year) {
@@ -389,6 +393,7 @@ public class ParserThread implements Callable<Void> {
     @Override
     public Void call() throws Exception {
         parseCourseData(url, semester, year);
+        clatch.countDown();
         return null;
     }
 }

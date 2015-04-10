@@ -447,7 +447,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             } else {
                 cct = new CourseCheckTask(this, datasource, this, sem, year);
                 cct.execute(query);
+                sv.setQuery("", false);
             }
+            sv.clearFocus();
         }
     }
 
@@ -712,6 +714,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             desd_adp.add(match);
             mandatoryDataChange();
         }
+        sv.setQuery("", false);
         sv.clearFocus();
     }
 

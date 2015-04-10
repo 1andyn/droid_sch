@@ -485,6 +485,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             } else {
                 st = new SearchTask(this, datasource, this, sem, yr);
                 st.execute(query, srch_key);
+                sv.setQuery("", false);
             }
             sv.clearFocus();
         }
@@ -886,7 +887,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         mandatoryDataChange();
         Toast.makeText(Search.this, final_results.size() + " results found.",
                 Toast.LENGTH_SHORT).show();
-
+        sv.setQuery("", false);
         sv.clearFocus();
     }
 

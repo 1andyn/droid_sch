@@ -16,12 +16,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnParseThreadComplete {
+public class Parser extends AsyncTask<Integer, Integer, Integer> {
 
+    private CountDownLatch cdl;
     private Context app_context;
     private OnParseTaskComplete listener;
     private ArrayList<String> mjr_list;
@@ -98,14 +100,10 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
 
         int wait_req = course_urls.size();
         ExecutorService es = parseCourseData(params[0], use_yr);
-        while(prog < wait_req) {
+        while (!es.isTerminated()) {
             try {
-                if(es.isTerminated()) {
-                    break;
-                } else {
-                    Thread.sleep(1000);                 //sleep for one second
-                }
-
+                publishProgress(2);
+                Thread.sleep(1000);                 //sleep for one second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -114,10 +112,10 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
         //DEBUG DELETE LATER
         long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
-        System.out.println("RUNTIME: " +elapsedTime);
+        System.out.println("RUNTIME: " + elapsedTime);
         //DEBUG DELETE LATER
 
-            return 1;
+        return 1;
     }
 
     @Override
@@ -132,8 +130,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
                 break;
             case 2:
                 prog++;
-                pdialog.setMessage("Retrieving Course data (" + String.valueOf(prog)
-                        + "/" + course_urls.size() + ")");
+                pdialog.setMessage("Downloading Course data...Please wait.");
                 break;
         }
     }
@@ -169,11 +166,12 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
     }
 
     private ExecutorService parseCourseData(int sem, int year) {
-       // int thread_lim = Runtime.getRuntime().availableProcessors();
+        // int thread_lim = Runtime.getRuntime().availableProcessors();
         //System.out.println("POOL SIZE:" + thread_lim);
+        cdl = new CountDownLatch(course_urls.size());
         ExecutorService es = Executors.newFixedThreadPool(5); //five threads limit
         for (int x = 0; x < course_urls.size(); x++) {
-            es.submit(new ParserThread(datasource, course_urls.get(x), sem, year, this));
+            es.submit(new ParserThread(datasource, course_urls.get(x), sem, year, cdl));
         }
         es.shutdown();
         return es;
@@ -211,10 +209,5 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> implements OnPa
         String yr = String.valueOf(calculateURLyear(year, sem));
         String dig = String.valueOf(getURLDigit(sem));
         return yr + dig;
-    }
-
-    @Override
-    public void onParseThreadComplete() {
-        publishProgress(2);
     }
 }
