@@ -33,7 +33,7 @@ public class ParserThread implements Callable<Void> {
 
     private void parseCourseData(String url, int sem, int year) {
         try {
-            Document doc = Jsoup.connect(url).timeout(10000).get();
+            Document doc = Jsoup.connect(url).timeout(60000).get();
             String mjr = url.substring(url.indexOf("&s=") + 3, url.length());
 
             Element table = doc.select("tbody").get(0); //get first table
@@ -78,11 +78,15 @@ public class ParserThread implements Callable<Void> {
                 Elements nextRowCol = null;
 
                 //Checks if Next Row Is a Secondary Row
-                if (z < row_count) {
+                if (z < row_count - 1) {
                     nextRow = rows.get(z + 1);
                     nextRowCol = nextRow.select("td");
-                    if (nextRowCol.get(1).text().charAt(0) == 0xA0) {
-                        exists = true;
+                    if(nextRowCol.size() < 11) {
+                        exists = false;
+                    } else {
+                        if (nextRowCol.get(1).text().charAt(0) == 0xA0) {
+                            exists = true;
+                        }
                     }
                 }
 
