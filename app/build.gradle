@@ -24,10 +24,11 @@ dependencies {
     repositories {
         mavenCentral()
     }
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.sothree.slidinguppanel:library:3.0.0'
     compile 'org.jsoup:jsoup:1.7.2'
+    compile files('libs/combinatoricslib-2.1.jar')
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:2.4'
 }
