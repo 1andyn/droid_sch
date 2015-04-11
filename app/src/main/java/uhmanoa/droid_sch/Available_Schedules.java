@@ -37,6 +37,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
     private int sem, year, month;
 
+
+    SingletonOptions sgo;
     ArrayList<String> titles, t1;
     ArrayList<String> subtitles, s1;
     ListView lv_item;
@@ -59,6 +61,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_available_schedules);
         setBackground();
 
+        sgo = SingletonOptions.getInstance();
         ss = SingletonSchedule.getInstance();
 
         star_list = new ArrayList<>();
@@ -289,11 +292,47 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         btnGoto.setText("Page \t" + (currentPage + 1) + " / " + totalPages);
     }
 
+    private ArrayList<Schedule> timeFilter (ArrayList<Schedule> s) {
+        ArrayList<Schedule> res = s;
+        ArrayList<Schedule> final_results = s;
+
+        //time filtering START TIME
+        if(sgo.getEnStart()) {
+            final_results = new ArrayList<>();
+            int time = sgo.getStartTime();
+            for(Schedule sch : s) {
+                    if(sch.earliestStart() >= time) {
+                        final_results.add(sch);
+                }
+            }
+        }
+
+        //time filtering END TIME
+        if(sgo.getEnEnd()) {
+            ArrayList<Schedule> temp = new ArrayList<>();
+            int time = sgo.getEndTime();
+            for(Schedule sch : final_results) {
+                if(time >= sch.latestEnd()) {
+                        temp.add(sch);
+                }
+            }
+            res = temp;
+        }
+        return res;
+    }
+
     @Override
     public void onBuildTaskComplete() {
-        populateList(sbt.getResults());
-        initLayout();
-        populateNextPage();
+        ArrayList<Schedule> final_results = timeFilter(sbt.getResults());
+        if(final_results.size() == 0) {
+            Toast.makeText(getApplicationContext(), "Your course list produced 0 possible " +
+                    "schedules. Try using different courses or schedules", Toast.LENGTH_LONG).show();
+            finish();
+        } else {
+            populateList(final_results);
+            initLayout();
+            populateNextPage();
+        }
     }
 
     @Override
