@@ -130,11 +130,6 @@ public class ClassScheduler {
         ArrayList<Schedule> sorted_list = sortSchedules(course_list, SCHED_SIZE);
         ArrayList<Schedule> result_list = createSchedules(sorted_list, sorted_list.size(),
                 semester, year);
-        for (Schedule s : sorted_list) {
-            System.out.println("------");
-            s.display();
-        }
-
         return result_list;
     }
 
