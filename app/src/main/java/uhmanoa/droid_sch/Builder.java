@@ -111,8 +111,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         datasource = new SQL_DataSource(this);
         datasource.open();
 
-        System.out.println("DEBUG: SEM: " + sem + " YEAR: " + year);
-
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 getApplicationContext());
         lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
