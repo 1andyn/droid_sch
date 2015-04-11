@@ -497,7 +497,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             case R.id.action_timeblock:
                 return true;
             case R.id.action_min:
-                if (desd_adp.getCount() >= 2) {
+                if (uniqueDesiredCount() >= 2) {
                     Dialog diag_min = createMinDialog();
                 } else {
                     Toast.makeText(Builder.this, "Please add atleast two courses before" +
@@ -647,6 +647,22 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         return builder.create();
     }
 
+    private int uniqueDesiredCount() {
+        int count = desd_adp.getCount();
+
+        ArrayList<String> crs_list = new ArrayList<>();
+        for(Star_obj so : al_desired) {
+            if(!crs_list.contains(so.getCourse())) {
+                crs_list.add(so.getCourse());
+            }
+        }
+
+        if(!crs_list.isEmpty()) {
+            count = crs_list.size();
+        }
+
+        return count;
+    }
 
     private Dialog createMinDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Builder.this);
@@ -655,12 +671,12 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         en_min = (CheckBox) diag_view.findViewById(R.id.enable_chkbox);
         min_pick = (NumberPicker) diag_view.findViewById(R.id.num_picker);
         min_pick.setMinValue(2);
-        min_pick.setMaxValue(desd_adp.getCount());
+        min_pick.setMaxValue(uniqueDesiredCount());
 
         //Load previous settings
         en_min.setChecked(en_min_np);
         if (min_course == -1) {
-            min_pick.setValue(desd_adp.getCount());
+            min_pick.setValue(uniqueDesiredCount());
         } else {
             min_pick.setValue(min_course);
         }
