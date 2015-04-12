@@ -238,9 +238,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                                         btnPrev.setEnabled(true);
                                     populateNextPage();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "You must enter a " +
+                                    new ToastWrapper(getApplicationContext(), "You must enter a " +
                                             "page number in the valid range from 1 to " +
-                                            totalPages, Toast.LENGTH_SHORT).show();
+                                            totalPages, Toast.LENGTH_SHORT);
                                 }
                             }
                         })
@@ -325,8 +325,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     public void onBuildTaskComplete() {
         ArrayList<Schedule> final_results = timeFilter(sbt.getResults());
         if(final_results.size() == 0) {
-            Toast.makeText(getApplicationContext(), "Your course list produced 0 possible " +
-                    "schedules. Try using different courses or schedules", Toast.LENGTH_LONG).show();
+            new ToastWrapper(getApplicationContext(), "Your course list produced 0 possible " +
+                    "schedules. Try using different courses or schedules", Toast.LENGTH_LONG);
             finish();
         } else {
             populateList(final_results);

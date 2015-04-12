@@ -273,8 +273,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         ClearStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Search.this, "Cleared starred list",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Search.this, "Cleared starred list",
+                        Toast.LENGTH_SHORT);
                 datasource.deleteAllStar();
                 sobj_adp.clear();
                 sobj_adp.clearCheckedList();
@@ -286,8 +286,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         DeleteStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Search.this, "Delete selected entries",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Search.this, "Delete selected entries",
+                        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -303,8 +303,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         AddCourseStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Search.this, "Add Selected Courses",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Search.this, "Add Selected Courses",
+                        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = crs_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -319,8 +319,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         AddCRNStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Search.this, "Add Selected CRN's",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Search.this, "Add Selected CRN's",
+                        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = crs_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -369,9 +369,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 so.setID(datasource.saveStar(so));
                 sobj_adp.add(so);
             } else {
-                Toast.makeText(Search.this,
+                new ToastWrapper(Search.this,
                         "A course with the CRN already exists in the Starred List",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
             }
         } else {
             if(!crsExists(crs.getCourse())) {
@@ -380,8 +380,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 so.setID(datasource.saveStar(so));
                 sobj_adp.add(so);
             } else {
-                Toast.makeText(Search.this, "Course already exists in Starred List",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Search.this, "Course already exists in Starred List",
+                        Toast.LENGTH_SHORT);
             }
         }
         mandatoryDataChange();
@@ -405,8 +405,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(Search.this, "Refreshing Course Data",
-                                Toast.LENGTH_SHORT).show();
+                        new ToastWrapper(Search.this, "Refreshing Course Data",
+                                Toast.LENGTH_SHORT);
                         forceCheckCourseData();
                         return;
                     }
@@ -480,8 +480,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             if(query.length() < 3) {
-            Toast.makeText(Search.this, "Please enter atleast 3 characters.",
-                    Toast.LENGTH_LONG).show();
+            new ToastWrapper(Search.this, "Please enter atleast 3 characters.",
+                    Toast.LENGTH_LONG);
             } else {
                 st = new SearchTask(this, datasource, this, sem, yr);
                 st.execute(query, srch_key);
@@ -599,8 +599,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 return true;
             case R.id.action_force_fil:
                 if(srch_key.equals("NONE")) {
-                    Toast.makeText(this, "Please select a Major to use this function.",
-                            Toast.LENGTH_LONG).show();
+                    new ToastWrapper(this, "Please select a Major to use this function.",
+                            Toast.LENGTH_LONG);
                 } else {
                     st = new SearchTask(this, datasource, this, sem, yr);
                     st.execute("", srch_key);
@@ -802,8 +802,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     @Override
     public void onParseTaskComplete(IOException e) {
         if(e != null) {
-            Toast.makeText(this, "Unable to retrieve course data, try again later.",
-                    Toast.LENGTH_SHORT).show();
+            new ToastWrapper(this, "Unable to retrieve course data, try again later.",
+                    Toast.LENGTH_SHORT);
             e.printStackTrace();
         }
 
@@ -893,8 +893,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
         //Update Display
         mandatoryDataChange();
-        Toast.makeText(Search.this, final_results.size() + " results found.",
-                Toast.LENGTH_SHORT).show();
+        new ToastWrapper(Search.this, final_results.size() + " results found.",
+                Toast.LENGTH_SHORT);
         sv.setQuery("", false);
         sv.clearFocus();
     }

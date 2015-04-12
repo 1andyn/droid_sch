@@ -71,13 +71,13 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 if (buttonView.isChecked()) {
-//                    Toast.makeText(app_Context, "Checked " + so.getID() + " " + so.getCRN(),
-//                            Toast.LENGTH_SHORT).show();
+//                    new ToastWrapper(app_Context, "Checked " + so.getID() + " " + so.getCRN(),
+//                            Toast.LENGTH_SHORT);
                     checked_list.add(object_list.get(pos).getID());
                     so.setChecked(true);
                 } else {
-//                    Toast.makeText(app_Context, "UnChecked " + so.getID() + " " + so.getCRN(),
-//                            Toast.LENGTH_SHORT).show();
+//                    new ToastWrapper(app_Context, "UnChecked " + so.getID() + " " + so.getCRN(),
+//                            Toast.LENGTH_SHORT);
                     so.setChecked(false);
                     checkedRemove(object_list.get(pos).getID());
                 }

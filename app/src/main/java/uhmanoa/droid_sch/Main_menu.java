@@ -93,8 +93,8 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
                         try {
                             d = createSemesterDialog(0);
                         } catch (Exception e) {
-                            Toast.makeText(Main_menu.this, "Unable to access course data online, try again later.",
-                                    Toast.LENGTH_SHORT).show();
+                            new ToastWrapper(Main_menu.this, "Unable to access course data online, try again later.",
+                                    Toast.LENGTH_SHORT);
                         }
                     }
                 });
@@ -115,8 +115,8 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
                         try {
                             d = createSemesterDialog(2);
                         } catch (Exception e) {
-                            Toast.makeText(Main_menu.this, "Unable to access course data online, try again later.",
-                                    Toast.LENGTH_SHORT).show();
+                            new ToastWrapper(Main_menu.this, "Unable to access course data online, try again later.",
+                                    Toast.LENGTH_SHORT);
                         }
                     }
                 });
@@ -262,9 +262,9 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
                         //vieeer activity doesn't need internet
                         if (available.get(which) == false) {
-                            Toast.makeText(Main_menu.this, "Course data is currently " +
+                            new ToastWrapper(Main_menu.this, "Course data is currently " +
                                             "unavailable for that semester.",
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_SHORT);
                         } else {
                             switchActivity(activity, which);
                         }
@@ -284,9 +284,9 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         dv.setBackgroundColor(getResources().getColor(R.color.aqua));
 
         if(prs.getException() != null) {
-            Toast.makeText(Main_menu.this, "Warning: the class availability website did not respond " +
+            new ToastWrapper(Main_menu.this, "Warning: the class availability website did not respond " +
                             " in a timely manner.",
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG);
         }
         prs = null; //deference
     }

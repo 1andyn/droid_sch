@@ -201,8 +201,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
-                Toast.makeText(Builder.this, "Profile selected: " + pos + " with Id: " + id,
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Builder.this, "Profile selected: " + pos + " with Id: " + id,
+                        Toast.LENGTH_SHORT);
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -259,8 +259,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteItemStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Builder.this, "Deleting selected items on star list.",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Builder.this, "Deleting selected items on star list.",
+                        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -277,8 +277,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         AddStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Builder.this, "Added to courses desired list",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Builder.this, "Added to courses desired list",
+                        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -293,8 +293,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Builder.this, "Delete selected entries",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Builder.this, "Delete selected entries",
+                        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = desd_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -312,8 +312,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onClick(View v) {
 
                 if (desd_adp.getCount() < 2) {
-                    Toast.makeText(Builder.this, "Please add atleast two courses.",
-                            Toast.LENGTH_SHORT).show();
+                    new ToastWrapper(Builder.this, "Please add atleast two courses.",
+                            Toast.LENGTH_SHORT);
                 } else {
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
                     Bundle b = new Bundle();
@@ -381,17 +381,17 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 so.setID(datasource.saveTStar(so));
                 desd_adp.add(so);
             } else {
-                Toast.makeText(Builder.this,
+                new ToastWrapper(Builder.this,
                         "A course with the CRN already exists in the Course List",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT);
             }
         } else {
             if (!crsExists(so.getCourse())) {
                 so.setID(datasource.saveTStar(so));
                 desd_adp.add(so);
             } else {
-                Toast.makeText(Builder.this, "Course already exists in Course List",
-                        Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Builder.this, "Course already exists in Course List",
+                        Toast.LENGTH_SHORT);
             }
         }
         mandatoryDataChange();
@@ -440,8 +440,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             if (query.length() < 3) {
-                Toast.makeText(Builder.this, "Please enter atleast 3 characters.",
-                        Toast.LENGTH_LONG).show();
+                new ToastWrapper(Builder.this, "Please enter atleast 3 characters.",
+                        Toast.LENGTH_LONG);
             } else {
                 cct = new CourseCheckTask(this, datasource, this, sem, year);
                 cct.execute(query);
@@ -498,9 +498,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 if (uniqueDesiredCount() >= 2) {
                     Dialog diag_min = createMinDialog();
                 } else {
-                    Toast.makeText(Builder.this, "Please add atleast two courses before" +
+                    new ToastWrapper(Builder.this, "Please add atleast two courses before" +
                                     "attempting to configure this option.",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT);
                 }
                 return true;
             default:
@@ -720,8 +720,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     public void onCheckTaskComplete() {
         Star_obj match = cct.getMatch();
         if (match == null) {
-            Toast.makeText(this, "No courses matched the input, try again.",
-                    Toast.LENGTH_LONG).show();
+            new ToastWrapper(this, "No courses matched the input, try again.",
+                    Toast.LENGTH_LONG);
         } else {
             match.setID(uniqueID());
             match.setID(datasource.saveTStar(match));
@@ -735,8 +735,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     @Override
     public void onParseTaskComplete(IOException e) {
         if (e != null) {
-            Toast.makeText(this, "Unable to retrieve course data, try again later.",
-                    Toast.LENGTH_SHORT).show();
+            new ToastWrapper(this, "Unable to retrieve course data, try again later.",
+                    Toast.LENGTH_SHORT);
 
             if(p.getTaskCancelled()) {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

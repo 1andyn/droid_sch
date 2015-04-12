@@ -69,8 +69,8 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(Viewer.this, "Deleting selected items",
-                                        Toast.LENGTH_SHORT).show();
+                                new ToastWrapper(Viewer.this, "Deleting selected items",
+                                        Toast.LENGTH_SHORT);
                                 ArrayList<Long> checked = sch_adp.getChecked_list();
                                 System.out.println("Outputting Selection");
                                 for (Long l : checked) {
