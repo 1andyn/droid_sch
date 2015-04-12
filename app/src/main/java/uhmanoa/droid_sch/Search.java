@@ -895,7 +895,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         //add results
         for(int x = 0; x < final_results.size(); x++) {
             Course c = final_results.get(x);
-            c.setID(uniqueID(true));
+            c.setID(x);
             crs_adp.add(c);
         }
 
@@ -911,14 +911,15 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private ArrayList<Course> focusFilter(ArrayList<Course> input) {
         ArrayList<Course> results = new ArrayList<>();
 
+        if(SelectedItems.size() == 0) return input;
+
         //check each course for focuses
         for(Course c : input) {
 
             boolean nomatch = false;
             ArrayList<String> focuses = c.getFocusReqs();
 
-            //this course doesn't match if the selected focuses are not empty but the course
-            //doesn't fu
+            //there are filter options, but the course doesn't have any focus fufillments
             if(SelectedItems.size() != 0 && focuses.size() == 0) {
                 continue;
             }
