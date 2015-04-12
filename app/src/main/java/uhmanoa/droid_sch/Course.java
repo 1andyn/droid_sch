@@ -1,6 +1,7 @@
 package uhmanoa.droid_sch;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Stores a detailed course listing for courses offered at UH at Manoa.
@@ -102,7 +103,7 @@ public class Course {
     Used to hide Checkbox for Schedule Item Purposes
     * */
 
-    private int year = 2015;
+    private int year = Calendar.getInstance().get(Calendar.YEAR);
 
     private int semester;
 
@@ -285,9 +286,15 @@ public class Course {
         ArrayList<Character> odays1 = other.getDays1();
         ArrayList<Character> odays2 = other.getDays2();
 
+        if(other.getDayString(false).equals("TBA") || this.getDayString(false).equals("TBA") ||
+        other.getDayString(true).equals("TBA") || this.getDayString(true).equals("TBA")) {
+            return false;
+        }
+
 		/*  compares class times of one course against
 		 * another to see if they overlap
 		 */
+
         for (char d11 : getDays1()) {
             for (char d21 : odays1) {
 
@@ -306,6 +313,7 @@ public class Course {
                 }
             }
         }
+
         if (getDays2() != null) {
             for (char d12 : getDays2()) {
                 for (char d21 : odays1) {
@@ -341,8 +349,8 @@ public class Course {
     public boolean timeOverlaps(int s1, int e1, int os1, int oe1) {
 		/* one class starts after the other ends */
 
-        //if time == -1 then it is TBA and assumed to be an ONLINE course
-        if (e1 < os1 || s1 > oe1 )
+        //if time == -1 then it is TBA and assumed to be an ONLINE course and should not overlap
+        if (e1 < os1 || e1 == -1 || s1 > oe1 || oe1 == -1)
             return false;
 
         return true;
@@ -424,6 +432,9 @@ public class Course {
             d1 = getDays1();
         }
         String temp = "";
+        if(d1 == null) {
+            return temp;
+        }
         for (int i = 0; i < d1.size(); i++) {
             temp = temp + (d1.get(i));
         }
@@ -512,7 +523,7 @@ public class Course {
      * Set the focus requirements using an existing array.
      * This method WILL overwrite existing focus requirements
      * that have been set either with this method previousely
-     * or using the {@link addFocusReq} method.
+     * or using the {@link } method.
      *
      * @param f Array of focus requirements.
      */
