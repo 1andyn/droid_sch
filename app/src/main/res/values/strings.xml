@@ -21,12 +21,12 @@
     <string name="bt_gefoc"> GE / Focus</string>
     <string name="title_activity_search"> Search for Courses</string>
     <string name="ok">OK</string>
-    <string name="force_update">Refresh Course Database</string>
+    <string name="force_update">Refresh Course Data</string>
     <string name="cancel">Cancel</string>
     <string name="srch_title">Search for Courses</string>
-    <string name="menu_gefc">General Education / Focus Filter</string>
-    <string name="menu_time">Course Time Start and End Filter</string>
-    <string name="menu_fil">Search without CRN or Course Name</string>
+    <string name="menu_gefc">Gen Ed/Focus Filter</string>
+    <string name="menu_time">Start/End Time Filter</string>
+    <string name="menu_fil">Search by Major</string>
     <string name="action_anchor_enable">Enable Anchor Point</string>
     <string name="action_anchor_disable">Disable Anchor Point</string>
     <string name="str_panel_clear">Clear List</string>
@@ -44,7 +44,7 @@
     <string name="res_end">End: </string>
     <string name="res_days">Days: </string>
     <string name="res_loc">Location: </string>
-    <string name="res_clear">Clear Results</string>
+    <string name="res_clear">Clear Results (X)</string>
     <string name="des_clear">Clear List</string>
     <string name="des_delete">Delete</string>
     <string name="des_build">Build Schedules</string>
