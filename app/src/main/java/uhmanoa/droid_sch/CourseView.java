@@ -53,7 +53,7 @@ public class CourseView extends LinearLayout implements App_const{
         tvWait = (TextView) findViewById(R.id.tv_wl);
         tvWaita = (TextView) findViewById(R.id.tv_wla);
         tvDates = (TextView) findViewById(R.id.tv_date);
-        tvPreq = (TextView) findViewById(R.id.tv_preq);
+//        tvPreq = (TextView) findViewById(R.id.tv_preq);
 
         tvFoc = (TextView) findViewById(R.id.tv_foc);
 
@@ -81,7 +81,7 @@ public class CourseView extends LinearLayout implements App_const{
         tvDates.setText(crs.getDates());
 
         // not going to have preq for now
-        tvPreq.setVisibility(View.GONE);
+        //tvPreq.setVisibility(View.GONE);
         //tvPreq.setText(crs.getPrereq());
         tvFoc.setText(crs.getFocusReqString());
 
