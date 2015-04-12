@@ -1,6 +1,12 @@
 package uhmanoa.droid_sch;
 
 
+import org.paukov.combinatorics.Factory;
+import org.paukov.combinatorics.Generator;
+import org.paukov.combinatorics.ICombinatoricsVector;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 
 public class ClassScheduler {
@@ -13,6 +19,8 @@ public class ClassScheduler {
     private int year;
     private int semester;
     private SQL_DataSource ds;
+    private int min = -1;
+    private ArrayList<Star_obj> crns;
 
 
     /* each schedule item in selectedClasses contains a list of courses
@@ -25,112 +33,115 @@ public class ClassScheduler {
      */
     ArrayList<Schedule> possibleSchedules;
 
-    public ClassScheduler(int sem, int yr, SQL_DataSource data) {
+    public ClassScheduler(int sem, int yr, SQL_DataSource data, int mini, ArrayList<Star_obj> crn) {
         ds = data;
         year = yr;
         semester = sem;
+        min = mini;
+        crns = crn;
     }
 
-    /**
-     * Takes in an array of course titles (Strings) and returns
-     * the cross product of those courses
-     */
-    private ArrayList<Schedule> findCourses(ArrayList<Star_obj> list) {
+    private ArrayList<Schedule> findCourses(ArrayList<String> course_list) {
 
         ArrayList<Schedule> results = new ArrayList<>();
-
-        // ----------------------- REDUNDANCY CHECK ---------------------------------
-        ArrayList<String> courses = new ArrayList<>(); //Contains List of "Named" of Courses
-        //Obtain List of Courses listed by Name
-        for (Star_obj s : list) {
-            String crs = s.getCourse();
-            if (!courses.contains(crs) && s.getCRN() == -1) {
-                //The list doesn't already contain the course and
-                courses.add(crs);
-            }
-        }
-
-        //Create new Star_Obj list containg non-reduant Star_Objs
-        ArrayList<Star_obj> course_list = new ArrayList<>();
-        //Iterate through current list
-        for (Star_obj s : list) {
-            boolean delete_current = false;
-            for (String c : courses) {
-                if (s.getCourse().equals(c) && s.getCRN() != -1) {
-                    delete_current = true; //this star_obj is repeated
-                    break;
-                }
-            }
-            if (!delete_current) {
-                course_list.add(s);
-            }
-
-        }
-
-        // ----------------------- REDUNDANCY CHECK ---------------------------------
-
-//        System.out.println("DEBUG DATA");
-//        for(Star_obj so: course_list) {
-//            System.out.println(so.getCourse() + " " +  so.getCRN());
-//        }
-
         //course_list = star_obj w/o redudancies
         //names only contains courses searched by name
-        ArrayList<Star_obj> names = new ArrayList<>();
-        for (Star_obj so : course_list) {
-            if (so.getCRN() == -1) {
-                names.add(so);
-            }
-        }
 
         //create schedules of the same courses in same schedule container
-        for (Star_obj so : names) {
+        for (String str : course_list) {
             Schedule s = new Schedule(-1, year, semester);
-            ArrayList<Course> crs = ds.getCoursesByName(semester, year, so.getCourse());
+            ArrayList<Course> crs = ds.getCoursesByName(semester, year, str);
             for (Course c : crs) {
                 s.addCourse(c);
             }
             results.add(s);
         }
 
-        //crns only contains courses searched by
-        ArrayList<Star_obj> crns = new ArrayList<>();
-        for (Star_obj so : course_list) {
-            if (so.getCRN() != -1) {
-                crns.add(so);
-            }
+        //if there aren't any specific CRN's we are looking at, just return this list
+        if(crns.isEmpty()) {
+            return results;
         }
 
-        ArrayList<String> unique_crs = new ArrayList<>();
+        ArrayList<Schedule> new_results = new ArrayList<>();
+        new_results.addAll(results);
+
         for (Star_obj so : crns) {
-            if (!unique_crs.contains(so.getCourse())) {
-                unique_crs.add(so.getCourse());
-            }
-        }
+            Star_obj star = so;
+            String crs = so.getCourse();
 
-        for (String s : unique_crs) {
-            Schedule sch = new Schedule(-1, year, semester);
-            for (Star_obj so : crns) {
-                if (so.getCourse().equals(s)) {
-                    Course c = ds.getCourseByCRN(semester, year, so.getCRN());
-                    sch.addCourse(c);
+            ArrayList<Integer> crn_match = new ArrayList<>();
+            for (int x = 0; x < crns.size(); x++) {
+                if (star.getCourse().equals(crns.get(x).getCourse())) {
+                    crn_match.add(crns.get(x).getCRN());
                 }
             }
-            results.add(sch);
+
+            for (Schedule s : results) {
+                ArrayList<Course> crz = s.getCourses();
+                for (int x = 0; x < crz.size(); x++) {
+                    if (crz.get(x).getCourse().equals(crs)) {
+                        if (!crn_match.contains(crz.get(x).getCrn())) {
+                            crz.remove(crz.get(x));
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
         }
 
         return results;
     }
 
+
+    private ArrayList<String> getCourseList (ArrayList<Star_obj> so) {
+        ArrayList<String> results = new ArrayList<>();
+        for(Star_obj s : so) {
+            if(!results.contains(s.getCourse())) {
+                results.add(s.getCourse());
+            }
+        }
+        return  results;
+    }
+
     public ArrayList<Schedule> getPossibleSchedules(ArrayList<Star_obj> so) {
+
+        ArrayList<Schedule> results = new ArrayList<>();
+
         int semester, year;
         semester = so.get(0).getSemester();
         year = so.get(0).getYear();
-        ArrayList<Schedule> course_list = findCourses(so); //gets all courses into one container
-        ArrayList<Schedule> sorted_list = sortSchedules(course_list, SCHED_SIZE);
-        ArrayList<Schedule> result_list = createSchedules(sorted_list, sorted_list.size(),
-                semester, year);
-        return result_list;
+        ArrayList<String> crs_list = getCourseList(so);
+
+        ArrayList<ArrayList<String>> search_list = new ArrayList<>();
+
+        int minimum = min;
+
+        if(minimum == -1) {
+            minimum = crs_list.size();
+        }
+        int maximum = crs_list.size();
+
+        String input[] = crs_list.toArray(new String[crs_list.size()]);
+        ICombinatoricsVector<String> initVec = Factory.createVector(input);
+
+        for(int x = minimum; x < maximum + 1; x++) {
+            Generator<String> cgen = Factory.createSimpleCombinationGenerator(initVec, x);
+            for(ICombinatoricsVector<String> combo: cgen) {
+                ArrayList<String> temp = new ArrayList<>();
+                temp.addAll(combo.getVector());
+                search_list.add(temp);
+            }
+        }
+
+        for(ArrayList<String> collection : search_list) {
+            ArrayList<Schedule> course_list = findCourses(collection); //gets all courses into one container
+            ArrayList<Schedule> sorted_list = sortSchedules(course_list, SCHED_SIZE);
+            ArrayList<Schedule> result_list = createSchedules(sorted_list, sorted_list.size(),
+                    semester, year);
+            results.addAll(result_list);
+        }
+        return results;
     }
 
     /**
