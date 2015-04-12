@@ -222,14 +222,18 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
     private void switchActivity(int activity, int sem) {
         Intent i;
+        int activity_code = 0;
         switch (activity) {
             case 0:
                 i = new Intent(Main_menu.this, Builder.class);
+                activity_code = 0;
                 break;
             case 1:
                 i = new Intent(Main_menu.this, Viewer.class);
+                activity_code = 1;
                 break;
             case 2:
+                activity_code = 2;
                 i = new Intent(Main_menu.this, Search.class);
                 break;
             default:
@@ -244,8 +248,21 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         b.putInt("YEAR", current_year);
         b.putInt("MONTH", month);
         i.putExtras(b);
-        startActivity(i);
+        startActivityForResult(i, activity_code);
     }
+
+    protected void onActivityResult(int req, int res, Intent data) {
+        switch(req) {
+            case 2:
+                if(res == RESULT_OK) {
+                    Bundle results = data.getExtras();
+                    int sem = Integer.valueOf(results.getString("SEM_KEY"));
+                    switchActivity(0, sem);
+                }
+        }
+    }
+
+
 
     private Dialog createSemesterDialog(int button) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Main_menu.this);

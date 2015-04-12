@@ -606,6 +606,14 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                     st.execute("", srch_key);
                 }
                 return true;
+            case R.id.action_build_schedules:
+                Bundle response = new Bundle();
+                response.putString("SEM_KEY", String.valueOf(sem));
+                Intent i = new Intent();
+                i.putExtras(response);
+                setResult(RESULT_OK, i);
+                finish();
+                return true;
             case R.id.force_update:
                 handleRefresh();
                 return true;
