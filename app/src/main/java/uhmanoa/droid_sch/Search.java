@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -251,10 +252,14 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
             @Override
             public void onPanelExpanded(View panel) {
+                TextView tv = (TextView) findViewById(R.id.star_slider);
+                tv.setText("Slide down or Tap Here to hide Starred Items");
             }
 
             @Override
             public void onPanelCollapsed(View panel) {
+                TextView tv = (TextView) findViewById(R.id.star_slider);
+                tv.setText("Slide up or Tap Here to show Starred Items");
             }
 
             @Override

@@ -92,7 +92,7 @@
                     android:layout_height="22dp"
                     android:focusable="false"
                     android:gravity="center|bottom"
-                    android:text="Slide up or Tap to view Starred Items"
+                    android:text="Slide up or Tap Here to view Starred Items"
                     android:textColor="@color/dark_gray"
                     android:textSize="18sp"
                     android:textStyle="bold" />
