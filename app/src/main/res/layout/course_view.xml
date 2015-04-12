@@ -35,6 +35,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:includeFontPadding="false"
                     android:text="@string/str_course"
                     android:textColor="@color/white"
                     android:textSize="20dp"
@@ -46,6 +47,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="15dp"
                     android:text="XXXXXXXX"
@@ -61,6 +63,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:gravity="right"
+                    android:includeFontPadding="false"
                     android:text="@string/str_crn"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -72,6 +75,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:gravity="right"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XXXXX"
@@ -93,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:includeFontPadding="false"
                     android:text="@string/str_title"
                     android:textColor="@color/white"
                     android:textSize="15dp"
@@ -103,12 +108,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:textSize="17dp"
                     android:focusableInTouchMode="false"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="17dp" />
             </LinearLayout>
             <!-- -Contains Professor-->
             <LinearLayout
@@ -121,6 +127,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:includeFontPadding="false"
                     android:text="@string/res_prof"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -131,14 +138,17 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XXXXXXXXXXXXXXX"
                     android:textColor="@color/white" />
+
                 <TextView
                     android:id="@+id/tv_sect_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_sect"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -147,6 +157,7 @@
                     android:id="@+id/tv_sect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:text="XXX"
@@ -158,6 +169,7 @@
                     android:id="@+id/tv_cred_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:text="@string/res_credit"
                     android:textColor="@color/white"
@@ -167,6 +179,7 @@
                     android:id="@+id/tv_credits"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:text="X"
@@ -183,6 +196,7 @@
                     android:id="@+id/tv_seats_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_seats"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -191,6 +205,7 @@
                     android:id="@+id/tv_seats"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="X"
@@ -202,6 +217,7 @@
                     android:id="@+id/tv_wl_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="11dp"
                     android:text="@string/res_wl"
                     android:textColor="@color/white"
@@ -211,6 +227,7 @@
                     android:id="@+id/tv_wl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="X"
@@ -222,6 +239,7 @@
                     android:id="@+id/tv_wla_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="8dp"
                     android:text="@string/res_wla"
                     android:textColor="@color/white"
@@ -231,6 +249,7 @@
                     android:id="@+id/tv_wla"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="X"
@@ -255,6 +274,7 @@
                     android:id="@+id/tv_day_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_days"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -263,6 +283,7 @@
                     android:id="@+id/tv_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XXXXXXXX"
@@ -274,6 +295,7 @@
                     android:id="@+id/tv_loc_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_loc"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -282,6 +304,7 @@
                     android:id="@+id/tv_loc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XXXXXXXXXX"
@@ -296,6 +319,7 @@
                     android:id="@+id/tv_start_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_start"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -304,6 +328,7 @@
                     android:id="@+id/tv_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XX:XX"
@@ -315,6 +340,7 @@
                     android:id="@+id/tv_end_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="16dp"
                     android:text="@string/res_end"
                     android:textColor="@color/white"
@@ -324,6 +350,7 @@
                     android:id="@+id/tv_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XX:XX"
@@ -331,6 +358,7 @@
                     android:textStyle="bold"
                     android:typeface="monospace" />
             </LinearLayout>
+
             <View
                 android:id="@+id/day1_divider2"
                 android:layout_width="310dp"
@@ -347,6 +375,7 @@
                     android:id="@+id/tv_day2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_days"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -355,6 +384,7 @@
                     android:id="@+id/tv_day2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XXXXXXXX"
@@ -366,6 +396,7 @@
                     android:id="@+id/tv_loc2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_loc"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -374,6 +405,7 @@
                     android:id="@+id/tv_loc2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XXXXXXXXXX"
@@ -388,6 +420,7 @@
                     android:id="@+id/tv_start2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_start"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -396,6 +429,7 @@
                     android:id="@+id/tv_start2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XX:XX"
@@ -407,6 +441,7 @@
                     android:id="@+id/tv_end2_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="16dp"
                     android:text="@string/res_end"
                     android:textColor="@color/white"
@@ -416,6 +451,7 @@
                     android:id="@+id/tv_end2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XX:XX"
@@ -423,6 +459,7 @@
                     android:textStyle="bold"
                     android:typeface="monospace" />
             </LinearLayout>
+
             <View
                 android:id="@+id/day2_divider"
                 android:layout_width="310dp"
@@ -439,6 +476,7 @@
                     android:id="@+id/tv_date_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_dates"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -447,6 +485,7 @@
                     android:id="@+id/tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:text="XX/XX to XX/XX"
@@ -458,6 +497,7 @@
                     android:id="@+id/tv_foc_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:text="@string/res_foc"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -466,6 +506,7 @@
                     android:id="@+id/tv_foc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:maxWidth="250sp"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
@@ -476,28 +517,28 @@
             </LinearLayout>
             <!-- PREQ -->
             <!--<LinearLayout-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content">-->
-<!--&lt;!&ndash;-->
-                <!--<TextView-->
-                    <!--android:id="@+id/tv_preq_static"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/res_preq"-->
-                    <!--android:textColor="@color/white"-->
-                    <!--android:textStyle="bold" />-->
-<!--&ndash;&gt;-->
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/tv_preq"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:maxWidth="250sp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:paddingLeft="5dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:paddingRight="10dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:text="XXXXXXXXXXXXXXXXXXXXXXXXX"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textColor="@color/dark_aqua"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textStyle="bold"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:typeface="monospace" />&ndash;&gt;-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content">-->
+            <!--&lt;!&ndash;-->
+            <!--<TextView-->
+            <!--android:id="@+id/tv_preq_static"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/res_preq"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textStyle="bold" />-->
+            <!--&ndash;&gt;-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/tv_preq"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:maxWidth="250sp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:paddingLeft="5dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:paddingRight="10dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="XXXXXXXXXXXXXXXXXXXXXXXXX"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textColor="@color/dark_aqua"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textStyle="bold"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:typeface="monospace" />&ndash;&gt;-->
             <!--</LinearLayout>-->
         </LinearLayout>
 
