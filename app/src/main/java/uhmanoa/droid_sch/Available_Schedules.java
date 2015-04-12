@@ -84,7 +84,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
     private void runBuildTask() {
         sbt = new ScheduleBuildTask(Available_Schedules.this, datasource,
-                Available_Schedules.this, sem, year, star_list);
+                Available_Schedules.this, sem, year, star_list, sgo.getMinCourse());
         sbt.execute();
     }
 
