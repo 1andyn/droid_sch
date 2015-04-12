@@ -99,9 +99,18 @@ public class Schedule {
         if(getCourses().size() == 0) return 0;
         for(Course c: getCourses()) {
             int temp = c.getStart1();
+
+            if(time == -1) {
+                time = temp;
+                if(c.getStart2() != 9999 && c.getStart2() != -1) {
+                    time = Math.min(temp, c.getStart2());
+                }
+                continue;
+            }
             if(c.getStart1() == -1 || c.getStart2() == -1) {
                 continue;
             }
+
             if(c.getStart2() != 9999) {
                 int temp2 = c.getStart2();
                 temp = Math.min(temp, temp2);
