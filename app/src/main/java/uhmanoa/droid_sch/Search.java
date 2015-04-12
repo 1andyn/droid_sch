@@ -95,7 +95,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private Parser p;
     private SearchTask st;
 
-    private final int sliderHeight = 175;
+    private final int sliderHeight = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

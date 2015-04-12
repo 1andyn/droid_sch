@@ -87,7 +87,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private StarListAdapter sobj_adp, desd_adp;
     protected SQL_DataSource datasource;
 
-    private final int sliderHeight = 175;
+    private final int sliderHeight = 100;
     private int min_course = -1; //if -1, then use size equal to desired list
 
     @Override
