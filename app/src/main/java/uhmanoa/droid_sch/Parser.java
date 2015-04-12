@@ -2,6 +2,7 @@ package uhmanoa.droid_sch;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 
@@ -33,6 +34,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
     private ProgressDialog pdialog;
     private int prog = 0;
     private IOException ex;
+    private Boolean task_cancelled = false;
 
     //this is the main URL for retrieving course data
     private final String WEB_URL = "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=";
@@ -44,6 +46,14 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
         pdialog = new ProgressDialog(app_context);
         pdialog.setCancelable(false);
         pdialog.setMessage("Initializing data parser...");
+        pdialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                task_cancelled = true;
+                dialog.dismiss();
+            }
+        });
         pdialog.show();
     }
 
@@ -57,6 +67,10 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
         app_context = c;
     }
 
+    public boolean getTaskCancelled() {
+        return task_cancelled;
+    }
+
     @Override
     protected Integer doInBackground(Integer... params) {
         //DEBUG DELETE LATER
@@ -66,12 +80,16 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
 
         //0 = SEMESTER, 1 = YEAR, 2 = MONTH
 
+        if(task_cancelled) return -1;
+
         int year = params[1];
         int year2 = year;
         if (params[2] >= Calendar.SEPTEMBER) {
             //if month is september or later
             year2 = year2 + 1;
         }
+
+
 
         int use_yr;
         switch (params[0]) {
@@ -87,6 +105,8 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                 break;
         }
 
+        if(task_cancelled) return -1;
+
         datasource.clearCourseData(params[0], use_yr);
 
         String webURL = WEB_URL + calculateURLField(use_yr, params[0]);
@@ -96,12 +116,18 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
 
         publishProgress(1);
 
+        if(task_cancelled) return -1;
+
         //Parse Course Data
 
         int wait_req = course_urls.size();
         ExecutorService es = parseCourseData(params[0], use_yr);
         while (!es.isTerminated()) {
             try {
+                if(task_cancelled) {
+                    es.shutdownNow();
+                    return -1;
+                }
                 publishProgress(2);
                 Thread.sleep(1000);                 //sleep for one second
             } catch (InterruptedException e) {

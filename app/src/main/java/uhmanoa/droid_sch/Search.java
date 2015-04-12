@@ -806,6 +806,14 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                     Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
+
+        if(p.getTaskCancelled()) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            wl.release();
+            finish();
+            return;
+        }
+
         configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
         reloadDBData();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

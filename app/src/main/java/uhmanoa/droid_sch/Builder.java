@@ -737,6 +737,14 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         if (e != null) {
             Toast.makeText(this, "Unable to retrieve course data, try again later.",
                     Toast.LENGTH_SHORT).show();
+
+            if(p.getTaskCancelled()) {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                wl.release();
+                finish();
+                return;
+            }
+
             e.printStackTrace();
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             wl.release();
