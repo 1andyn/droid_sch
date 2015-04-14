@@ -62,7 +62,7 @@
                     android:text="@string/des_build" />
             </LinearLayout>
             <ListView
-                android:paddingBottom="48dp"
+                android:paddingBottom="24dp"
                 android:id="@+id/lv_desired"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -61,7 +61,7 @@
                     android:text="@string/res_crs" />
             </LinearLayout>
             <ListView
-                android:paddingBottom="48dp"
+                android:paddingBottom="24dp"
                 android:id="@+id/lv_result"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
