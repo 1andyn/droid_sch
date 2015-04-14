@@ -61,6 +61,7 @@
     <string name="res_preq">Prequsites: </string>
     <string name="res_foc">Focus/GE: </string>
     <string name="menu_build">Go to Schedule Builder</string>
+    <string name="menu_refresh">Refresh Seating Data</string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>

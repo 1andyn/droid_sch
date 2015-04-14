@@ -140,6 +140,7 @@ public class Course {
         this.checkboxhide = c.getCheckboxHide();
         this.ID = c.getID();
         this.checked = c.isChecked();
+        this.major = c.getMajor();
     }
 
     /**

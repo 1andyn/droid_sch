@@ -22,10 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Viewer extends ActionBarActivity implements OnViewButtonPress {
+public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnParseTaskComplete {
 
     private Drawable drw_bg;
     private Resources res_srch;
@@ -107,6 +108,8 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
     }
 
     private void load_schedules() {
+        sch_adp.clearCheckedList();
+        sch_adp.clear();
         ArrayList<Schedule> sch = ds.getAllSchedules();
         for(Schedule s: sch) {
             sch_adp.add(s);
@@ -156,8 +159,9 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+
+        if (id == R.id.action_refresh) {
+            refreshCourseData();
             return true;
         }
 
@@ -193,5 +197,27 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress {
         b.putInt("YEAR", s.getYear());
         i.putExtras(b);
         startActivity(i);
+    }
+
+    private void refreshCourseData() {
+        ArrayList<ScheduleParsePackage> spp_data = new ArrayList<>();
+        for(Schedule s : al_sched) {
+            spp_data.add(s.getParsePackage());
+        }
+        ParserPartial pp = new ParserPartial(ds, this, this, spp_data);
+        pp.execute();
+
+    }
+
+
+    @Override
+    public void onParseTaskComplete(IOException e) {
+        if(e != null) {
+            new ToastWrapper(this, "Some data could not be updated.", Toast.LENGTH_LONG);
+        } else {
+            new ToastWrapper(this, "Data successfully updated.", Toast.LENGTH_LONG);
+        }
+
+        load_schedules();
     }
 }

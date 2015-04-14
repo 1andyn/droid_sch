@@ -142,4 +142,25 @@ public class Schedule {
         checked = chk;
     }
 
+    public ScheduleParsePackage getParsePackage() {
+        ArrayList<String> maj = getUniqueMajors();
+        ScheduleParsePackage spp = new ScheduleParsePackage(this.semester, this.year, maj);
+        return spp;
+    }
+
+    private ArrayList<String> getUniqueMajors() {
+        ArrayList<String> mjr = new ArrayList<>();
+        ArrayList<Course> crs = getCourses();
+
+        for(Course c : crs) {
+            String major = c.getMajor();
+            if(!mjr.contains(major)) {
+                mjr.add(major);
+            }
+        }
+
+        return mjr;
+    }
+
+
 }

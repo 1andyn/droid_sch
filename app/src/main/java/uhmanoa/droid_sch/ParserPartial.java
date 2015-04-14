@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Build;
-
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,29 +12,26 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Parser extends AsyncTask<Integer, Integer, Integer> {
+public class ParserPartial extends AsyncTask<Void, Integer, Integer> {
 
     private CountDownLatch cdl;
     private Context app_context;
     private OnParseTaskComplete listener;
-    private ArrayList<String> mjr_list;
-    private ArrayList<String> full_mjr_list;
     private ArrayList<String> course_urls;
     private SQL_DataSource datasource;
     private ProgressDialog pdialog;
+    private ArrayList<ScheduleParsePackage> spp;
     private IOException ex;
     private Boolean task_cancelled = false;
 
     //this is the main URL for retrieving course data
     private final String WEB_URL = "https://www.sis.hawaii.edu/uhdad/avail.classes?i=MAN&t=";
+    private final String MJR_FIELD = "&s=";
 
 
     @Override
@@ -44,7 +39,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
         super.onPreExecute();
         pdialog = new ProgressDialog(app_context);
         pdialog.setCancelable(false);
-        pdialog.setMessage("Initializing data parser...");
+        pdialog.setMessage("Attempting to update Seating Data...");
         pdialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
                 new DialogInterface.OnClickListener() {
             @Override
@@ -57,13 +52,13 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
     }
 
     //constructor, doesnt need to do anything for now
-    public Parser(SQL_DataSource ds, Context c, OnParseTaskComplete listener) {
+    public ParserPartial(SQL_DataSource ds, Context c, OnParseTaskComplete listener,
+                         ArrayList<ScheduleParsePackage> spp_data) {
         this.listener = listener;
-        mjr_list = new ArrayList<>();
-        full_mjr_list = new ArrayList<>();
         course_urls = new ArrayList<>();
         datasource = ds;
         app_context = c;
+        spp = spp_data;
     }
 
     public boolean getTaskCancelled() {
@@ -71,51 +66,29 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(Integer... params) {
-        //DEBUG DELETE LATER
-        long startTime = System.currentTimeMillis();
-        //DEBUG DELETE LATER
+    protected Integer doInBackground(Void... params) {
 
-        //0 = SEMESTER, 1 = YEAR, 2 = MONTH
-
-        if(task_cancelled) return -1;
-
-        int year = params[1];
-        int year2 = year;
-        if (params[2] >= Calendar.SEPTEMBER) {
-            //if month is september or later
-            year2 = year2 + 1;
-        }
-
-        int use_yr;
-        switch (params[0]) {
-            case 0: //fall
-                use_yr = year;
-                break;
-            case 1:
-            case 2:
-                use_yr = year2;
-                break;
-            default:
-                use_yr = year;
-                break;
-        }
-
-        if(task_cancelled) return -1;
-
-        String webURL = WEB_URL + calculateURLField(use_yr, params[0]);
+        ArrayList<Integer> sem_data = new ArrayList<>();
+        ArrayList<Integer> yr_data = new ArrayList<>();
 
         publishProgress(0);
-        parseMajorData(webURL, params[0], use_yr);
+        if(task_cancelled) return -1;
+        for(ScheduleParsePackage s : spp) {
+            ArrayList<String> mjrs = s.getMajors();
+            for(String m : mjrs) {
+                String url = produceURL(s.getSemester(), s.getYear(), m);
+                if(!course_urls.contains(url)){
+                    course_urls.add(url);
+                    sem_data.add(s.getSemester());
+                    yr_data.add(s.getYear());
+                }
+            }
+        }
 
         publishProgress(1);
-
         if(task_cancelled) return -1;
 
-        //Parse Course Data
-
-        int wait_req = course_urls.size();
-        ExecutorService es = parseCourseData(params[0], use_yr);
+        ExecutorService es = parseCourseData(sem_data, yr_data);
         while (!es.isTerminated()) {
             try {
                 if(task_cancelled) {
@@ -128,13 +101,6 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
                 e.printStackTrace();
             }
         }
-
-        //DEBUG DELETE LATER
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        System.out.println("RUNTIME: " + elapsedTime);
-        //DEBUG DELETE LATER
-
         return 1;
     }
 
@@ -143,7 +109,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
         super.onProgressUpdate(progress);
         switch (progress[0]) {
             case 0:
-                pdialog.setMessage("Retrieving Major List...");
+                pdialog.setMessage("Preparing to retrieve data...");
                 break;
             case 1:
                 pdialog.setMessage("Retrieving Course data...");
@@ -155,43 +121,12 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
         }
     }
 
-    public ArrayList<String> getMajors() {
-        return mjr_list;
-    }
 
-    public ArrayList<String> getFull_mjr_list() {
-        return full_mjr_list;
-    }
-
-    private void parseMajorData(String webURL, int sem, int year) {
-        try {
-            System.setProperty("https.protocols", "TLSv1,SSLv3,SSLv2Hello");
-            Document startDoc = Jsoup.connect(
-                    webURL).timeout(0).userAgent("Mozilla").get();
-            Elements subjectLinks = startDoc.select("ul.subjects").select("a[href]");
-            for (Element subjectLink : subjectLinks) {
-                String subjectURL = subjectLink.attr("abs:href");
-                String fullmjr = subjectLink.text();
-                String mjr = subjectURL.substring(subjectURL.indexOf("&s=") + 3,
-                        subjectURL.length());
-                mjr_list.add(mjr);
-                course_urls.add(subjectURL);
-                full_mjr_list.add(fullmjr);
-                datasource.saveMajor(fullmjr, mjr, sem, year);
-            }
-        } catch (IOException e) {
-            ex = e;
-        }
-
-    }
-
-    private ExecutorService parseCourseData(int sem, int year) {
-        // int thread_lim = Runtime.getRuntime().availableProcessors();
-        //System.out.println("POOL SIZE:" + thread_lim);
+    private ExecutorService parseCourseData(ArrayList<Integer> sem, ArrayList<Integer> yr) {
         cdl = new CountDownLatch(course_urls.size());
         ExecutorService es = Executors.newFixedThreadPool(5); //five threads limit
         for (int x = 0; x < course_urls.size(); x++) {
-            es.submit(new ParserThread(datasource, course_urls.get(x), sem, year, cdl));
+            es.submit(new ParserThread(datasource, course_urls.get(x), sem.get(x), yr.get(x), cdl));
         }
         es.shutdown();
         return es;
@@ -230,4 +165,10 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
         String dig = String.valueOf(getURLDigit(sem));
         return yr + dig;
     }
+
+    private String produceURL(int sem, int year, String mjr) {
+        String temp = WEB_URL + calculateURLField(year, sem) + MJR_FIELD + mjr;
+        return temp;
+    }
+
 }
