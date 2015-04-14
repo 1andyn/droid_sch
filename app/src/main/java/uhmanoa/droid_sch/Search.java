@@ -165,7 +165,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
     private void forceCheckCourseData() {
         //Retrieve Course Data
-        datasource.clearCourseData(sem, yr);
+        //datasource.clearCourseData(sem, yr);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 getApplicationContext());
         SharedPreferences.Editor editor = settings.edit();
@@ -185,7 +185,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         if(!datasource.courseDataExists(sem, yr) || !lastLoadSuccess ) {
 
             //Retrieve Course Data
-            datasource.clearCourseData(sem, yr);
+            //datasource.clearCourseData(sem, yr);
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                     getApplicationContext());
             SharedPreferences.Editor editor = settings.edit();

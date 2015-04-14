@@ -107,7 +107,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
 
         if(task_cancelled) return -1;
 
-        datasource.clearCourseData(params[0], use_yr);
+        //datasource.clearCourseData(params[0], use_yr);
 
         String webURL = WEB_URL + calculateURLField(use_yr, params[0]);
 

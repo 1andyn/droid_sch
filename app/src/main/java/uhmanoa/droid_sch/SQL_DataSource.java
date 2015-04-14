@@ -803,11 +803,15 @@ public class SQL_DataSource {
 
     //used by parser to save course data
     public void saveCourse(Course crs) {
-        database.beginTransaction();
 
+
+        int crn = crs.getCrn();
         int year = crs.getYear();
         int sem = crs.getSemester();
 
+        deleteDuplicateCourse(crn, sem, year);
+
+        database.beginTransaction();
         ContentValues values = new ContentValues();
         values.put(SQL_Helper.COLUMN_CRN, crs.getCrn());
         values.put(SQL_Helper.COLUMN_CRS, crs.getCourse());
@@ -858,6 +862,22 @@ public class SQL_DataSource {
             saveCFocus(sem, year, crs.getCourse(), crs.getFocusReqs());
         }
         curse.close();
+        database.setTransactionSuccessful();
+        database.endTransaction();
+    }
+
+    private void deleteDuplicateCourse(int CRN, int semester, int year) {
+        database.beginTransaction();
+        String delete_crs = "DELETE FROM " + SQL_Helper.TABLE_COURSE + " WHERE " +
+                SQL_Helper.COLUMN_CRN + " = " + String.valueOf(CRN) + " AND " +
+                SQL_Helper.COLUMN_SEM + " = " + String.valueOf(semester) + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year);
+        String delete_day = "DELETE FROM " + SQL_Helper.TABLE_CDAY + " WHERE " +
+                SQL_Helper.COLUMN_CRN + " = " + String.valueOf(CRN) + " AND " +
+                SQL_Helper.COLUMN_SEM + " = " + String.valueOf(semester) + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year);
+        database.execSQL(delete_crs);
+        database.execSQL(delete_day);
         database.setTransactionSuccessful();
         database.endTransaction();
     }
