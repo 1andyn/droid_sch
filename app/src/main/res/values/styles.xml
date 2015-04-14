@@ -22,6 +22,7 @@
         <item name="android:shadowRadius">0.6</item>
         <item name="android:background">@drawable/btn_genoa</item>
         <item name="android:padding">5dip</item>
+        <item name="android:height">40dp</item>
     </style>
 
     <!-- Hack for Robolectric to run with appcompat.v7 -->
@@ -56,6 +57,35 @@
 
     <style name="itemSubheadingValue" parent="itemSubheading">
         <item name="android:textColor">#FFF</item>
+    </style>
+
+    <!-- Styles for Prefences Activity -->
+    <style name="EditTextBasic" parent="android:Widget.EditText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="EditTextTimePicker" parent="@style/EditTextBasic">
+        <item name="android:editable">false</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextViewBasic" parent="android:Widget.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+    <style name="TextViewTitle" parent="@style/TextViewBasic">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CheckBoxBasic" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CheckBoxTitle" parent="@style/CheckBoxBasic">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/dark_aqua</item>
     </style>
 
 </resources>

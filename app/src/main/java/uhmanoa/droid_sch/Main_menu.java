@@ -125,8 +125,9 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(Main_menu.this, Preferences.class);
-                        startActivity(i); //Preferences hasn't been implemented yet
+                        Intent prefIntent = new Intent(Main_menu.this, Preferences.class);
+                        startActivity(prefIntent);
+
                     }
                 });
 
