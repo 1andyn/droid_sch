@@ -420,7 +420,6 @@ public class SQL_DataSource {
 
     public ArrayList<Schedule> getAllSchedules() {
         ArrayList<Schedule> sch = new ArrayList<>();
-        database.beginTransaction();
         String select = "SELECT * FROM " + SQL_Helper.TABLE_SCH + " ORDER BY "
                 + SQL_Helper.COLUMN_ID + " ASC";
         Cursor curse = database.rawQuery(select, null);
@@ -462,9 +461,6 @@ public class SQL_DataSource {
             s.addCourse(c);
         }
         sch.add(s);
-
-        database.setTransactionSuccessful();
-        database.endTransaction();
         return sch;
     }
 
@@ -540,8 +536,6 @@ public class SQL_DataSource {
     }
 
     public ArrayList<Course> getSearchResults(int sem, int year, String search_text, String mjr_key) {
-        database.beginTransaction();
-
         String query = search_text;
         boolean isCRN = isCRN(search_text);
         if (isCRN) {
@@ -588,24 +582,18 @@ public class SQL_DataSource {
 
         ArrayList<Course> results = new ArrayList<>();
         Cursor curse = database.rawQuery(selection, null);
-        System.out.println("DEBUG: RESULTS RETURNED: " + curse.getCount());
+
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
             Course c = cursorToCourse(curse);
-
             results.add(c);
             curse.moveToNext();
         }
         curse.close();
-
-        database.setTransactionSuccessful();
-        database.endTransaction();
         return results;
     }
 
     public ArrayList<Course> getSearchResultsNoText(int sem, int year, String mjr_key) {
-        database.beginTransaction();
-
         String selection;
 
         if (mjr_key.equals("NONE")) {
@@ -624,18 +612,14 @@ public class SQL_DataSource {
 
         ArrayList<Course> results = new ArrayList<>();
         Cursor curse = database.rawQuery(selection, null);
-        System.out.println("DEBUG: RESULTS RETURNED: " + curse.getCount());
+
         curse.moveToFirst();
         while (!curse.isAfterLast()) {
             Course c = cursorToCourse(curse);
-
             results.add(c);
             curse.moveToNext();
         }
         curse.close();
-
-        database.setTransactionSuccessful();
-        database.endTransaction();
         return results;
     }
 
