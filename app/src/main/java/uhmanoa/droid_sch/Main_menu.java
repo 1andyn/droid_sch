@@ -295,10 +295,10 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     public void onCheckTaskComplete() {
         available = prs.getDataStatus();
         d.show();
-        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
-                null, null);
-        View dv = d.findViewById(dividerId);
-        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
+//        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+//                null, null);
+//        View dv = d.findViewById(dividerId);
+//        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
 
         if(prs.getException() != null) {
             new ToastWrapper(Main_menu.this, "Warning: the class availability website did not respond " +

@@ -251,10 +251,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                             }
                         });
                 Dialog d = pagenum.show();
-                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
-                        null, null);
-                View dv = d.findViewById(dividerId);
-                dv.setBackgroundColor(getResources().getColor(R.color.aqua));
+//                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
+//                        null, null);
+//                View dv = d.findViewById(dividerId);
+//                dv.setBackgroundColor(getResources().getColor(R.color.aqua));
 
                 break;
             case R.id.btn_save_selected:
