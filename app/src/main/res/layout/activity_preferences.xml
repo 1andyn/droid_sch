@@ -4,9 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:id="@+id/ll_preferences"
-    >
+    android:id="@+id/ll_preferences" >
 
     <!--  Days off Section -->
     <LinearLayout
@@ -100,7 +98,7 @@
             android:id="@+id/btnAddTimeOff"
             android:background="@drawable/plus"
             android:scaleType="fitXY"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_alignParentRight="true"
             android:text="@string/plus"/>
 

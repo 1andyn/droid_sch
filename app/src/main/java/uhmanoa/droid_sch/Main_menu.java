@@ -78,7 +78,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         arraylst_btn.add((Button) findViewById(R.id.bt_create));
         arraylst_btn.add((Button) findViewById(R.id.bt_view));
         arraylst_btn.add((Button) findViewById(R.id.bt_search));
-        arraylst_btn.add((Button) findViewById(R.id.bt_pref));
+//        arraylst_btn.add((Button) findViewById(R.id.bt_pref));
         arraylst_btn.add((Button) findViewById(R.id.bt_exit));
 
         configureBtnListeners();
@@ -121,15 +121,15 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
                     }
                 });
 
-        arraylst_btn.get(App_const.buttons.about.ordinal()).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent prefIntent = new Intent(Main_menu.this, Preferences.class);
-                        startActivity(prefIntent);
-
-                    }
-                });
+//        arraylst_btn.get(App_const.buttons.about.ordinal()).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent prefIntent = new Intent(Main_menu.this, Preferences.class);
+//                        startActivity(prefIntent);
+//
+//                    }
+//                });
 
         arraylst_btn.get(App_const.buttons.exit.ordinal()).setOnClickListener(
                 new View.OnClickListener() {

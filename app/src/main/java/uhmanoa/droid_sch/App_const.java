@@ -5,7 +5,7 @@ package uhmanoa.droid_sch;
  */
 public interface App_const {
     static enum buttons {
-        create, view, search, about, exit
+        create, view, search, exit
     }
 
     // Used for spacing on Views

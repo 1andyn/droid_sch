@@ -40,6 +40,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class Builder extends ActionBarActivity implements App_const, OnCheckTaskComplete,
@@ -181,7 +182,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     private void loadProfiles() {
         al_profiles = new ArrayList<>();
-        al_profiles.add("Default Profile");
+        al_profiles.add("Default Settings");
+        al_profiles.add("Custom Settings");
         cfg_settings_from_profile();
     }
 
@@ -202,7 +204,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
-                new ToastWrapper(Builder.this, "Profile selected: " + pos + " with Id: " + id,
+                new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
                         Toast.LENGTH_SHORT);
             }
 
@@ -494,11 +496,11 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_time_frame:
-                Dialog diag_time = createTimeDialog();
-                return true;
-            case R.id.action_timeblock:
-                return true;
+//            case R.id.action_time_frame:
+//                Dialog diag_time = createTimeDialog();
+//                return true;
+//            case R.id.action_timeblock:
+//                return true;
             case R.id.action_min:
                 if (uniqueDesiredCount() >= 2) {
                     Dialog diag_min = createMinDialog();
@@ -508,6 +510,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                             Toast.LENGTH_SHORT);
                 }
                 return true;
+            case R.id.action_pref:
+                Intent i = new Intent(this, Preferences.class);
+                startActivityForResult(i,0);
             default:
                 return super.onOptionsItemSelected(item);
         }
