@@ -40,7 +40,7 @@ public class SQL_Helper extends SQLiteOpenHelper {
     public static final String TABLE_PREF = "tbPref";
     public static final String TABLE_PBLOCK = "tbPBlock";
     public static final String TABLE_MAJOR = "tbMajor";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public static synchronized SQL_Helper getInstance(Context context) {
         //singleton code
@@ -313,8 +313,8 @@ public class SQL_Helper extends SQLiteOpenHelper {
         database.execSQL(TABLE_COURSE_CREATE);
         database.execSQL(TABLE_CFOCUS_CREATE);
         database.execSQL(TABLE_CDAYS_CREATE);
-        database.execSQL(TABLE_PREF_CREATE);
-        database.execSQL(TABLE_PBLOCK_CREATE);
+//        database.execSQL(TABLE_PREF_CREATE);
+//        database.execSQL(TABLE_PBLOCK_CREATE);
         database.execSQL(TABLE_MAJOR_CREATE);
     }
 
