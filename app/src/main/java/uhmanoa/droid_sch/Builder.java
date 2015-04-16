@@ -93,6 +93,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private final int sliderHeight = 100;
     private int min_course = -1; //if -1, then use size equal to desired list
 
+    private int builderSelection = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -208,6 +210,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 bos.setSelectedOption(pos);
+                builderSelection = pos;
                 new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
                         Toast.LENGTH_SHORT);
             }
@@ -344,8 +347,17 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     }
 
     private void configBuilderOptions() {
-        sgo.setEn_EndTime(timeConvert(end_hr, end_min), en_end_tp);
-        sgo.setEn_StartTime(timeConvert(start_hr, start_min), en_start_tp);
+        if(builderSelection == 0) {
+            //default don't use any options
+            sgo.setEn_StartTime(0, false);
+            sgo.setEn_EndTime(0, false);
+        } else {
+            boolean start = bos.getBooleanEarliestStart();
+            boolean end = bos.getBooleanLatestEnd();
+            sgo.setEn_StartTime(bos.getEarliestStart(), start);
+            sgo.setEn_EndTime(bos.getLatestEnd(), end);
+        }
+
         if(en_min_np) {
             sgo.setMinCrs(min_course);
         } else {
@@ -500,11 +512,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.action_time_frame:
-//                Dialog diag_time = createTimeDialog();
-//                return true;
-//            case R.id.action_timeblock:
-//                return true;
             case R.id.action_min:
                 if (uniqueDesiredCount() >= 2) {
                     Dialog diag_min = createMinDialog();

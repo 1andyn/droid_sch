@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+
 /**
  * Created by supah_000 on 4/15/2015.
  */
@@ -89,9 +91,14 @@ public class BuilderOptions{
         return settings.getBoolean(booleanDaysOff, false);
     }
 
-    public String getDaysOffString() {
+    public ArrayList<Character> getDaysOffArray() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(c);
-        return settings.getString(stringDaysOff ,"");
+        String days = settings.getString(stringDaysOff ,"");
+        ArrayList<Character> day_char = new ArrayList<>();
+        for(int x = 0; x< days.length(); x++) {
+            day_char.add(days.charAt(x));
+        }
+        return day_char;
     }
 
     public boolean getBooleanLatestEnd() {

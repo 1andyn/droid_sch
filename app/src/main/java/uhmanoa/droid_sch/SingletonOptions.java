@@ -1,6 +1,8 @@
 package uhmanoa.droid_sch;
 
 
+import java.util.ArrayList;
+
 public class SingletonOptions {
     private static SingletonOptions instance = null;
 	private boolean en_StartTime = false;
@@ -8,6 +10,7 @@ public class SingletonOptions {
     private int startTime = 0;
     private int endTime = 0;
     private int mincrs = -1;
+    private ArrayList<Character> daysOff;
 
 	private SingletonOptions(){
         //do nothing
@@ -57,6 +60,14 @@ public class SingletonOptions {
 
     public boolean defaultCrs() {
         return mincrs == -1;
+    }
+
+    private void setDaysOff(ArrayList<Character> input) {
+        daysOff = input;
+    }
+
+    private ArrayList<Character> getDaysOff() {
+        return daysOff;
     }
 
 

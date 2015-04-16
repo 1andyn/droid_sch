@@ -125,12 +125,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         //check if offdays were saved
         if(bos.getDaysOffBoolean()) {
             chkDays.setChecked(true);
-            String days = bos.getDaysOffString();
-            ArrayList<Character> day_char = new ArrayList<>();
-
-            for(int x = 0; x< days.length(); x++) {
-                day_char.add(days.charAt(x));
-            }
+            ArrayList<Character> day_char = bos.getDaysOffArray();
 
             if(day_char.contains('M')) {
                 chkDaysM.setChecked(true);
