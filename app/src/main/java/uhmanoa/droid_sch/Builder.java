@@ -53,6 +53,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private SingletonOptions sgo;
 
 
+    private BuilderOptions bos;
     private boolean lastLoadSuccess = false;
 
     private SearchView sv;
@@ -112,6 +113,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
         datasource = new SQL_DataSource(this);
         datasource.open();
+
+        bos = new BuilderOptions(getApplicationContext());
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 getApplicationContext());
@@ -200,10 +203,11 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 al_profiles);
         spinner_data.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinner_data);
+        spinner.setSelection(bos.getSelectedOption());
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                // An item was selected. You can retrieve the selected item using
+                bos.setSelectedOption(pos);
                 new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
                         Toast.LENGTH_SHORT);
             }
