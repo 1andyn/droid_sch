@@ -62,11 +62,11 @@ public class SingletonOptions {
         return mincrs == -1;
     }
 
-    private void setDaysOff(ArrayList<Character> input) {
+    public void setDaysOff(ArrayList<Character> input) {
         daysOff = input;
     }
 
-    private ArrayList<Character> getDaysOff() {
+    public ArrayList<Character> getDaysOff() {
         return daysOff;
     }
 

@@ -363,6 +363,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         } else {
             sgo.setMinCrs(-1);
         }
+
+        sgo.setDaysOff(bos.getDaysOffArray());
+
     }
 
     private Star_obj getResultById(long id) {

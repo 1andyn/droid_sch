@@ -100,6 +100,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
         } else {
             bos.setDaysOffBoolean(false);
+            bos.setDaysOffString("");
         }
 
         //check if earleist start is configured

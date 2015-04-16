@@ -37,6 +37,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
     private int sem, year, month;
 
+    private BuilderOptions bos;
+
 
     SingletonOptions sgo;
     ArrayList<String> titles, t1;
@@ -63,6 +65,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
         sgo = SingletonOptions.getInstance();
         ss = SingletonSchedule.getInstance();
+
+        bos = new BuilderOptions(getApplicationContext());
 
         star_list = new ArrayList<>();
 
@@ -251,11 +255,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                             }
                         });
                 Dialog d = pagenum.show();
-//                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
-//                        null, null);
-//                View dv = d.findViewById(dividerId);
-//                dv.setBackgroundColor(getResources().getColor(R.color.aqua));
-
                 break;
             case R.id.btn_save_selected:
                 AlertDialog.Builder confirm = new AlertDialog.Builder(this)
@@ -279,11 +278,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                             }
                         });
                 Dialog dg = confirm.show();
-//                int did = dg.getContext().getResources().getIdentifier("android:id/titleDivider",
-//                        null, null);
-//                View v = dg.findViewById(did);
-//                v.setBackgroundColor(getResources().getColor(R.color.aqua));
-
                 break;
         }
     }
@@ -292,28 +286,28 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         btnGoto.setText("Page \t" + (currentPage + 1) + " / " + totalPages);
     }
 
-    private ArrayList<Schedule> timeFilter (ArrayList<Schedule> s) {
+    private ArrayList<Schedule> timeFilter(ArrayList<Schedule> s) {
         ArrayList<Schedule> res = s;
         ArrayList<Schedule> final_results = s;
 
         //time filtering START TIME
-        if(sgo.getEnStart()) {
+        if (sgo.getEnStart()) {
             final_results = new ArrayList<>();
             int time = sgo.getStartTime();
-            for(Schedule sch : s) {
-                    if(sch.earliestStart() >= time) {
-                        final_results.add(sch);
+            for (Schedule sch : s) {
+                if (sch.earliestStart() >= time) {
+                    final_results.add(sch);
                 }
             }
         }
 
         //time filtering END TIME
-        if(sgo.getEnEnd()) {
+        if (sgo.getEnEnd()) {
             ArrayList<Schedule> temp = new ArrayList<>();
             int time = sgo.getEndTime();
-            for(Schedule sch : final_results) {
-                if(time >= sch.latestEnd()) {
-                        temp.add(sch);
+            for (Schedule sch : final_results) {
+                if (time >= sch.latestEnd()) {
+                    temp.add(sch);
                 }
             }
             res = temp;
@@ -321,12 +315,37 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         return res;
     }
 
+    private ArrayList<Schedule> dayFilter(ArrayList<Schedule> s) {
+        ArrayList<Character> offDays = bos.getDaysOffArray();
+        ArrayList<Schedule> filtered_results = new ArrayList<>();
+        for (Schedule sc : s) {
+            boolean match = false;
+            ArrayList<Character> days = sc.getDays();
+            for (int x = 0; x < offDays.size(); x++) {
+                if (days.contains(offDays.get(x))) {
+                    match = true;
+                    break;
+                }
+            }
+            if (match) {
+                continue;
+            } else {
+                filtered_results.add((sc));
+            }
+        }
+        return filtered_results;
+    }
+
     @Override
     public void onBuildTaskComplete() {
         ArrayList<Schedule> final_results = timeFilter(sbt.getResults());
-        if(final_results.size() == 0) {
+        int size = (bos.getDaysOffArray().size());
+        if(bos.getDaysOffBoolean() && size != 0) {
+            final_results = dayFilter(final_results);
+        }
+        if (final_results.size() == 0) {
             new ToastWrapper(getApplicationContext(), "Your course list produced 0 possible " +
-                    "schedules. Try using different courses or schedules", Toast.LENGTH_LONG);
+                    "schedules. Try using different courses or schedule options.", Toast.LENGTH_LONG);
             finish();
         } else {
             populateList(final_results);
