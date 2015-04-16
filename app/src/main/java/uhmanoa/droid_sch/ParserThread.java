@@ -227,8 +227,10 @@ public class ParserThread implements Callable<Void> {
 
                 if (exists) {
                     ArrayList<Character> d = new ArrayList<>();
-                    for (int i = 0; i < days.length(); i++) {
-                        d.add(days.charAt(i));
+                    if(!days.equals("TBA")) {
+                        for (int i = 0; i < days.length(); i++) {
+                            d.add(days.charAt(i));
+                        }
                     }
 
                     Course c = new Course(
@@ -255,13 +257,17 @@ public class ParserThread implements Callable<Void> {
                     datasource.saveCourse(c);
                 } else {
                     ArrayList<Character> d = new ArrayList<>();
-                    for (int i = 0; i < days.length(); i++) {
-                        d.add(days.charAt(i));
+                    if(!days.equals("TBA")) {
+                        for (int i = 0; i < days.length(); i++) {
+                            d.add(days.charAt(i));
+                        }
                     }
 
                     ArrayList<Character> d2 = new ArrayList<>();
-                    for (int i = 0; i < days2.length(); i++) {
-                        d2.add(days2.charAt(i));
+                    if(!days2.equals("TBA")) {
+                        for (int i = 0; i < days2.length(); i++) {
+                            d2.add(days2.charAt(i));
+                        }
                     }
 
                     Course c = new Course(
