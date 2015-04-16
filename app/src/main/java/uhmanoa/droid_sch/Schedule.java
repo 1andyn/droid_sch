@@ -162,5 +162,28 @@ public class Schedule {
         return mjr;
     }
 
+    public ArrayList<Character> getDays() {
+        ArrayList<Course> crs = this.getCourses();
+        ArrayList<Character> days = new ArrayList<>();
+        for(Course c : crs) {
+            ArrayList<Character> d1 = c.getDays1();
+            for(int x = 0; x < d1.size(); x++) {
+                if(!days.contains(d1.get(x))) {
+                    days.add(d1.get(x));
+                }
+            }
+            //check secondary days if it exists
+            if(c.getStart2() != 9999) {
+                ArrayList<Character> d2 = c.getDays2();
+                for(int x = 0; x < d2.size(); x++) {
+                    if(!days.contains(d2.get(x))) {
+                        days.add(d2.get(x));
+                    }
+                }
+            }
+        }
+        return  days;
+    }
+
 
 }
