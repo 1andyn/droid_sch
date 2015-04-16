@@ -24,10 +24,12 @@ import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class Preferences extends ActionBarActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class Preferences extends ActionBarActivity implements View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
 
     private int DEST_FIELD;
     private final int START_TIME_OFF = 0;
@@ -37,9 +39,11 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     private final int EARLIEST_START = 4;
     private final int LATEST_END = 5;
 
+    private BuilderOptions bos;
 
-    EditText etStartTimeOff, etEndTimeOff, etEarliestStart, etLatestEnd;
-    EditText etStartTimeOff2, etEndTimeOff2, etEarliestStart2, etLatestEnd2;
+    EditText etStartTimeOff, etEndTimeOff;
+    EditText etStartTimeOff2, etEndTimeOff2;
+    EditText etEarliestStart, etLatestEnd;
     CheckBox chkDaysM, chkDaysT, chkDaysW, chkDaysR, chkDaysF, chkDaysS, chkDays;
     CheckBox chkTimesM, chkTimesT, chkTimesW, chkTimesR, chkTimesF, chkTimesS, chkTimes;
     CheckBox chkTimesM2, chkTimesT2, chkTimesW2, chkTimesR2, chkTimesF2, chkTimesS2;
@@ -49,16 +53,123 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     LinearLayout llTimesOffTimesWrapper1, llTimesOffTimesWrapper2;
     ImageButton btnAddTimeOff;
 
+    private int earliestStart = -1;
+    private int latestEnd = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
 
+        bos = new BuilderOptions(getApplicationContext());
+
         setBackground();
         initLayout();
+        loadSettings();
         configureButtons();
     }
 
+    private void saveSettings() {
+        //Checked days is checked
+        if(chkDays.isChecked()) {
+            String days = "";
+            if(chkDaysM.isChecked()) {
+                days = days + "M";
+            }
+            if(chkDaysT.isChecked()) {
+                days = days + "T";
+            }
+            if(chkDaysW.isChecked()) {
+                days = days + "W";
+            }
+            if(chkDaysR.isChecked()) {
+                days = days + "R";
+            }
+            if(chkDaysF.isChecked()) {
+                days = days + "F";
+            }
+            if(chkDaysS.isChecked()) {
+                days = days + "S";
+            }
+
+            //DEBUG
+            System.out.println("DEBUG " + days);
+
+            bos.setDaysOffBoolean(true);
+            bos.setDaysOffString(days);
+
+        } else {
+            bos.setDaysOffBoolean(false);
+        }
+
+        //check if earleist start is configured
+        if(chkEarliestStart.isChecked()) {
+            bos.setEarliestStartBoolean(true);
+            bos.setStartTime(earliestStart);
+        } else {
+            bos.setEarliestStartBoolean(false);
+            bos.setStartTime(-1);
+        }
+
+        //check if latest end is configured
+        if(chkLatestEnd.isChecked()){
+            bos.setLatestEndBoolean(true);
+            bos.setEndTime(latestEnd);
+        } else {
+            bos.setLatestEndBoolean(false);
+            bos.setEndTime(-1);
+        }
+    }
+
+    private void loadSettings() {
+        //check if offdays were saved
+        if(bos.getDaysOffBoolean()) {
+            chkDays.setChecked(true);
+            String days = bos.getDaysOffString();
+            ArrayList<Character> day_char = new ArrayList<>();
+
+            for(int x = 0; x< days.length(); x++) {
+                day_char.add(days.charAt(x));
+            }
+
+            if(day_char.contains('M')) {
+                chkDaysM.setChecked(true);
+            }
+            if(day_char.contains('T')) {
+                chkDaysT.setChecked(true);
+            }
+            if(day_char.contains('W')) {
+                chkDaysW.setChecked(true);
+            }
+            if(day_char.contains('R')) {
+                chkDaysR.setChecked(true);
+            }
+            if(day_char.contains('F')) {
+                chkDaysF.setChecked(true);
+            }
+            if(day_char.contains('S')) {
+                chkDaysS.setChecked(true);
+            }
+        }
+
+        //check if earliest start was saved
+        if(bos.getBooleanEarliestStart()) {
+            earliestStart = bos.getEarliestStart();
+            int hr = earliestStart/100;
+            int min = earliestStart%100;
+            etEarliestStart.setText(getTimeString(hr, min));
+            chkEarliestStart.setChecked(true);
+        }
+
+        //check if latest end was saved
+        if(bos.getBooleanLatestEnd()) {
+            latestEnd = bos.getLatestEnd();
+            int hr = latestEnd/100;
+            int min = latestEnd%100;
+            etLatestEnd.setText(getTimeString(hr, min));
+            chkLatestEnd.setChecked(true);
+        }
+    }
 
     private void configureButtons() {
         Button saveButton = (Button) findViewById(R.id.btnSave);
@@ -68,6 +179,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        saveSettings();
                         Bundle b = new Bundle();
                         Intent i = new Intent();
                         b.putBoolean("SAVE", true);
@@ -131,6 +243,18 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         }
     }
 
+    private String getTimeString(int hr, int min) {
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR_OF_DAY, hr);
+        time.set(Calendar.MINUTE, min);
+        String ampm = (time.get(Calendar.AM_PM) == Calendar.AM) ? "AM" : "PM";
+        String showHour = (time.get(Calendar.HOUR) == 0) ?
+                "12" : time.get(Calendar.HOUR) + "";
+        String showMin = (time.get(Calendar.MINUTE) < 10) ?
+                "0" + time.get(Calendar.MINUTE) : time.get(Calendar.MINUTE) + "";
+        return ("" + showHour + ":" + showMin + " " + ampm);
+    }
+
     public void setEditTextTime() {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -140,16 +264,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hr, int min) {
                         Log.w("TIME:", "Setting time...");
-                        Calendar time = Calendar.getInstance();
-                        time.set(Calendar.HOUR_OF_DAY, hr);
-                        time.set(Calendar.MINUTE, min);
 
-                        String ampm = (time.get(Calendar.AM_PM) == Calendar.AM) ? "AM" : "PM";
-                        String showHour = (time.get(Calendar.HOUR) == 0) ?
-                                "12" : time.get(Calendar.HOUR) + "";
-                        String showMin = (time.get(Calendar.MINUTE) < 10) ?
-                                "0" + time.get(Calendar.MINUTE) : time.get(Calendar.MINUTE) + "";
-                        String showTime = "" + showHour + ":" + showMin + " " + ampm;
+                        int tp_time = timeConversion(hr, min);
+                        String showTime = getTimeString(hr, min);
+
                         switch (DEST_FIELD) {
                             case START_TIME_OFF:
                                 etStartTimeOff.setText(showTime);
@@ -164,9 +282,17 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                                 etEndTimeOff2.setText(showTime);
                                 break;
                             case EARLIEST_START:
+
+                                System.out.println("DEBUG ES: " + tp_time);
+
+                                earliestStart = tp_time;
                                 etEarliestStart.setText(showTime);
                                 break;
                             case LATEST_END:
+
+                                System.out.println("DEBUG LE: " + tp_time);
+
+                                latestEnd = tp_time;
                                 etLatestEnd.setText(showTime);
                                 break;
                         }
@@ -174,6 +300,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 }, hour, minute, false);
         timePicker.setTitle("Select Time");
         timePicker.show();
+    }
+
+    private int timeConversion(int hr, int min) {
+        return ((hr*100) + min);
     }
 
     @Override
