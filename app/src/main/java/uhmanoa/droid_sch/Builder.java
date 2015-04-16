@@ -522,6 +522,20 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         }
     }
 
+    protected void onActivityResult(int req, int res, Intent data) {
+        switch(req) {
+            case 0:
+                if(res == RESULT_OK) {
+                    Bundle results = data.getExtras();
+                    boolean saved = results.getBoolean("SAVE");
+                    if(saved) {
+                        bos.setSelectedOption(1);
+                        spinner.setSelection(1);
+                    }
+                }
+        }
+    }
+
     private long uniqueID() {
         long id = 0;
         boolean unique = false; // Initialize Unique to False

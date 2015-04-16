@@ -98,7 +98,7 @@
             android:id="@+id/btnAddTimeOff"
             android:background="@drawable/plus"
             android:scaleType="fitXY"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_alignParentRight="true"
             android:text="@string/plus"/>
 

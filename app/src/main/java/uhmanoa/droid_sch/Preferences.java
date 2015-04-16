@@ -1,6 +1,7 @@
 package uhmanoa.droid_sch;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -54,11 +56,45 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
         setBackground();
         initLayout();
+        configureButtons();
+    }
+
+
+    private void configureButtons() {
+        Button saveButton = (Button) findViewById(R.id.btnSave);
+        Button cancelButton = (Button) findViewById(R.id.btnCancel);
+
+        saveButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle b = new Bundle();
+                        Intent i = new Intent();
+                        b.putBoolean("SAVE", true);
+                        i.putExtras(b);
+                        setResult(RESULT_OK, i);
+                        finish();
+                    }
+                });
+
+        cancelButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle b = new Bundle();
+                        Intent i = new Intent();
+                        b.putBoolean("SAVE", false);
+                        i.putExtras(b);
+                        setResult(RESULT_OK, i);
+                        finish();
+                    }
+                });
+
     }
 
     @Override
-    public void onClick(View v){
-        switch (v.getId()){
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.btnAddTimeOff:
 
                 break;
@@ -95,7 +131,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         }
     }
 
-    public void setEditTextTime(){
+    public void setEditTextTime() {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
@@ -114,7 +150,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                         String showMin = (time.get(Calendar.MINUTE) < 10) ?
                                 "0" + time.get(Calendar.MINUTE) : time.get(Calendar.MINUTE) + "";
                         String showTime = "" + showHour + ":" + showMin + " " + ampm;
-                        switch (DEST_FIELD){
+                        switch (DEST_FIELD) {
                             case START_TIME_OFF:
                                 etStartTimeOff.setText(showTime);
                                 break;
@@ -142,7 +178,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
     @Override
     public void onCheckedChanged(CompoundButton v, boolean isChecked) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.chkDays:
                 if (chkDays.isChecked())
                     llDaysOff.setVisibility(View.VISIBLE);
@@ -153,8 +189,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 if (chkTimes.isChecked()) {
                     llTimesOffTimesWrapper1.setVisibility(View.VISIBLE);
                     llTimesOffTimesWrapper2.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     llTimesOffTimesWrapper1.setVisibility(View.GONE);
                     llTimesOffTimesWrapper2.setVisibility(View.GONE);
                 }
@@ -169,7 +204,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     }
 
 
-    public void initLayout(){
+    public void initLayout() {
         llDaysOff = (LinearLayout) findViewById(R.id.llDaysOff);
         llTimesOffDays = (LinearLayout) findViewById(R.id.llTimesOffDays);
         llTimesOffTimes = (LinearLayout) findViewById(R.id.llTimesOffTimes);
@@ -260,13 +295,13 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
     }
 
-    public void setButtonDimensions(){
+    public void setButtonDimensions() {
         final ViewTreeObserver vto = chkTimes.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 ViewGroup.LayoutParams params = btnAddTimeOff.getLayoutParams();
-                int chkHeight = (chkTimes.getHeight() * 3) /4;
+                int chkHeight = (chkTimes.getHeight() * 3) / 4;
                 params.height = chkHeight;
                 params.width = chkHeight;
                 btnAddTimeOff.setLayoutParams(params);
@@ -275,7 +310,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
     }
 
-    private void setBackground(){
+    private void setBackground() {
         Resources res_main = getResources();
         Point pt_resolution = new Point();
         Display dsp = getWindowManager().getDefaultDisplay();
