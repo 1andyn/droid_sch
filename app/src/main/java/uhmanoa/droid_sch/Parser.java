@@ -169,6 +169,7 @@ public class Parser extends AsyncTask<Integer, Integer, Integer> {
             Document startDoc = Jsoup.connect(
                     webURL).timeout(0).userAgent("Mozilla").get();
             Elements subjectLinks = startDoc.select("ul.subjects").select("a[href]");
+            datasource.clearMajorData(sem, year);
             for (Element subjectLink : subjectLinks) {
                 String subjectURL = subjectLink.attr("abs:href");
                 String fullmjr = subjectLink.text();

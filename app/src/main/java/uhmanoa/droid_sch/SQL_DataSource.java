@@ -1056,6 +1056,14 @@ public class SQL_DataSource {
         database.delete(SQL_Helper.TABLE_CDAY, null, null);
     }
 
+    public void clearMajorData(int sem, int year) {
+        database.beginTransaction();
+        database.delete(SQL_Helper.TABLE_MAJOR, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + year, null);
+        database.setTransactionSuccessful();
+        database.endTransaction();
+    }
+
     public void clearCourseData(int sem, int year) {
         database.delete(SQL_Helper.TABLE_MAJOR, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
                 SQL_Helper.COLUMN_YEAR + " = " + year, null);
