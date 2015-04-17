@@ -813,7 +813,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     @Override
     public void onDestroy(){
         super.onDestroy();
-        datasource.close();
+        //datasource.close();
     }
 
     @Override
