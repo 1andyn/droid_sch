@@ -91,6 +91,13 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_available__schedules">Available Schedules</string>
 
+    <!-- Additional strings for Builder Activity -->
+    <string name="spin_default_profile">Default Profile</string>
+    <string name="spin_select_profile">Select Profile</string>
+    <string name="spin_new_profile">New profile...</string>
+    <string name="btn_new_profile">New Profile</string>
+    <string name="btn_delete_profile">Delete</string>
+
     <!-- Strings for Available Schedules Activity -->
 
     <string name="previous">&lt;</string>

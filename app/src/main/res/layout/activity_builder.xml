@@ -16,8 +16,15 @@
         <Spinner
             android:id="@+id/major_spinner"
             style="@style/btnStyleGenoa"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="3"
             android:layout_height="40dp" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            style="@style/btnStyleGenoa"
+            android:layout_weight="1"
+            android:text="@string/btn_delete_profile"/>
     </LinearLayout>
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"

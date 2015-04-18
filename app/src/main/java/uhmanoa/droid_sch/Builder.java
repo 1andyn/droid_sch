@@ -51,6 +51,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     private SingletonOptions sgo;
 
+    // Preferences
+    private String currentProfile;
 
     private boolean lastLoadSuccess = false;
 
@@ -116,9 +118,10 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 getApplicationContext());
         lastLoadSuccess = settings.getBoolean("lastLoadSuccess" + String.valueOf(sem) +
                 String.valueOf(year), false);
+        //SharedPreferences prefs =
 
         loadImageResources();
-        loadProfiles();
+        populateProfiles();
         configureSpinner();
         configureSlidingPanel();
         configureViewStubs();
@@ -179,9 +182,11 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         super.onPause();
     }
 
-    private void loadProfiles() {
+    private void populateProfiles() {
         al_profiles = new ArrayList<>();
-        al_profiles.add("Default Profile");
+        //al_profiles.add("Default Profile");
+        al_profiles.add(getString(R.string.spin_default_profile));
+        al_profiles.add(getString(R.string.spin_new_profile));
         cfg_settings_from_profile();
     }
 
@@ -202,14 +207,18 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item using
-                new ToastWrapper(Builder.this, "Profile selected: " + pos + " with Id: " + id,
-                        Toast.LENGTH_SHORT);
+                loadProfile(spinner.getSelectedItem().toString());
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
             }
         });
+    }
+
+    private void loadProfile(String profileName){
+        currentProfile = profileName;
+
     }
 
     private void configureListViews() {
@@ -317,7 +326,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onClick(View v) {
 
                 if (desd_adp.getCount() < 2) {
-                    new ToastWrapper(Builder.this, "Please add atleast two courses.",
+                    new ToastWrapper(Builder.this, "Please add at least two courses.",
                             Toast.LENGTH_SHORT);
                 } else {
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
