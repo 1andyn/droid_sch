@@ -1,117 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:descendantFocusability="blocksDescendants"
-    android:focusableInTouchMode="false"
-    android:focusable="false"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
     android:orientation="vertical">
+
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:focusable="false"
         android:focusableInTouchMode="false"
+        android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:baselineAligned="false">
+
         <LinearLayout
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
+
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-                <TextView
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:id="@+id/tv_crs_static"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_course"/>
+                android:baselineAligned="false">
 
-                <TextView
-                    android:typeface="monospace"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:id="@+id/tv_crs"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="15dp"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/dark_aqua"
-                    android:text="XXXXXXXX"/>
-                <TextView
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:gravity="right"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_crn_static"
-                    android:layout_width="wrap_content"
+                    android:layout_weight="3">
+
+                    <TextView
+                        android:id="@+id/tv_crs_static"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:text="@string/str_course"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_crs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="15dp"
+                        android:text="XXXXXXXX"
+                        android:textColor="@color/dark_aqua"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:typeface="monospace" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_crn" />
-                <TextView
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:gravity="right"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_crn"
-                    android:textSize="15dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="XXXXX" />
+                    android:layout_weight="1.5">
+
+                    <TextView
+                        android:id="@+id/tv_crn_static"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="right"
+                        android:text="@string/str_crn"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_crn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="right"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="10dp"
+                        android:text="XXXXX"
+                        android:textColor="@color/white"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     android:id="@+id/tv_title_static"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_title"/>
-                <TextView
-                    android:textColor="@color/white"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:text="@string/str_title"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tv_title"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
-        <View
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
         <CheckBox
-            android:paddingRight="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/chk_star"/>
+            android:gravity="right"
+            android:id="@+id/chk_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp" />
     </LinearLayout>
 </LinearLayout>

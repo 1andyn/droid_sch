@@ -50,7 +50,6 @@ public class ParserThread implements Callable<Void> {
             for (int z = 0; z < rows.size(); z++) {
                 Element row = rows.get(z);
                 Elements col = row.select("td");
-
                 if(col.size() < 11) continue;
                 if (col.get(1).text().charAt(0) == 0xA0) {
                     //if the CRN is a blank space it is an extra row so continue
@@ -225,10 +224,12 @@ public class ParserThread implements Callable<Void> {
                     wla = Integer.valueOf(wlava);
                 }
 
-                if (exists) {
+                if (!exists) {
                     ArrayList<Character> d = new ArrayList<>();
-                    for (int i = 0; i < days.length(); i++) {
-                        d.add(days.charAt(i));
+                    if(!days.equals("TBA")) {
+                        for (int i = 0; i < days.length(); i++) {
+                            d.add(days.charAt(i));
+                        }
                     }
 
                     Course c = new Course(
@@ -255,13 +256,17 @@ public class ParserThread implements Callable<Void> {
                     datasource.saveCourse(c);
                 } else {
                     ArrayList<Character> d = new ArrayList<>();
-                    for (int i = 0; i < days.length(); i++) {
-                        d.add(days.charAt(i));
+                    if(!days.equals("TBA")) {
+                        for (int i = 0; i < days.length(); i++) {
+                            d.add(days.charAt(i));
+                        }
                     }
 
                     ArrayList<Character> d2 = new ArrayList<>();
-                    for (int i = 0; i < days2.length(); i++) {
-                        d2.add(days2.charAt(i));
+                    if(!days2.equals("TBA")) {
+                        for (int i = 0; i < days2.length(); i++) {
+                            d2.add(days2.charAt(i));
+                        }
                     }
 
                     Course c = new Course(

@@ -793,7 +793,7 @@ public class SQL_DataSource {
         int year = crs.getYear();
         int sem = crs.getSemester();
 
-        deleteDuplicateCourse(crn, sem, year);
+        //deleteDuplicateCourse(crn, sem, year);
 
         database.beginTransaction();
         ContentValues values = new ContentValues();
@@ -816,7 +816,8 @@ public class SQL_DataSource {
         values.put(SQL_Helper.COLUMN_WAITLA, crs.getWait_avail());
         values.put(SQL_Helper.COLUMN_DATES, crs.getDates());
         values.put(SQL_Helper.COLUMN_MJR, crs.getMajor());
-        database.insert(SQL_Helper.TABLE_COURSE, null, values);
+        database.replace(SQL_Helper.TABLE_COURSE, null, values);
+        //database.rep
 
         //Store Day Values
         ArrayList<Character> days = crs.getDays1();
@@ -904,7 +905,7 @@ public class SQL_DataSource {
             }
             col++;
         }
-        database.insert(SQL_Helper.TABLE_CFOCUS, null, cv);
+        database.replace(SQL_Helper.TABLE_CFOCUS, null, cv);
     }
 
     private void saveCDays(int sem, int year, int CRN, boolean secday, ArrayList<Integer> day) {
@@ -924,7 +925,7 @@ public class SQL_DataSource {
         cv.put(SQL_Helper.COLUMN_THR, day.get(4));
         cv.put(SQL_Helper.COLUMN_FRI, day.get(5));
         cv.put(SQL_Helper.COLUMN_SAT, day.get(6));
-        database.insert(SQL_Helper.TABLE_CDAY, null, cv);
+        database.replace(SQL_Helper.TABLE_CDAY, null, cv);
     }
 
     private ArrayList<String> getFocusArray(String crs, int sem, int year) {
@@ -1053,6 +1054,14 @@ public class SQL_DataSource {
         database.delete(SQL_Helper.TABLE_COURSE, null, null);
         database.delete(SQL_Helper.TABLE_CFOCUS, null, null);
         database.delete(SQL_Helper.TABLE_CDAY, null, null);
+    }
+
+    public void clearMajorData(int sem, int year) {
+        database.beginTransaction();
+        database.delete(SQL_Helper.TABLE_MAJOR, SQL_Helper.COLUMN_SEM + " = " + sem + " AND " +
+                SQL_Helper.COLUMN_YEAR + " = " + year, null);
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     public void clearCourseData(int sem, int year) {

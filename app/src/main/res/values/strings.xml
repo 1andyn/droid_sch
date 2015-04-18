@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Mānoa Scheduler</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -62,6 +61,7 @@
     <string name="res_foc">Focus/GE: </string>
     <string name="menu_build">Go to Schedule Builder</string>
     <string name="menu_refresh">Refresh Seating Data</string>
+    <string name="menu_build_pref">Custom Schedule Options</string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>
