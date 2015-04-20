@@ -386,7 +386,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         // Else don't add either
         if (start1 != -1 && end1 != -1 && start2 != -1 && end2 != -1 &&
                 bos.getDaysTOArray1().size() > 0 &&
-                bos.getDaysOffArray().size() > 0) {
+                bos.getDaysTOArray2().size() > 0) {
             c = new Course("T",
                     "",
                     0,
