@@ -351,11 +351,16 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             //default don't use any options
             sgo.setEn_StartTime(0, false);
             sgo.setEn_EndTime(0, false);
+            sgo.setTimeOff(null);
         } else {
             boolean start = bos.getBooleanEarliestStart();
             boolean end = bos.getBooleanLatestEnd();
             sgo.setEn_StartTime(bos.getEarliestStart(), start);
             sgo.setEn_EndTime(bos.getLatestEnd(), end);
+            if (bos.getTimeOffBoolean()) {
+                sgo.setTimeOff(timeBlockBuilder());
+            }
+            sgo.setDaysOff(bos.getDaysOffArray());
         }
 
         if (en_min_np) {
@@ -363,13 +368,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         } else {
             sgo.setMinCrs(-1);
         }
-
-        sgo.setDaysOff(bos.getDaysOffArray());
-
-        if (bos.getTimeOffBoolean()) {
-            sgo.setTimeOff(timeBlockBuilder());
-        }
-
     }
 
     private Course timeBlockBuilder() {
