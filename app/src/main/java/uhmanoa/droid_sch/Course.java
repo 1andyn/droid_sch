@@ -296,6 +296,7 @@ public class Course {
 		 * another to see if they overlap
 		 */
 
+
         for (char d11 : getDays1()) {
             for (char d21 : odays1) {
 
@@ -320,7 +321,7 @@ public class Course {
                 for (char d21 : odays1) {
 
                     if (d12 == d21) {
-                        if (timeOverlaps(getStart1(), getEnd1(), other.getStart1(), other.getEnd1()))
+                        if (timeOverlaps(getStart2(), getEnd2(), other.getStart1(), other.getEnd1()))
                             return true;
                     }
 
@@ -328,13 +329,21 @@ public class Course {
                 if (odays2 != null) {
                     for (char d22 : odays2) {
                         if (d12 == d22) {
-                            if (timeOverlaps(getStart1(), getEnd1(), other.getStart2(), other.getEnd2()))
+                            if (timeOverlaps(getStart2(), getEnd2(), other.getStart2(), other.getEnd2()))
                                 return true;
                         }
                     }
                 }
             }
         }
+
+        System.out.println("DEBUG-----");
+        System.out.println("DEBUG THIS: " + this.getTimeString(false) + " " + this.getDayString(false));
+        System.out.println("DEBUG THIS2: " + this.getTimeString(true) + " " + this.getDayString(true));
+        System.out.println("DEBUG THIS: " + other.getTimeString(false) + " " + other.getDayString(false));
+        System.out.println("DEBUG THIS2: " + other.getTimeString(true) + " " + other.getDayString(true));
+        System.out.println("DEBUG-----");
+
         return false;
     }
 
