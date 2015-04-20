@@ -161,16 +161,11 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 days = days + "S";
             }
 
-            System.out.println("DEBUG DAYS1: " + days);
-
             if (!days.equals("")) {
                 bos.setDayTimeOffString1(days);
             } else {
                 bos.setDayTimeOffString1("");
             }
-
-            System.out.println("DEBUG S1: " + eStartTime1);
-            System.out.println("DEBUG E1: " + lEndTime1);
 
             bos.setTimeOffStart1(eStartTime1);
             bos.setTimeOffEnd1(lEndTime1);
@@ -219,8 +214,6 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 days = days + "S";
             }
 
-            System.out.println("DEBUG DAYS2: " + days);
-
             if (!days.equals("")) {
                 bos.setDayTimeOffString2(days);
             } else {
@@ -229,10 +222,6 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
             bos.setTimeOffStart2(eStartTime2);
             bos.setTimeOffEnd2(lEndTime2);
-
-            System.out.println("DEBUG S2: " + eStartTime2);
-            System.out.println("DEBUG E2: " + lEndTime2);
-
 
             if (!days.equals("")) {
                 if (eStartTime1 != -1 && lEndTime1 != -1) {
