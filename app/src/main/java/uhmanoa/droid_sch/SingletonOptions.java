@@ -11,6 +11,7 @@ public class SingletonOptions {
     private int endTime = 0;
     private int mincrs = -1;
     private ArrayList<Character> daysOff;
+    private Course timeOff = null;
 
 	private SingletonOptions(){
         //do nothing
@@ -70,5 +71,11 @@ public class SingletonOptions {
         return daysOff;
     }
 
+    public void setTimeOff(Course c) {
+        timeOff = c;
+    }
 
+    public Course getTimeOff() {
+        return timeOff;
+    }
 }
