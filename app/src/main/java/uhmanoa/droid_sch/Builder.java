@@ -793,10 +793,4 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             editor.commit();
         }
     }
-
-    private int timeConvert(int hr, int min) {
-        int full_hr = hr * 100;
-        return full_hr + min;
-    }
-
 }
