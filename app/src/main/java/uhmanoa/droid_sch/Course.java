@@ -320,7 +320,7 @@ public class Course {
                 for (char d21 : odays1) {
 
                     if (d12 == d21) {
-                        if (timeOverlaps(getStart1(), getEnd1(), other.getStart1(), other.getEnd1()))
+                        if (timeOverlaps(getStart2(), getEnd2(), other.getStart1(), other.getEnd1()))
                             return true;
                     }
 
@@ -328,7 +328,7 @@ public class Course {
                 if (odays2 != null) {
                     for (char d22 : odays2) {
                         if (d12 == d22) {
-                            if (timeOverlaps(getStart1(), getEnd1(), other.getStart2(), other.getEnd2()))
+                            if (timeOverlaps(getStart2(), getEnd2(), other.getStart2(), other.getEnd2()))
                                 return true;
                         }
                     }
