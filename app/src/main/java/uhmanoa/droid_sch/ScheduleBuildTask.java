@@ -17,6 +17,7 @@ public class ScheduleBuildTask extends AsyncTask<Void, Void, Integer> {
     private int year;
     private int semester;
     private int min;
+    private Course timeblock;
 
     @Override
     protected void onPreExecute() {
@@ -29,7 +30,7 @@ public class ScheduleBuildTask extends AsyncTask<Void, Void, Integer> {
 
     //constructor, doesnt need to do anything for now
     public ScheduleBuildTask(Context c, SQL_DataSource ds, OnBuildTaskComplete listener,
-                             int sem, int yr, ArrayList<Star_obj> so, int mini) {
+                             int sem, int yr, ArrayList<Star_obj> so, int mini, Course tb) {
         this.listener = listener;
         data = ds;
         year = yr;
@@ -37,13 +38,14 @@ public class ScheduleBuildTask extends AsyncTask<Void, Void, Integer> {
         app_context = c;
         inputs = so;
         min = mini;
+        timeblock = tb;
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
         ArrayList<Star_obj> filtered_list = filterCourses(inputs);
         ClassScheduler cs = new ClassScheduler(semester, year, data, min,
-                getCrnExclusive(filtered_list));
+                getCrnExclusive(filtered_list), timeblock);
         results = cs.getPossibleSchedules(filtered_list);
         return 1;
     }

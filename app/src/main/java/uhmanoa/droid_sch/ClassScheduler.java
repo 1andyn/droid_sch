@@ -21,6 +21,7 @@ public class ClassScheduler {
     private SQL_DataSource ds;
     private int min = -1;
     private ArrayList<Star_obj> crns;
+    private Course timeblock = null;
 
 
     /* each schedule item in selectedClasses contains a list of courses
@@ -33,12 +34,14 @@ public class ClassScheduler {
      */
     ArrayList<Schedule> possibleSchedules;
 
-    public ClassScheduler(int sem, int yr, SQL_DataSource data, int mini, ArrayList<Star_obj> crn) {
+    public ClassScheduler(int sem, int yr, SQL_DataSource data, int mini, ArrayList<Star_obj> crn,
+                          Course tb) {
         ds = data;
         year = yr;
         semester = sem;
         min = mini;
         crns = crn;
+        timeblock = tb;
     }
 
     private ArrayList<Schedule> findCourses(ArrayList<String> course_list) {
@@ -57,13 +60,19 @@ public class ClassScheduler {
             results.add(s);
         }
 
+        if(timeblock != null) {
+            Schedule sch = new Schedule(0, year, semester);
+            sch.addTimeBlock(timeblock);
+            results.add(sch);
+        }
+
         //if there aren't any specific CRN's we are looking at, just return this list
         if(crns.isEmpty()) {
             return results;
         }
 
-        ArrayList<Schedule> new_results = new ArrayList<>();
-        new_results.addAll(results);
+//        ArrayList<Schedule> new_results = new ArrayList<>();
+//        new_results.addAll(results);
 
         for (Star_obj so : crns) {
             Star_obj star = so;
@@ -89,7 +98,6 @@ public class ClassScheduler {
                 }
             }
         }
-
         return results;
     }
 

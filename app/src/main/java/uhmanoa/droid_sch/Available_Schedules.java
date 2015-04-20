@@ -87,8 +87,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     private void runBuildTask() {
+
+        Course c = sgo.getTimeOff();
         sbt = new ScheduleBuildTask(Available_Schedules.this, datasource,
-                Available_Schedules.this, sem, year, star_list, sgo.getMinCourse());
+                Available_Schedules.this, sem, year, star_list, sgo.getMinCourse(), c);
         sbt.execute();
     }
 

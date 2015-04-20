@@ -59,12 +59,16 @@ public class Schedule {
 		if (!schedule.contains(c))
 			if (!c.isInvalid())
 				schedule.add(new Course(c));
-			else{
-				System.out.println("Invalid course, please fill in appropriate fields.");
-				System.out.println("Current course data is: ");
-				c.display();
-			}
+//			else{
+//				System.out.println("Invalid course, please fill in appropriate fields.");
+//				System.out.println("Current course data is: ");
+//				c.display();
+//			}
 	}
+
+    public void addTimeBlock(Course c) {
+        schedule.add(c);
+    }
 
     public void setID(long pId) {
         sid = pId;
