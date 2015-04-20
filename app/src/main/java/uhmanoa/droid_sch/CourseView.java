@@ -104,7 +104,7 @@ public class CourseView extends LinearLayout implements App_const{
             tvDay2.setVisibility(View.GONE);
         } else {
             tvLoc2.setText(ModifySpacingString(String.valueOf(crs.getRoom2()), ViewStringCat.loc));
-            if(crs.getStart1() == -1) {
+            if(crs.getStart1() != -1) {
                 tvStart2.setText(ModifySpacingString(String.valueOf(crs.getStartString(true)),
                         ViewStringCat.time));
                 tvEnd2.setText(ModifySpacingString(String.valueOf(crs.getEndString(true)),

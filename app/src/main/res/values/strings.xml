@@ -18,11 +18,11 @@
     <string name="bt_search">Search</string>
     <string name="txt_srch_hnt">Enter CRN or Course Name</string>
     <string name="bt_gefoc"> GE / Focus</string>
-    <string name="title_activity_search"> Search for Courses</string>
+    <string name="title_activity_search">Search Activity</string>
     <string name="ok">OK</string>
     <string name="force_update">Refresh Course Data</string>
     <string name="cancel">Cancel</string>
-    <string name="srch_title">Search for Courses</string>
+    <string name="srch_title">Tap the Icon to Search!</string>
     <string name="menu_gefc">Gen Ed/Focus Filter</string>
     <string name="menu_time">Start/End Time Filter</string>
     <string name="menu_fil">Search by Major</string>
@@ -84,7 +84,7 @@
         <item>(WI)  Writing Intensive</item>
     </string-array>
 
-    <string name="title_activity_builder">Add courses to Start!</string>
+    <string name="title_activity_builder">Tap the Icon to Start!</string>
     <string name="title_activity_viewer">View Schedules</string>
     <string name="title_activity_visualize">Visualize</string>
     <string name="title_activity_create__schedules">Create_Schedules</string>
