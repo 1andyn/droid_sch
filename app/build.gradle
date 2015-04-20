@@ -12,6 +12,13 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release{
+            storeFile file("myreleasekey.keystore")
+            storePassword "password"
+            keyAlias "MyReleaseKey"
+            keyPassword "password"
+        }
     buildTypes {
         release {
             minifyEnabled false
@@ -29,33 +36,33 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:3.0.0'
     compile 'org.jsoup:jsoup:1.7.2'
     compile files('libs/combinatoricslib-2.1.jar')
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:2.4'
+//    testCompile 'junit:junit:4.12'
+//    testCompile 'org.robolectric:robolectric:2.4'
 }
 
-robolectric {
-    // Configure includes / excludes
-    include '**/*Test.class'
-    exclude '**/espresso/**/*.class'
-
-    // Configure max heap size of the test JVM
-    maxHeapSize = '2048m'
-
-    // Configure the test JVM arguments - Does not apply to Java 8
-    jvmArgs '-XX:MaxPermSize=512m', '-XX:-UseSplitVerifier'
-
-    // Specify max number of processes (default is 1)
-    maxParallelForks = 4
-
-    // Specify max number of test classes to execute in a test process
-    // before restarting the process (default is unlimited)
-    forkEvery = 150
-
-    // configure whether failing tests should fail the build
-    ignoreFailures true
-
-    // use afterTest to listen to the test execution results
-    afterTest { descriptor, result ->
-        println "Executing test for ${descriptor.name} with result: ${result.resultType}"
-    }
-}
+//robolectric {
+//    // Configure includes / excludes
+//    include '**/*Test.class'
+//    exclude '**/espresso/**/*.class'
+//
+//    // Configure max heap size of the test JVM
+//    maxHeapSize = '2048m'
+//
+//    // Configure the test JVM arguments - Does not apply to Java 8
+//    jvmArgs '-XX:MaxPermSize=512m', '-XX:-UseSplitVerifier'
+//
+//    // Specify max number of processes (default is 1)
+//    maxParallelForks = 4
+//
+//    // Specify max number of test classes to execute in a test process
+//    // before restarting the process (default is unlimited)
+//    forkEvery = 150
+//
+//    // configure whether failing tests should fail the build
+//    ignoreFailures true
+//
+//    // use afterTest to listen to the test execution results
+//    afterTest { descriptor, result ->
+//        println "Executing test for ${descriptor.name} with result: ${result.resultType}"
+//    }
+//}
