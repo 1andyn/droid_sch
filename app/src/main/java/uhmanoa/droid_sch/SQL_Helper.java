@@ -261,35 +261,6 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + COLUMN_SAT + " INT NOT NULL "
             + " );";
 
-    private static final String TABLE_PREF_CREATE = "CREATE TABLE "
-            + TABLE_PREF
-            + "("
-            + COLUMN_PNAME + " TEXT NOT NULL, "
-            + COLUMN_CRSMIN + " INT NOT NULL, "
-            + COLUMN_SUN + " INT NOT NULL, "
-            + COLUMN_MON + " INT NOT NULL, "
-            + COLUMN_TUE + " INT NOT NULL, "
-            + COLUMN_WED + " INT NOT NULL, "
-            + COLUMN_THR + " INT NOT NULL, "
-            + COLUMN_FRI + " INT NOT NULL, "
-            + COLUMN_SAT + " INT NOT NULL "
-            + " );";
-
-    private static final String TABLE_PBLOCK_CREATE = "CREATE TABLE "
-            + TABLE_PBLOCK
-            + "("
-            + COLUMN_PNAME + " TEXT NOT NULL, "
-            + COLUMN_START + " INT NOT NULL, "
-            + COLUMN_END + " INT NOT NULL, "
-            + COLUMN_SUN + " INT NOT NULL, "
-            + COLUMN_MON + " INT NOT NULL, "
-            + COLUMN_TUE + " INT NOT NULL, "
-            + COLUMN_WED + " INT NOT NULL, "
-            + COLUMN_THR + " INT NOT NULL, "
-            + COLUMN_FRI + " INT NOT NULL, "
-            + COLUMN_SAT + " INT NOT NULL "
-            + " );";
-
     private static final String TABLE_MAJOR_CREATE = "CREATE TABLE "
             + TABLE_MAJOR
             + "("
@@ -301,8 +272,6 @@ public class SQL_Helper extends SQLiteOpenHelper {
 
     private SQL_Helper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-//        super(context, "/mnt/sdcard/" + DATABASE_NAME, null, DATABASE_VERSION);
-            /*DEBUG ONLY, use COMMENTED VERSION FOR RELEASE */
     }
 
     @Override
@@ -313,8 +282,6 @@ public class SQL_Helper extends SQLiteOpenHelper {
         database.execSQL(TABLE_COURSE_CREATE);
         database.execSQL(TABLE_CFOCUS_CREATE);
         database.execSQL(TABLE_CDAYS_CREATE);
-//        database.execSQL(TABLE_PREF_CREATE);
-//        database.execSQL(TABLE_PBLOCK_CREATE);
         database.execSQL(TABLE_MAJOR_CREATE);
     }
 
