@@ -347,7 +347,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     }
 
     private void configBuilderOptions() {
-        if(builderSelection == 0) {
+        if (builderSelection == 0) {
             //default don't use any options
             sgo.setEn_StartTime(0, false);
             sgo.setEn_EndTime(0, false);
@@ -358,7 +358,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             sgo.setEn_EndTime(bos.getLatestEnd(), end);
         }
 
-        if(en_min_np) {
+        if (en_min_np) {
             sgo.setMinCrs(min_course);
         } else {
             sgo.setMinCrs(-1);
@@ -366,6 +366,80 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
         sgo.setDaysOff(bos.getDaysOffArray());
 
+        if (bos.getTimeOffBoolean()) {
+            sgo.setTimeOff(timeBlockBuilder());
+        }
+
+    }
+
+    private Course timeBlockBuilder() {
+        Course c;
+        int start1 = bos.getTimeOffStart1();
+        int end1 = bos.getTimeOffEnd1();
+        int start2 = bos.getTimeOffStart2();
+        int end2 = bos.getTimeOffEnd2();
+
+        //Four Unique Cases
+        // #1 Both are complete, add both
+        // #2 One is complete, create one
+        // #3 One is complete (other) create one
+        // Else don't add either
+        if (start1 != -1 && end1 != -1 && start2 != -1 && end2 != -1 &&
+                bos.getDaysTOArray1().size() > 0 &&
+                bos.getDaysOffArray().size() > 0) {
+            c = new Course("T",
+                    "",
+                    0,
+                    "",
+                    "",
+                    bos.getDaysTOArray1(),
+                    bos.getDaysTOArray2(),
+                    start1,
+                    start2,
+                    end1,
+                    end2,
+                    "",
+                    "",
+                    0,
+                    0,
+                    0,
+                    0,
+                    "",
+                    "");
+        } else if (start1 != -1 && end1 != -1 && bos.getDaysTOArray1().size() > 0) {
+            c = new Course("T",
+                    "",
+                    0,
+                    "",
+                    "",
+                    bos.getDaysTOArray1(),
+                    start1, end1,
+                    "",
+                    0,
+                    0,
+                    0,
+                    0,
+                    "",
+                    "");
+        } else if (start2 != -1 && end2 != -1 && bos.getDaysTOArray2().size() > 0) {
+            c = new Course("T",
+                    "",
+                    0,
+                    "",
+                    "",
+                    bos.getDaysTOArray2(),
+                    start2, end2,
+                    "",
+                    0,
+                    0,
+                    0,
+                    0,
+                    "",
+                    "");
+        } else {
+            return null;
+        }
+        return c;
     }
 
     private Star_obj getResultById(long id) {
@@ -520,25 +594,25 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     Dialog diag_min = createMinDialog();
                 } else {
                     new ToastWrapper(Builder.this, "Please add atleast two courses before" +
-                                    "attempting to configure this option.",
+                            "attempting to configure this option.",
                             Toast.LENGTH_SHORT);
                 }
                 return true;
             case R.id.action_pref:
                 Intent i = new Intent(this, Preferences.class);
-                startActivityForResult(i,0);
+                startActivityForResult(i, 0);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     protected void onActivityResult(int req, int res, Intent data) {
-        switch(req) {
+        switch (req) {
             case 0:
-                if(res == RESULT_OK) {
+                if (res == RESULT_OK) {
                     Bundle results = data.getExtras();
                     boolean saved = results.getBoolean("SAVE");
-                    if(saved) {
+                    if (saved) {
                         bos.setSelectedOption(1);
                         spinner.setSelection(1);
                     }
@@ -687,13 +761,13 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         int count = desd_adp.getCount();
 
         ArrayList<String> crs_list = new ArrayList<>();
-        for(Star_obj so : al_desired) {
-            if(!crs_list.contains(so.getCourse())) {
+        for (Star_obj so : al_desired) {
+            if (!crs_list.contains(so.getCourse())) {
                 crs_list.add(so.getCourse());
             }
         }
 
-        if(!crs_list.isEmpty()) {
+        if (!crs_list.isEmpty()) {
             count = crs_list.size();
         }
 
@@ -776,7 +850,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             new ToastWrapper(this, "Unable to retrieve course data, try again later.",
                     Toast.LENGTH_SHORT);
 
-            if(p.getTaskCancelled()) {
+            if (p.getTaskCancelled()) {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 wl.release();
                 finish();
