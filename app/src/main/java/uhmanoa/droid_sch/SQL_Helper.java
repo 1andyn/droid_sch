@@ -300,8 +300,8 @@ public class SQL_Helper extends SQLiteOpenHelper {
             + " );";
 
     private SQL_Helper(Context context) {
-        //super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        super(context, "/mnt/sdcard/" + DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//        super(context, "/mnt/sdcard/" + DATABASE_NAME, null, DATABASE_VERSION);
             /*DEBUG ONLY, use COMMENTED VERSION FOR RELEASE */
     }
 
