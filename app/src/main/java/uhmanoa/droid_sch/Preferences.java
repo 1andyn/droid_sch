@@ -55,6 +55,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
     private int earliestStart = -1;
     private int latestEnd = -1;
+    private int eStartTime1 = -1;
+    private int lEndTime1 = -1;
+    private int eStartTime2 = -1;
+    private int lEndTime2 = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +75,24 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
     private void saveSettings() {
         //Checked days is checked
-        if(chkDays.isChecked()) {
+        if (chkDays.isChecked()) {
             String days = "";
-            if(chkDaysM.isChecked()) {
+            if (chkDaysM.isChecked()) {
                 days = days + "M";
             }
-            if(chkDaysT.isChecked()) {
+            if (chkDaysT.isChecked()) {
                 days = days + "T";
             }
-            if(chkDaysW.isChecked()) {
+            if (chkDaysW.isChecked()) {
                 days = days + "W";
             }
-            if(chkDaysR.isChecked()) {
+            if (chkDaysR.isChecked()) {
                 days = days + "R";
             }
-            if(chkDaysF.isChecked()) {
+            if (chkDaysF.isChecked()) {
                 days = days + "F";
             }
-            if(chkDaysS.isChecked()) {
+            if (chkDaysS.isChecked()) {
                 days = days + "S";
             }
 
@@ -104,7 +108,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         }
 
         //check if earleist start is configured
-        if(chkEarliestStart.isChecked()) {
+        if (chkEarliestStart.isChecked()) {
             bos.setEarliestStartBoolean(true);
             bos.setStartTime(earliestStart);
         } else {
@@ -113,57 +117,272 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         }
 
         //check if latest end is configured
-        if(chkLatestEnd.isChecked()){
+        if (chkLatestEnd.isChecked()) {
             bos.setLatestEndBoolean(true);
             bos.setEndTime(latestEnd);
         } else {
             bos.setLatestEndBoolean(false);
             bos.setEndTime(-1);
         }
+
+        if(chkLatestEnd.isChecked() && chkEarliestStart.isChecked()) {
+            if (earliestStart != -1 && latestEnd != -1) {
+                if (earliestStart > latestEnd) {
+                    new ToastWrapper(getApplicationContext(), "Warning: Your designated EARLIEST START TIME " +
+                            "appears to be later than your LATEST END TIME!", Toast.LENGTH_LONG);
+                    new ToastWrapper(getApplicationContext(), "This may result in the builder " +
+                            "producing no schedules!", Toast.LENGTH_LONG);
+                }
+            }
+        }
+
+        //check if timeblocks are enabled
+        if (chkTimes.isChecked()) {
+            bos.setTimeOffBoolean(true);
+
+            //first block check
+            String days = "";
+            if (chkTimesM.isChecked()) {
+                days = days + "M";
+            }
+            if (chkTimesT.isChecked()) {
+                days = days + "T";
+            }
+            if (chkTimesW.isChecked()) {
+                days = days + "W";
+            }
+            if (chkTimesR.isChecked()) {
+                days = days + "R";
+            }
+            if (chkTimesF.isChecked()) {
+                days = days + "F";
+            }
+            if (chkTimesS.isChecked()) {
+                days = days + "S";
+            }
+
+            System.out.println("DEBUG DAYS1: " + days);
+
+            if (!days.equals("")) {
+                bos.setDayTimeOffString1(days);
+            } else {
+                bos.setDayTimeOffString1("");
+            }
+
+            System.out.println("DEBUG S1: " + eStartTime1);
+            System.out.println("DEBUG E1: " + lEndTime1);
+
+            bos.setTimeOffStart1(eStartTime1);
+            bos.setTimeOffEnd1(lEndTime1);
+
+
+            if (!days.equals("")) {
+                if (eStartTime1 != -1 && lEndTime1 != -1) {
+                    //both have been entered
+                    if (eStartTime1 > lEndTime1) {
+                        new ToastWrapper(getApplicationContext(), "WARNING: Your designated TIME OFF" +
+                                "START TIME is be later than your TIME OFF END TIME.",
+                                Toast.LENGTH_LONG);
+                        new ToastWrapper(getApplicationContext(), "This may result in the builder " +
+                                "producing no schedules!",
+                                Toast.LENGTH_LONG);
+                    }
+                } else {
+                    new ToastWrapper(getApplicationContext(), "Error: Please set both Start and End " +
+                            "times for the time off time block functionality.", Toast.LENGTH_LONG);
+                }
+            } else {
+                new ToastWrapper(getApplicationContext(), "Error: Days were not designated for" +
+                        " the first TIME OFF time block", Toast.LENGTH_LONG);
+                new ToastWrapper(getApplicationContext(), "Without designated days, the first " +
+                        "TIME OFF time block will not be used by the builder", Toast.LENGTH_LONG);
+            }
+
+            //second block check
+            days = "";
+            if (chkTimesM2.isChecked()) {
+                days = days + "M";
+            }
+            if (chkTimesT2.isChecked()) {
+                days = days + "T";
+            }
+            if (chkTimesW2.isChecked()) {
+                days = days + "W";
+            }
+            if (chkTimesR2.isChecked()) {
+                days = days + "R";
+            }
+            if (chkTimesF2.isChecked()) {
+                days = days + "F";
+            }
+            if (chkTimesS2.isChecked()) {
+                days = days + "S";
+            }
+
+            System.out.println("DEBUG DAYS2: " + days);
+
+            if (!days.equals("")) {
+                bos.setDayTimeOffString2(days);
+            } else {
+                bos.setDayTimeOffString2("");
+            }
+
+            bos.setTimeOffStart2(eStartTime2);
+            bos.setTimeOffEnd2(lEndTime2);
+
+            System.out.println("DEBUG S2: " + eStartTime2);
+            System.out.println("DEBUG E2: " + lEndTime2);
+
+
+            if (!days.equals("")) {
+                if (eStartTime1 != -1 && lEndTime1 != -1) {
+                    //both have been entered
+                    if (eStartTime2 > lEndTime2) {
+                        new ToastWrapper(getApplicationContext(), "WARNING: Your SECOND designated " +
+                                "TIME OFF START TIME is be later than your TIME OFF END TIME.",
+                                Toast.LENGTH_LONG);
+                        new ToastWrapper(getApplicationContext(), "This may result in the builder " +
+                                "producing no schedules!",
+                                Toast.LENGTH_LONG);
+                    }
+                } else {
+                    new ToastWrapper(getApplicationContext(), "Error: Please set both Start and End " +
+                            "times for the second TIME OFF time block functionality.", Toast.LENGTH_LONG);
+                }
+            } else {
+                new ToastWrapper(getApplicationContext(), "Warning: Days were not designated for" +
+                        " the second TIME OFF time block", Toast.LENGTH_LONG);
+                new ToastWrapper(getApplicationContext(), "Without designated days, the second " +
+                        "TIME OFF time block will not be used by the builder", Toast.LENGTH_LONG);
+            }
+
+        } else {
+            bos.setTimeOffBoolean(false);
+            bos.setTimeOffStart1(-1);
+            bos.setTimeOffEnd1(-1);
+            bos.setTimeOffStart2(-1);
+            bos.setTimeOffEnd2(-1);
+        }
     }
 
     private void loadSettings() {
         //check if offdays were saved
-        if(bos.getDaysOffBoolean()) {
+        if (bos.getDaysOffBoolean()) {
             chkDays.setChecked(true);
             ArrayList<Character> day_char = bos.getDaysOffArray();
 
-            if(day_char.contains('M')) {
+            if (day_char.contains('M')) {
                 chkDaysM.setChecked(true);
             }
-            if(day_char.contains('T')) {
+            if (day_char.contains('T')) {
                 chkDaysT.setChecked(true);
             }
-            if(day_char.contains('W')) {
+            if (day_char.contains('W')) {
                 chkDaysW.setChecked(true);
             }
-            if(day_char.contains('R')) {
+            if (day_char.contains('R')) {
                 chkDaysR.setChecked(true);
             }
-            if(day_char.contains('F')) {
+            if (day_char.contains('F')) {
                 chkDaysF.setChecked(true);
             }
-            if(day_char.contains('S')) {
+            if (day_char.contains('S')) {
                 chkDaysS.setChecked(true);
             }
         }
 
         //check if earliest start was saved
-        if(bos.getBooleanEarliestStart()) {
+        if (bos.getBooleanEarliestStart() && bos.getEarliestStart() != -1) {
             earliestStart = bos.getEarliestStart();
-            int hr = earliestStart/100;
-            int min = earliestStart%100;
+            int hr = earliestStart / 100;
+            int min = earliestStart % 100;
             etEarliestStart.setText(getTimeString(hr, min));
             chkEarliestStart.setChecked(true);
         }
 
         //check if latest end was saved
-        if(bos.getBooleanLatestEnd()) {
+        if (bos.getBooleanLatestEnd() && bos.getLatestEnd() != -1) {
             latestEnd = bos.getLatestEnd();
-            int hr = latestEnd/100;
-            int min = latestEnd%100;
+            int hr = latestEnd / 100;
+            int min = latestEnd % 100;
             etLatestEnd.setText(getTimeString(hr, min));
             chkLatestEnd.setChecked(true);
+        }
+
+        //check if the time blocks were saved and configured before
+        if (bos.getTimeOffBoolean()) {
+            chkTimes.setChecked(true);
+            eStartTime1 = bos.getTimeOffStart1();
+            lEndTime1 = bos.getTimeOffEnd1();
+            eStartTime2 = bos.getTimeOffStart2();
+            lEndTime2 = bos.getTimeOffEnd2();
+
+            if (eStartTime1 != -1) {
+                int hr = eStartTime1 / 100;
+                int min = eStartTime1 % 100;
+                etStartTimeOff.setText(getTimeString(hr, min));
+            }
+
+            if (eStartTime2 != -1) {
+                int hr = eStartTime2 / 100;
+                int min = eStartTime2 % 100;
+                etStartTimeOff2.setText(getTimeString(hr, min));
+            }
+
+
+            if (lEndTime1 != -1) {
+                int hr = lEndTime1 / 100;
+                int min = lEndTime1 % 100;
+                etEndTimeOff.setText(getTimeString(hr, min));
+            }
+
+            if (lEndTime2 != -1) {
+                int hr = lEndTime2 / 100;
+                int min = lEndTime2 % 100;
+                etEndTimeOff2.setText(getTimeString(hr, min));
+            }
+
+            ArrayList<Character> day_char = bos.getDaysTOArray1();
+
+            if (day_char.contains('M')) {
+                chkTimesM.setChecked(true);
+            }
+            if (day_char.contains('T')) {
+                chkTimesT.setChecked(true);
+            }
+            if (day_char.contains('W')) {
+                chkTimesW.setChecked(true);
+            }
+            if (day_char.contains('R')) {
+                chkTimesR.setChecked(true);
+            }
+            if (day_char.contains('F')) {
+                chkTimesF.setChecked(true);
+            }
+            if (day_char.contains('S')) {
+                chkTimesS.setChecked(true);
+            }
+
+            day_char = bos.getDaysTOArray2();
+            if (day_char.contains('M')) {
+                chkTimesM2.setChecked(true);
+            }
+            if (day_char.contains('T')) {
+                chkTimesT2.setChecked(true);
+            }
+            if (day_char.contains('W')) {
+                chkTimesW2.setChecked(true);
+            }
+            if (day_char.contains('R')) {
+                chkTimesR2.setChecked(true);
+            }
+            if (day_char.contains('F')) {
+                chkTimesF2.setChecked(true);
+            }
+            if (day_char.contains('S')) {
+                chkTimesS2.setChecked(true);
+            }
+
         }
     }
 
@@ -266,28 +485,26 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
                         switch (DEST_FIELD) {
                             case START_TIME_OFF:
+                                eStartTime1 = tp_time;
                                 etStartTimeOff.setText(showTime);
                                 break;
                             case END_TIME_OFF:
+                                lEndTime1 = tp_time;
                                 etEndTimeOff.setText(showTime);
                                 break;
                             case START_TIME_OFF_2:
+                                eStartTime2 = tp_time;
                                 etStartTimeOff2.setText(showTime);
                                 break;
                             case END_TIME_OFF_2:
+                                lEndTime2 = tp_time;
                                 etEndTimeOff2.setText(showTime);
                                 break;
                             case EARLIEST_START:
-
-                                System.out.println("DEBUG ES: " + tp_time);
-
                                 earliestStart = tp_time;
                                 etEarliestStart.setText(showTime);
                                 break;
                             case LATEST_END:
-
-                                System.out.println("DEBUG LE: " + tp_time);
-
                                 latestEnd = tp_time;
                                 etLatestEnd.setText(showTime);
                                 break;
@@ -299,7 +516,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     }
 
     private int timeConversion(int hr, int min) {
-        return ((hr*100) + min);
+        return ((hr * 100) + min);
     }
 
     @Override
