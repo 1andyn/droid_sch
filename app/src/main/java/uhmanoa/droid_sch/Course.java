@@ -337,12 +337,12 @@ public class Course {
             }
         }
 
-        System.out.println("DEBUG-----");
-        System.out.println("DEBUG THIS: " + this.getTimeString(false) + " " + this.getDayString(false));
-        System.out.println("DEBUG THIS2: " + this.getTimeString(true) + " " + this.getDayString(true));
-        System.out.println("DEBUG THIS: " + other.getTimeString(false) + " " + other.getDayString(false));
-        System.out.println("DEBUG THIS2: " + other.getTimeString(true) + " " + other.getDayString(true));
-        System.out.println("DEBUG-----");
+//        System.out.println("DEBUG-----");
+//        System.out.println("DEBUG THIS: " + this.getTimeString(false) + " " + this.getDayString(false));
+//        System.out.println("DEBUG THIS2: " + this.getTimeString(true) + " " + this.getDayString(true));
+//        System.out.println("DEBUG THIS: " + other.getTimeString(false) + " " + other.getDayString(false));
+//        System.out.println("DEBUG THIS2: " + other.getTimeString(true) + " " + other.getDayString(true));
+//        System.out.println("DEBUG-----");
 
         return false;
     }
