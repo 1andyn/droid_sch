@@ -53,7 +53,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private ArrayList<String> focList;
 
     // --------DEBUG
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     // --------DEBUG
 
     private static String pref_file = "PREF_FILE";
@@ -294,9 +294,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 new ToastWrapper(Search.this, "Delete selected entries",
                         Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
-                System.out.println("Outputting Selection");
                 for (Long l : checked) {
-                    if (DEBUG) System.out.println(l);
                     deleteStarByID(l);
                 }
                 sobj_adp.clearCheckedList(); //Finished deleting so clear this list
@@ -311,7 +309,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 new ToastWrapper(Search.this, "Add Selected Courses",
                         Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = crs_adp.getChecked_list();
-                System.out.println("Outputting Selection");
                 for (Long l : checked) {
                     Course temp = getResultById(l);
                     addStarFromResults(temp, false);
@@ -327,7 +324,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 new ToastWrapper(Search.this, "Add Selected CRN's",
                         Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = crs_adp.getChecked_list();
-                System.out.println("Outputting Selection");
                 for (Long l : checked) {
                     Course temp = getResultById(l);
                     addStarFromResults(temp, true);

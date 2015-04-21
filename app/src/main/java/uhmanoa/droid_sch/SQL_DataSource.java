@@ -290,7 +290,6 @@ public class SQL_DataSource {
     //delete starred
     public void deleteStar(long id) {
         database.beginTransaction();
-        System.out.println("Deleting Starred Object with id: " + id);
         database.delete(SQL_Helper.TABLE_STAR, SQL_Helper.COLUMN_ID + " = " + id, null);
         database.setTransactionSuccessful();
         database.endTransaction();
@@ -299,7 +298,6 @@ public class SQL_DataSource {
     //delete starred
     public void deleteTStar(long id) {
         database.beginTransaction();
-        System.out.println("Deleting Starred Object with id: " + id);
         database.delete(SQL_Helper.TABLE_TSTAR, SQL_Helper.COLUMN_ID + " = " + id, null);
         database.setTransactionSuccessful();
         database.endTransaction();
@@ -369,7 +367,6 @@ public class SQL_DataSource {
         database.delete(SQL_Helper.TABLE_STAR, null, null);
         database.setTransactionSuccessful();
         database.endTransaction();
-        System.out.println("Removed all Starred/Favorite Courses");
     }
 
     //--------------------------- STARRED OBJECT DB HELPER FUNCTIONS----------------------------//
@@ -1046,7 +1043,6 @@ public class SQL_DataSource {
 
     //--------------------------- COURSE DB HELPER FUNCTIONS ----------------------------------//
     public void deleteSchedule(long id) {
-        System.out.println("Deleted Schedule with id: " + id);
         database.delete(SQL_Helper.TABLE_SCH, SQL_Helper.COLUMN_ID + " = " + id, null);
     }
 

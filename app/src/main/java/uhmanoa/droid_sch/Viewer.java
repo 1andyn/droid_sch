@@ -73,7 +73,6 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
                                 new ToastWrapper(Viewer.this, "Deleting selected items",
                                         Toast.LENGTH_SHORT);
                                 ArrayList<Long> checked = sch_adp.getChecked_list();
-                                System.out.println("Outputting Selection");
                                 for (Long l : checked) {
                                     deleteSchedByID(l);
                                 }
