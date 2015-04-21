@@ -619,7 +619,6 @@ public class Visualize extends Activity {
         CASE 4, Top = 0, Middle = FULL Width, Bot = 0; Middle = Course color
         CASE 5, Top = 0, Middle = FULL Width, Bot = 0; Middle = White
     */
-
         int top_end;
         int bot_start;
 
@@ -643,7 +642,8 @@ public class Visualize extends Activity {
         }
 
         int top_height = getTopHeight(top_end);
-        int bot_height = getBotHeight(bot_start);
+
+        int bot_height = getBotHeight(bot_start, vcase);
 
         //Vis_Cell (top, mid, bot, color, color, color)
         final int max_height = 300;
@@ -684,14 +684,6 @@ public class Visualize extends Activity {
         return crstime % 100;
     }
 
-    public int DEBUG_getTopHeight(int EndTime) {
-        return getTopHeight(EndTime);
-    }
-
-    public int DEBUG_getBotHeight(int StartTime) {
-        return getBotHeight(StartTime);
-    }
-
     private int getTopHeight(int EndTime) {
         if (EndTime == -1) {
             return 0;
@@ -705,7 +697,7 @@ public class Visualize extends Activity {
         return (int) height;
     }
 
-    private int getBotHeight(int StartTime) {
+    private int getBotHeight(int StartTime, int vcase) {
         if (StartTime == -1) {
             return 0;
         }
@@ -714,6 +706,13 @@ public class Visualize extends Activity {
 
         double st= (double) getTimeMinutes(StartTime);
         double height = ((min_hour - st)/60) * max_height;
+
+        //bug fix
+        if(vcase == 3) {
+            if((int)height == 300) {
+                return 0;
+            }
+        }
 
         return (int) height;
     }
