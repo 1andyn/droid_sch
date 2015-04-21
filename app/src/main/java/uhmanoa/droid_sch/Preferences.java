@@ -96,9 +96,6 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 days = days + "S";
             }
 
-            //DEBUG
-            System.out.println("DEBUG " + days);
-
             bos.setDaysOffBoolean(true);
             bos.setDaysOffString(days);
 

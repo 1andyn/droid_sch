@@ -57,12 +57,8 @@ public class Schedule {
 	 */
 	public void addCourse(Course c){
 		if (!schedule.contains(c))
-			if (!c.isInvalid())
+			if (!c.isInvalid()) {
 				schedule.add(new Course(c));
-			else{
-				System.out.println("Invalid course, please fill in appropriate fields.");
-				System.out.println("Current course data is: ");
-				c.display();
 			}
 	}
 
