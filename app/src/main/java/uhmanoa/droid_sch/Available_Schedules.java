@@ -293,7 +293,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     private ArrayList<Schedule> timeFilter(ArrayList<Schedule> s) {
-        ArrayList<Schedule> res = s;
         ArrayList<Schedule> final_results = s;
 
         //time filtering START TIME
@@ -316,9 +315,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                     temp.add(sch);
                 }
             }
-            res = temp;
+            return temp;
+        } else {
+            return final_results;
         }
-        return res;
     }
 
     private ArrayList<Schedule> dayFilter(ArrayList<Schedule> s) {
