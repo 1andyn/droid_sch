@@ -156,8 +156,12 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         schedPage = new ArrayList<>(ITEMS_PER_PAGE);
 
         int itemsOnPage = ITEMS_PER_PAGE;
-        if (currentPage == totalPages - 1)
+        if (currentPage == totalPages - 1) {
             itemsOnPage = titles.size() % ITEMS_PER_PAGE;
+            if(itemsOnPage == 0) {
+                itemsOnPage = ITEMS_PER_PAGE;
+            }
+        }
 
         for (int i = (currentPage * ITEMS_PER_PAGE); i < ((currentPage * ITEMS_PER_PAGE) +
                 itemsOnPage); i++) {
