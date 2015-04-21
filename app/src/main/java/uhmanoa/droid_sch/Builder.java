@@ -352,6 +352,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             sgo.setEn_StartTime(0, false);
             sgo.setEn_EndTime(0, false);
             sgo.setTimeOff(null);
+            sgo.setDaysOff(null);
         } else {
             boolean start = bos.getBooleanEarliestStart();
             boolean end = bos.getBooleanLatestEnd();
@@ -359,6 +360,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             sgo.setEn_EndTime(bos.getLatestEnd(), end);
             if (bos.getTimeOffBoolean()) {
                 sgo.setTimeOff(timeBlockBuilder());
+            } else {
+                sgo.setTimeOff(null);
             }
             sgo.setDaysOff(bos.getDaysOffArray());
         }

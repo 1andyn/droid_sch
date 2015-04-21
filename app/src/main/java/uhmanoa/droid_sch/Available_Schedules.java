@@ -322,7 +322,10 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     private ArrayList<Schedule> dayFilter(ArrayList<Schedule> s) {
-        ArrayList<Character> offDays = bos.getDaysOffArray();
+        ArrayList<Character> offDays = sgo.getDaysOff();
+        if(offDays == null) {
+            return s;
+        }
         ArrayList<Schedule> filtered_results = new ArrayList<>();
         for (Schedule sc : s) {
             boolean match = false;
