@@ -847,20 +847,21 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     @Override
     public void onParseTaskComplete(IOException e) {
+        if (p.getTaskCancelled()) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            wl.release();
+            finish();
+            return;
+        }
+
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        wl.release();
+
         if (e != null) {
             new ToastWrapper(this, "Unable to retrieve course data, try again later.",
                     Toast.LENGTH_SHORT);
-
-            if (p.getTaskCancelled()) {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                wl.release();
-                finish();
-                return;
-            }
-
             e.printStackTrace();
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            wl.release();
+        } else {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                     getApplicationContext());
             SharedPreferences.Editor editor = settings.edit();

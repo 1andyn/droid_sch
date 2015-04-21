@@ -814,12 +814,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
     @Override
     public void onParseTaskComplete(IOException e) {
-        if(e != null) {
-            new ToastWrapper(this, "Unable to retrieve course data, try again later.",
-                    Toast.LENGTH_SHORT);
-            e.printStackTrace();
-        }
-
         if(p.getTaskCancelled()) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             wl.release();
@@ -827,17 +821,23 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             return;
         }
 
-        configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
-        reloadDBData();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         wl.release();
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                getApplicationContext());
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), true);
-        editor.commit();
+        if(e != null) {
+            new ToastWrapper(this, "Unable to retrieve course data, try again later.",
+                    Toast.LENGTH_SHORT);
+            e.printStackTrace();
+        } else {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                    getApplicationContext());
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), true);
+            editor.commit();
+        }
 
+        configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
+        reloadDBData();
     }
 
     @Override
