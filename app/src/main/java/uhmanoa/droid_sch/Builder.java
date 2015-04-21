@@ -592,7 +592,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     Dialog diag_min = createMinDialog();
                 } else {
                     new ToastWrapper(Builder.this, "Please add atleast two courses before" +
-                            "attempting to configure this option.",
+                            " attempting to configure this option.",
                             Toast.LENGTH_SHORT);
                 }
                 return true;
