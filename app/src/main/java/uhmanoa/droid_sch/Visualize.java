@@ -1,6 +1,7 @@
 package uhmanoa.droid_sch;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -731,7 +732,9 @@ public class Visualize extends Activity {
 
         TextView tv = (TextView) table_view.findViewById(R.id.tv_time);
         tv.setText(input);
-        tv.setTextColor(getResources().getColor(R.color.black));
+        tv.setTypeface(Typeface.DEFAULT_BOLD);
+        tv.setTextColor(getResources().getColor(R.color.white));
+        tv.setBackgroundColor(getResources().getColor(R.color.dark_gray));
         tv.setLayoutParams(new TableRow.LayoutParams(getColumnWidth() - 10,
                 TableRow.LayoutParams.WRAP_CONTENT));
         tv.setGravity(Gravity.CENTER);
