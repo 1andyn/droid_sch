@@ -25,7 +25,7 @@
     <string name="srch_title">Search for Courses</string>
     <string name="menu_gefc">Gen Ed/Focus Filter</string>
     <string name="menu_time">Start/End Time Filter</string>
-    <string name="menu_fil">Search by Major</string>
+    <string name="menu_fil">Show Courses by Major</string>
     <string name="action_anchor_enable">Enable Anchor Point</string>
     <string name="action_anchor_disable">Disable Anchor Point</string>
     <string name="str_panel_clear">Clear List</string>

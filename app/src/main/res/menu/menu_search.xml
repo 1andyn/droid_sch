@@ -11,16 +11,6 @@
         android:icon="@drawable/ic_action_search"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_gefc_fil"
-        android:orderInCategory="100"
-        android:title="@string/menu_gefc"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_time_fil"
-        android:orderInCategory="100"
-        android:title="@string/menu_time"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_force_fil"
         android:orderInCategory="100"
         android:title="@string/menu_fil"
@@ -29,6 +19,16 @@
         android:id="@+id/action_clear_results"
         android:orderInCategory="100"
         android:title="@string/res_clear"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_gefc_fil"
+        android:orderInCategory="100"
+        android:title="@string/menu_gefc"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_time_fil"
+        android:orderInCategory="100"
+        android:title="@string/menu_time"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_build_schedules"
