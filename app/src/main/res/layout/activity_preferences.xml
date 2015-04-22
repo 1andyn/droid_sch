@@ -6,6 +6,38 @@
     android:layout_height="match_parent"
     android:id="@+id/ll_preferences" >
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/spProfiles"
+            style="@style/btnStyleGenoa"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="40dp" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            style="@style/btnStyleGenoa"
+            android:layout_weight="2"
+            android:text="@string/btn_delete_profile"
+            android:id="@+id/btnDeleteProfile" />
+    </LinearLayout>
+
+    <!-- SPACER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/layout_spacer"/>
+
     <!--  Days off Section -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,6 +124,7 @@
             android:id="@+id/chkTimes"
             style="@style/CheckBoxTitle"
             android:text="@string/times_off"/>
+
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -369,26 +402,42 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
 
             <Button
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="2dp"
                 style="@style/btnStyleGenoa"
                 android:id="@+id/btnCancel"
                 android:text="@string/cancel"
                 />
             <Button
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_margin="2dp"
+                style="@style/btnStyleGenoa"
+                android:id="@+id/btnReset"
+                android:text="@string/btn_reset"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 style="@style/btnStyleGenoa"
                 android:id="@+id/btnSave"
-                android:text="@string/save"/>
+                android:text="@string/btn_save"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                style="@style/btnStyleGenoa"
+                android:id="@+id/btnDone"
+                android:text="@string/btn_done"
+                />
         </LinearLayout>
     </RelativeLayout>
-
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

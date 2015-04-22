@@ -71,14 +71,14 @@
             android:layout_margin="2dp"
             style="@style/btnStyleGenoa" />
 
-        <!--<Button-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:text="@string/bt_txt_pref"-->
-            <!--android:id="@+id/bt_pref"-->
-            <!--android:textStyle="bold"-->
-            <!--android:layout_margin="2dp"-->
-            <!--style="@style/btnStyleGenoa" />-->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/bt_txt_pref"
+            android:id="@+id/bt_pref"
+            android:textStyle="bold"
+            android:layout_margin="2dp"
+            style="@style/btnStyleGenoa" />
 
         <Button
             android:layout_width="match_parent"

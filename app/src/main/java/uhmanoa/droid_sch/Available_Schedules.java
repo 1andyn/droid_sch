@@ -33,7 +33,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     public static final String LOGTAG = "SCHED";
     public static final String CONFIRM_SAVE = "Warning: By clicking ok you will save the selected " +
             "schedules and discard all other schedules.  Are you sure you want to continue?";
-    public static final int ITEMS_PER_PAGE = 5;
+    public static final int ITEMS_PER_PAGE = 4;
 
     private int sem, year, month;
 
