@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -283,7 +284,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         View v = getLayoutInflater().inflate(R.layout.dialog_new_profile, null);
         final EditText newName = (EditText) v.findViewById(R.id.etProfileName);
         builder.setView(v)
-                .setTitle(R.string.tv_add_profile_desc)
+                .setTitle(Html.fromHtml("<font color='#66FFCC'>" + getApplicationContext().getString(R.string.tv_add_profile_desc) + "</font>"))
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
 
                     @Override
