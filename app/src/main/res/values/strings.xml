@@ -102,6 +102,7 @@
     <string name="btn_remove_course">Remove Course</string>
     <string name="tv_add_profile_desc">Enter Profile Name</string>
     <string name="hint_profile_name">Profile name...</string>
+    <string name="dialog_confirm_home">Are you sure you wish to return to the main menu?</string>
 
     <!-- Strings for Available Schedules Activity -->
 
@@ -144,14 +145,138 @@
     <string name="btn_done">Done</string>
     <string name="confirm_profile_change">Confirm Profile Change</string>
 
-    <string name="dialog_warning_profile_change">If you change profiles without saving the settings for the current profile, you will loose any unsaved
-        changes.</string>
-
     <string name="help_title">Show help dialogs for the following screens:</string>
     <string name="help_preferences">Preferences</string>
     <string name="help_home">Home Screen</string>
     <string name="help_create">Create Schedules</string>
     <string name="help_view">View Schedules</string>
     <string name="help_search">Search for Courses</string>
+
+
+<!--**********************************-->
+<!-- Strings for Help Dialogs -->
+<!--**********************************-->
+
+    <string name="help_main_title">Help for \'Main Menu\'</string>
+    <string name="help_create_title">Help for \'CreateSchedules\'</string>
+    <string name="help_view_title">Help for \'View Schedules\'</string>
+    <string name="help_search_title">Help for \'Search for Courses\'</string>
+    <string name="help_preferences_title">Help for \'Schedule Preferences\'</string>
+
+<!-- Strings for Main Menu  -->
+    <string name="help_main_create">Create Schedules:</string>
+    <string name="help_main_view">View Schedules:</string>
+    <string name="help_main_search">Search for Courses:</string>
+    <string name="help_main_preferences">Schedule Preferences:</string>
+    <string name="help_main_exit">Exit Application:</string>
+
+            <!-- Main Menu descriptions -->
+    <string name="help_main_create_desc">Creates a list of all possible combinations of schedules using the
+        given courses you specify.  Can include courses found in the \'Search for Courses\' screen.</string>
+    <string name="help_main_view_desc">Allows you to review previously saved schedules from the \'Create Schedules\' screen.</string>
+    <string name="help_main_search_desc">Search for courses from the entire UH catalog, or narrow searches to a specific major.
+        A detailed listing of courses matching the search criteria will be displayed.  Courses found can be saved for use in the
+        \'Create Schedules\' screen.</string>
+    <string name="help_main_preferences_desc">Manage profiles used for specifying preferences for creating schedules.  This
+        screen can also be accessed from overflow menu in the \'Create Schedules\' screen.</string>
+    <string name="help_main_exit_desc">Quits the application.</string>
+
+<!-- Strings for Create Schedules Activity -->
+    <string name="help_create_search">Search:</string>
+    <string name="help_create_min_course">Set Minimum Course Count:</string>
+    <string name="help_create_options">Custom Schedule Options:</string>
+    <string name="help_create_profiles">Selecting a Profile:</string>
+    <string name="help_create_delete_profile">Delete Profile:</string>
+    <string name="help_create_build">Build Schedules:</string>
+    <string name="help_create_remove">Remove Course:</string>
+    <string name="help_create_done">Done:</string>
+
+    <!-- Create Schedules Activity descriptions -->
+    <string name="help_create_search_desc">Search for courses by either CRN or Course Name.</string>
+    <string name="help_create_min_course_desc">Sets the minimum class count for schedules.  For example: if you have
+        four classes to create schedules with and set the minimum class count to three, you will receive a list of
+        possible schedules, some of which contain three classes, and, perhaps, some which contain four classes.</string>
+    <string name="help_create_options_desc">Takes you to the \'Preferences\' screen to specify detailed options for
+        creating schedules.</string>
+    <string name="help_create_profiles_desc">Allows you to select a saved profile to use when creating schedules.  All
+        preferences for that profile will be used when creating schedules.</string>
+    <string name="help_create_delete_profile_desc">Deletes the selected profile and all of its options.  Cannot be undone.</string>
+    <string name="help_create_build_desc">Creates all possible combinations of schedules from your selected courses.</string>
+    <string name="help_create_remove_desc">Removes the selected course(s) from the list.</string>
+    <string name="help_create_done_desc">Returns to the main menu.</string>
+
+<!-- Strings for View Schedules Activity -->
+    <string name="help_view_refresh">Refresh Seating Data:</string>
+    <string name="help_view_view">View:</string>
+    <string name="help_view_delete">Delete:</string>
+
+    <!-- View Schedules Activity descriptions -->
+    <string name="help_view_refresh_desc">Refreshes the available seating data for courses in the saved schedules.  This option is
+        accessed from the overflow menu</string>
+    <string name="help_view_view_desc">Shows a time chart of the associated schedule as well as a detailed description of each
+        course in the schedule.</string>
+    <string name="help_view_delete_desc">Deletes the checked schedule(s) from the list.  Cannot be undone.</string>
+
+<!-- Strings for Search Activity -->
+    <string name="help_search_search">Search:</string>
+    <string name="help_search_show_by_major">Show Courses by Major:</string>
+    <string name="help_search_clear">Clear Results:</string>
+    <string name="help_search_focus">Gen Ed/Focus Filter:</string>
+    <string name="help_search_time">Start/End Time Filter:</string>
+    <string name="help_search_builder">Go to Schedule Builder:</string>
+    <string name="help_search_refresh">Refresh Course Data:</string>
+    <string name="help_search_major">Select a Major:</string>
+    <string name="help_search_save_crn">Save CRN:</string>
+    <string name="help_search_save_course">Save Course:</string>
+
+            <!-- Search Activity descriptions -->
+    <string name="help_search_search_desc">Clicking on the search icon in the action bar will allow you to enter a course to search for.  You can search
+        for a course by either its CRN, or the course name (i.e. EE 160).</string>
+    <string name="help_search_show_by_major_desc">Shows courses for the selected major.</string>
+    <string name="help_search_clear_desc">Clears the search results</string>
+    <string name="help_search_focus_desc">Filter search results to courses meeting the selected gen ed/focus requirements.  For example: selecting
+        Writing Intensive (WI) and selecting Electrical Engineering (EE) from the \'Select a Major\' spinner, followed by \'Show Courses by Major\'
+        from the menu will show all classes in Electrical Engineering that satisfy the WI requirement.</string>
+    <string name="help_search_time_desc">Allows you to specify your desired earliest start time and latest end time for classes without having to
+        edit profile preferences.</string>
+    <string name="help_search_builder_desc">Opens the \'Create Schedules\' screen.</string>
+    <string name="help_search_refresh_desc">Reloads course data for the selected semester.  This will update the \'seats available\' field.</string>
+    <string name="help_search_major_desc">Selecting a major from the list will narrow search results to only those in the selected major.</string>
+    <string name="help_search_save_crn_desc">Saves the specific course that matches the CRN of the selected search result.  For example: if ENG 100
+        with CRN 80826 is selected, the schedule builder will only use that specific ENG 100 course when making schedules.</string>
+    <string name="help_search_save_course_desc">Saves the course (by name) of the selected search result.  For example: if ENG 100 is selected,
+        the schedule builder will make all possible schedules for every ENG 100 CRN available.\n\nAll saved courses, whether by CRN or Course Name,
+        can be viewed by sliding up or tapping on the \'Starred Items\' tab at the bottom of the screen. These starred items can be used in the
+        \'Create Schedules\' screen.</string>
+
+<!-- Strings for Search Activity -->
+    <string name="help_preferences_profiles">Selecting a Profile:</string>
+    <string name="help_preferences_delete_profile">Delete Profile:</string>
+    <string name="help_preferences_days_off">Days Off:</string>
+    <string name="help_preferences_times_off">Times Off:</string>
+    <string name="help_preferences_start">Earliest Start Time:</string>
+    <string name="help_preferences_end">Latest End Time:</string>
+    <string name="help_preferences_show_help">Show Help Dialogs:</string>
+    <string name="help_preferences_cancel">Cancel:</string>
+    <string name="help_preferences_reset">Reset Settings:</string>
+    <string name="help_preferences_save">Save Settings:</string>
+    <string name="help_preferences_done">Done:</string>
+
+        <!-- Search Activity descriptions -->
+    <string name="help_preferences_profiles_desc">Select the profile to edit or create a new profile.</string>
+    <string name="help_preferences_delete_profile_desc">Delete the currently selected profile.  Cannot be undone.</string>
+    <string name="help_preferences_days_off_desc">Specify days which you wish to not have classes.</string>
+    <string name="help_preferences_times_off_desc">Specify times you wish to not have classes. You can also specify the
+        individual days you wish this setting to apply to.</string>
+    <string name="help_preferences_start_desc">The earliest time your first class may be.</string>
+    <string name="help_preferences_end_desc">The latest time your last class may be.</string>
+    <string name="help_preferences_show_help_desc">Select which screens you wish to see the help dialogs (like this one) for.</string>
+    <string name="help_preferences_cancel_desc">Cancel the current changes.</string>
+    <string name="help_preferences_reset_desc">Reset all values for the current profile.</string>
+    <string name="help_preferences_save_desc">Save settings for the current profile.</string>
+    <string name="help_preferences_done_desc">Return to the previous screen.</string>
+
+    <string name="help_preferences_switch">If you change profiles without saving the settings for the current profile, you will loose any unsaved
+        changes.</string>
 
 </resources>

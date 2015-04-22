@@ -68,7 +68,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private Resources res_srch;
     private Point pt_resolution;
     private Spinner spinner;
-    private Button btnDeleteProfile;
+    private Button btnDeleteProfile, btnDone;
     private SlidingUpPanelLayout slideupl;
     private ViewStub empty_desire;
     private ViewStub empty_star;
@@ -146,6 +146,25 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     }
 
+    private void showHelp(){
+
+        AlertDialog.Builder help = new AlertDialog.Builder(Builder.this);
+
+        help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
+                getApplicationContext().getString(R.string.help_create_title) + "</font>"))
+                .setView(R.layout.dialog_help_create)
+                .setPositiveButton("OK", new AlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
+                        bos.setShowHelpCreateSchedules(!cb.isChecked());
+                        return;
+                    }
+                })
+                .show();
+
+    }
+
     private void checkCourseData() {
 
         if (!datasource.courseDataExists(sem, year) || !lastLoadSuccess) {
@@ -188,13 +207,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         super.onResume();
         updateProfiles();
         spinner.setSelection(bos.getSelectedOption());
-// -----------   DEBUG  ------------------
-        if (DEBUG){
-            Log.w(LOGTAG, "(onResume) RGet selected option: " + bos.getSelectedOption());
 
-        }
-// -----------   END DEBUG  ------------------
-
+        if (bos.getShowHelpCreateSchedules())
+            showHelp();
     }
 
     @Override
@@ -260,16 +275,15 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                                        int pos, long id) {
                 // An item was selected. You can retrieve the selected item
                 String profName = spinner.getSelectedItem().toString();
-                if (profName.equals(getString(R.string.spin_new_profile))){
+                if (profName.equals(getString(R.string.spin_new_profile))) {
                     addProfileName();
-                }
-                else {
+                } else {
                     bos = new BuilderOptions(getApplicationContext(), profName);
                     bos.setSelectedOption(pos);
 
                     builderSelection = pos;
-                    new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
-                            Toast.LENGTH_SHORT);
+                    //new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
+                    //        Toast.LENGTH_SHORT);
                 }
             }
 
@@ -379,8 +393,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteItemStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ToastWrapper(Builder.this, "Deleting selected items on star list.",
-                        Toast.LENGTH_SHORT);
+                //new ToastWrapper(Builder.this, "Deleting selected items on star list.",
+                //        Toast.LENGTH_SHORT);
+
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -389,6 +404,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 }
                 sobj_adp.clearCheckedList();
                 mandatoryDataChange();
+                Toast.makeText(Builder.this, "Selected items removed.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -451,7 +467,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         });
 
         btnDeleteProfile = (Button) findViewById(R.id.btnDeleteProfile);
-        btnDeleteProfile.setOnClickListener(new Button.OnClickListener(){
+        btnDeleteProfile.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String toDelete = spinner.getSelectedItem().toString();
@@ -465,6 +481,24 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 bos.setSelectedOption(0);
                 ph.removePreferenceFile(toDelete);
 
+            }
+        });
+
+        btnDone = (Button) findViewById(R.id.btnDone);
+        btnDone.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder confirm = new AlertDialog.Builder(Builder.this);
+                confirm.setTitle(Html.fromHtml("<font color='#66FFCC'>Confirm...</font>"))
+                        .setMessage(R.string.dialog_confirm_home)
+                        .setPositiveButton("Yes", new AlertDialog.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
     }

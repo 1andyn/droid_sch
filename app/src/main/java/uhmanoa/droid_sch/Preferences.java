@@ -57,7 +57,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     CheckBox chkTimesM, chkTimesT, chkTimesW, chkTimesR, chkTimesF, chkTimesS, chkTimes;
     CheckBox chkTimesM2, chkTimesT2, chkTimesW2, chkTimesR2, chkTimesF2, chkTimesS2;
     CheckBox chkEarliestStart, chkLatestEnd;
-    CheckBox chkHelpPreferences, chkHelpHome, chkHelpCreate, chkHelpView, chkHelpSearch;
+    CheckBox chkHelpPreferences, chkHelpMain, chkHelpCreate, chkHelpView, chkHelpSearch;
     LinearLayout llTimesOffTimes, llTimesOffDays, llDaysOff;
     LinearLayout llTimesOffTimes2, llTimesOffDays2;
     LinearLayout llTimesOffTimesWrapper1, llTimesOffTimesWrapper2;
@@ -89,14 +89,15 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         setBackground();
         initLayout();
         loadSettings();
-        if (bos.getShowHelpPreferences())
-            showHelp();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         spProfiles.setSelection(bos.getSelectedOption());
+
+        if (bos.getShowHelpPreferences())
+            showHelp();
     }
 
     private void saveSettings() {
@@ -196,6 +197,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         *************** Help Section *************
         ******************************************/
 
+        bos.setShowHelpMain(chkHelpMain.isChecked());
+        bos.setShowHelpCreateSchedules(chkHelpCreate.isChecked());
+        bos.setShowHelpViewSchedules(chkHelpView.isChecked());
+        bos.setShowHelpSearchCourses(chkHelpSearch.isChecked());
         bos.setShowHelpPreferences(chkHelpPreferences.isChecked());
     }
 
@@ -315,6 +320,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         *************** Help Section *************
         ******************************************/
 
+        chkHelpMain.setChecked(bos.getShowHelpMain());
+        chkHelpCreate.setChecked(bos.getShowHelpCreateSchedules());
+        chkHelpView.setChecked(bos.getShowHelpViewSchedules());
+        chkHelpSearch.setChecked(bos.getShowHelpSearchCourses());
         chkHelpPreferences.setChecked(bos.getShowHelpPreferences());
 
     }
@@ -546,6 +555,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         //-----------------------------------------
         // Check boxes for saving help settings
         //----------------------------------------
+        chkHelpMain = (CheckBox) findViewById(R.id.chkHelpMain);
+        chkHelpCreate = (CheckBox) findViewById(R.id.chkHelpCreate);
+        chkHelpView = (CheckBox) findViewById(R.id.chkHelpView);
+        chkHelpSearch = (CheckBox) findViewById(R.id.chkHelpSearch);
         chkHelpPreferences = (CheckBox) findViewById(R.id.chkHelpPreferences);
 
 
@@ -646,8 +659,9 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
         AlertDialog.Builder warning = new AlertDialog.Builder(Preferences.this);
 
-        warning.setTitle(Html.fromHtml("<font color='#66FFCC'>Confirm Profile Change</font>"))
-                .setView(R.layout.dialog_switch_profiles)
+        warning.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
+                getApplicationContext().getString(R.string.help_preferences_title) + "</font>"))
+                .setView(R.layout.dialog_help_preferences)
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {

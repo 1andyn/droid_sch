@@ -430,9 +430,33 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/chkHelpMain"
+                    style="@style/CheckBoxBasic"
+                    android:text="@string/help_main_title"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chkHelpCreate"
+                    style="@style/CheckBoxBasic"
+                    android:text="@string/help_create_title"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chkHelpView"
+                    style="@style/CheckBoxBasic"
+                    android:text="@string/help_view_title"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chkHelpSearch"
+                    style="@style/CheckBoxBasic"
+                    android:text="@string/help_search_title"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/chkHelpPreferences"
                     style="@style/CheckBoxBasic"
-                    android:text="@string/help_preferences"/>
+                    android:text="@string/help_preferences_title"/>
 
             </LinearLayout>
         </LinearLayout>

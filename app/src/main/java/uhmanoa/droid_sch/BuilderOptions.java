@@ -15,7 +15,11 @@ public class BuilderOptions{
     private final String selectOption = "SELECTED_OPTION";  // Remember last used profile
 
     /*  For General Preferences  */
-    private final String helpProfileSwitchSave = "HELP_PREFERENCES_SAVE";
+    private final String helpMainMenu = "HELP_MAIN";
+    private final String helpCreateSchedules = "HELP_CREATE";
+    private final String helpViewSchedules = "HELP_VIEW";
+    private final String helpSearchCourses = "HELP_SEARCH";
+    private final String helpPreferences = "HELP_PREFERENCES";
 
     /*  For Days Off section */
     private final String booleanDaysOff = "PREF_DAYS_OFF";
@@ -56,7 +60,11 @@ public class BuilderOptions{
     public void createProfile(String profileName){
         setCurrentProfile(profileName);
         SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(helpProfileSwitchSave, true);
+        editor.putBoolean(helpMainMenu, true);
+        editor.putBoolean(helpCreateSchedules, true);
+        editor.putBoolean(helpViewSchedules, true);
+        editor.putBoolean(helpSearchCourses, true);
+        editor.putBoolean(helpPreferences, true);
         editor.commit();
     }
 
@@ -86,9 +94,30 @@ public class BuilderOptions{
     /* ************    Setters   ****************/
     /* ******************************************/
 
+    //-------------------------------
+    //--- Help Dialog preferences ---
+    //-------------------------------
+
     public void setShowHelpPreferences(boolean b){
-        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(helpProfileSwitchSave, b).commit();
+        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(helpPreferences, b).commit();
     }
+
+    public void setShowHelpMain(boolean b){
+        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(helpMainMenu, b).commit();
+    }
+
+    public void setShowHelpCreateSchedules(boolean b){
+        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(helpCreateSchedules, b).commit();
+    }
+
+    public void setShowHelpViewSchedules(boolean b){
+        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(helpViewSchedules, b).commit();
+    }
+
+    public void setShowHelpSearchCourses(boolean b){
+        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(helpSearchCourses, b).commit();
+    }
+    //-----------------------------------
 
     public void setCurrentProfile(String profName){
         this.currentProfile = profName;
@@ -177,9 +206,31 @@ public class BuilderOptions{
         return currentProfile;
     }
 
-    public boolean getShowHelpPreferences(){
-        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(helpProfileSwitchSave, true);
+    //-------------------------------
+    //--- Help Dialog preferences ---
+    //-------------------------------
+
+    public boolean getShowHelpMain(){
+        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(helpMainMenu, true);
     }
+
+    public boolean getShowHelpCreateSchedules(){
+        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(helpCreateSchedules, true);
+    }
+
+    public boolean getShowHelpViewSchedules(){
+        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(helpViewSchedules, true);
+    }
+
+    public boolean getShowHelpSearchCourses(){
+        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(helpSearchCourses, true);
+    }
+
+    public boolean getShowHelpPreferences(){
+        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(helpPreferences, true);
+    }
+    //-----------------------------------
+
 
     public boolean getDaysOffBoolean() {
         SharedPreferences settings = c.getSharedPreferences(currentProfile, Context.MODE_PRIVATE);

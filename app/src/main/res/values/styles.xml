@@ -88,4 +88,19 @@
         <item name="android:textColor">@color/dark_aqua</item>
     </style>
 
+    <!-- Styles for Help dialog GridViews  -->
+    <style name="tvFeature" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/dark_aqua</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+
+    </style>
+    <style name="tvFeatureDescription" parent="@style/tvFeature">
+        <item name="android:layout_gravity">fill_horizontal</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
 </resources>

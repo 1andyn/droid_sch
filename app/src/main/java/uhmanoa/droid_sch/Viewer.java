@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -39,6 +40,8 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
 
     private SQL_DataSource ds;
 
+    BuilderOptions bos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         al_sched = new ArrayList<>();
@@ -49,6 +52,8 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
         ds.open();
         ss = SingletonSchedule.getInstance();
 
+        bos  = new BuilderOptions(this);
+
         sch_adp = new SchListAdapter(this, R.layout.sch_view, al_sched, this);
         pt_resolution = new Point();
         loadImageResources();
@@ -57,6 +62,34 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
         configureButtons();
         toggle_ViewStub();
         load_schedules();
+    }
+
+    private void showHelp(){
+
+        AlertDialog.Builder help = new AlertDialog.Builder(Viewer.this);
+
+        help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
+                getApplicationContext().getString(R.string.help_view_title) + "</font>"))
+                .setView(R.layout.dialog_help_view)
+                .setPositiveButton("OK", new AlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
+                        bos.setShowHelpViewSchedules(!cb.isChecked());
+                        return;
+                    }
+                })
+                .show();
+
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        if (bos.getShowHelpViewSchedules())
+            showHelp();
     }
 
     private void configureButtons() {

@@ -98,6 +98,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
     private final int sliderHeight = 100;
 
+    private BuilderOptions bos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +120,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
         datasource = new SQL_DataSource(this);
         datasource.open();
+
+        bos = new BuilderOptions(this);
 
         System.out.println("DEBUG: SEM: " + sem + " YEAR: " + yr);
 
@@ -140,6 +144,24 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         checkCourseData();
     }
 
+    private void showHelp(){
+
+        AlertDialog.Builder help = new AlertDialog.Builder(Search.this);
+
+        help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
+                getApplicationContext().getString(R.string.help_search_title) + "</font>"))
+                .setView(R.layout.dialog_help_search)
+                .setPositiveButton("OK", new AlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
+                        bos.setShowHelpSearchCourses(!cb.isChecked());
+                        return;
+                    }
+                })
+                .show();
+
+    }
 
     private void populateFocArray() {
         focList = new ArrayList<>();
@@ -219,6 +241,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     {
         reloadDBData();
         super.onResume();
+        if (bos.getShowHelpSearchCourses())
+            showHelp();
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -45,6 +46,8 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     protected SQL_DataSource datasource;
     PreferencesHelper ph = new PreferencesHelper(this);
 
+    BuilderOptions bos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +63,32 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         datasource = new SQL_DataSource(this);
         datasource.open();
 
-        BuilderOptions bos = new BuilderOptions(getApplicationContext());
+        bos = new BuilderOptions(getApplicationContext());
         if (bos.isFirstUse()) {
             ph.createPreferencesFile(getString(R.string.spin_default_profile), bos);
             bos.setSelectedOption(0);
 
         }
+
+    }
+
+    private void showHelp(){
+
+        AlertDialog.Builder help = new AlertDialog.Builder(Main_menu.this);
+
+        help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
+                    getApplicationContext().getString(R.string.help_main_title) + "</font>"))
+                .setView(R.layout.dialog_help_main)
+                .setPositiveButton("OK", new AlertDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
+                        bos.setShowHelpMain(!cb.isChecked());
+                        return;
+                    }
+                })
+                .show();
+
     }
 
     private void checkPrefFiles(){
@@ -81,6 +104,9 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     {
         datasource.open();
         super.onResume();
+
+        if (bos.getShowHelpMain())
+            showHelp();
     }
 
     @Override
