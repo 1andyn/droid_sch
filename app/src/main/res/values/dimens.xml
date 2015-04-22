@@ -12,4 +12,7 @@
 
     <!-- Spacers for distance between layouts -->
     <dimen name="layout_spacer">1dp</dimen>
+
+    <!-- Preferences Layout padding -->
+    <dimen name="layout_top_bottom_pad">10dp</dimen>
 </resources>

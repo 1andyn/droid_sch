@@ -147,4 +147,11 @@
     <string name="dialog_warning_profile_change">If you change profiles without saving the settings for the current profile, you will loose any unsaved
         changes.</string>
 
+    <string name="help_title">Show help dialogs for the following screens:</string>
+    <string name="help_preferences">Preferences</string>
+    <string name="help_home">Home Screen</string>
+    <string name="help_create">Create Schedules</string>
+    <string name="help_view">View Schedules</string>
+    <string name="help_search">Search for Courses</string>
+
 </resources>

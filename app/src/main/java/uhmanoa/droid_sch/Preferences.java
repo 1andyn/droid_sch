@@ -1,12 +1,9 @@
 package uhmanoa.droid_sch;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -25,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -61,6 +57,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     CheckBox chkTimesM, chkTimesT, chkTimesW, chkTimesR, chkTimesF, chkTimesS, chkTimes;
     CheckBox chkTimesM2, chkTimesT2, chkTimesW2, chkTimesR2, chkTimesF2, chkTimesS2;
     CheckBox chkEarliestStart, chkLatestEnd;
+    CheckBox chkHelpPreferences, chkHelpHome, chkHelpCreate, chkHelpView, chkHelpSearch;
     LinearLayout llTimesOffTimes, llTimesOffDays, llDaysOff;
     LinearLayout llTimesOffTimes2, llTimesOffDays2;
     LinearLayout llTimesOffTimesWrapper1, llTimesOffTimesWrapper2;
@@ -92,8 +89,8 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         setBackground();
         initLayout();
         loadSettings();
-        if (bos.getShowProfileSwitchSave())
-            showWarning();
+        if (bos.getShowHelpPreferences())
+            showHelp();
     }
 
     @Override
@@ -194,10 +191,16 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
         bos.setLatestEndBoolean(chkLatestEnd.isChecked());
         bos.setEndTime(latestEnd);
+
+        /* ***************************************
+        *************** Help Section *************
+        ******************************************/
+
+        bos.setShowHelpPreferences(chkHelpPreferences.isChecked());
     }
 
     private void loadSettings() {
-        /**************************************
+        /* ************************************
         /****    settings for Days Off    *****
         /*************************************/
 
@@ -212,7 +215,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         chkDaysF.setChecked(day_char.contains('F'));
         chkDaysS.setChecked(day_char.contains('S'));
 
-        /*****************************************
+        /* ***************************************
          /****    settings for Times Off     *****
          /****************************************/
 
@@ -278,7 +281,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         chkTimesF2.setChecked(days2.contains('F'));
         chkTimesS2.setChecked(days2.contains('S'));
 
-        /*********************************************
+        /* ********************************************
          /****    settings for Earliest Start    *****
          /********************************************/
 
@@ -293,7 +296,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         else
             etEarliestStart.setText("");
 
-        /*****************************************
+        /* ****************************************
          /****    settings for Latest End    *****
          /****************************************/
 
@@ -307,6 +310,12 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         }
         else
             etLatestEnd.setText("");
+
+        /* ***************************************
+        *************** Help Section *************
+        ******************************************/
+
+        chkHelpPreferences.setChecked(bos.getShowHelpPreferences());
 
     }
 
@@ -362,6 +371,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 resetPreferenceValues();
                 break;
             case R.id.btnDone:
+                saveSettings();
                 finish();
                 break;
             case R.id.btnDeleteProfile:
@@ -521,20 +531,27 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         etStartTimeOff2.setOnClickListener(this);
         etEndTimeOff2.setOnClickListener(this);
 
-        //chkTimes.setOnCheckedChangeListener(this);
-
+        //-------------------------------------------------
+        // Check boxes for Earliest Start and Latest End
+        //-------------------------------------------------
         chkEarliestStart = (CheckBox) findViewById(R.id.chkEarliestStart);
         chkLatestEnd = (CheckBox) findViewById(R.id.chkLatestEnd);
-
-        //chkEarliestStart.setOnCheckedChangeListener(this);
-        //chkLatestEnd.setOnCheckedChangeListener(this);
 
         etEarliestStart = (EditText) findViewById(R.id.etEarliestStart);
         etLatestEnd = (EditText) findViewById(R.id.etLatestEnd);
 
         etEarliestStart.setOnClickListener(this);
         etLatestEnd.setOnClickListener(this);
-        
+
+        //-----------------------------------------
+        // Check boxes for saving help settings
+        //----------------------------------------
+        chkHelpPreferences = (CheckBox) findViewById(R.id.chkHelpPreferences);
+
+
+        //----------------------------------------
+        // Profile manipulation
+        //--------------------------------------
         btnDeleteProfile = (Button) findViewById(R.id.btnDeleteProfile);
         spProfiles = (Spinner) findViewById(R.id.spProfiles);
         
@@ -625,7 +642,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
 
     }
 
-    private void showWarning(){
+    private void showHelp(){
 
         AlertDialog.Builder warning = new AlertDialog.Builder(Preferences.this);
 
@@ -635,27 +652,12 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
-                        bos.setShowProfileSwitchSave(!cb.isChecked());
-                        Toast.makeText(Preferences.this, "Is it checked: " + cb.isChecked() + "  :  " + bos.getCurrentProfile(), Toast.LENGTH_SHORT).show();
+                        chkHelpPreferences.setChecked(!cb.isChecked());
+                        bos.setShowHelpPreferences(!cb.isChecked());
                         return;
                     }
                 })
                 .show();
-        /*
-        final Dialog warning = new Dialog(Preferences.this);
-        warning.setTitle(Html.fromHtml("<font color='#66FFCC'>Confirm Profile Change</font>"));
-        warning.setContentView(R.layout.dialog_switch_profiles);
-        warning.setOnDismissListener(new Dialog.OnDismissListener(){
-            @Override
-            public void onDismiss(DialogInterface di) {
-                CheckBox cb = (CheckBox) warning.findViewById(R.id.chkDontShow);
-                bos.setShowProfileSwitchSave(!cb.isChecked());
-
-            }
-        });
-        warning.setCancelable(true);
-        warning.show();
-        */
 
     }
 
@@ -692,6 +694,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         chkLatestEnd.setChecked(false);
         etEarliestStart.setText("");
         etLatestEnd.setText("");
+
     }
 
     private void setButtonDimensions() {

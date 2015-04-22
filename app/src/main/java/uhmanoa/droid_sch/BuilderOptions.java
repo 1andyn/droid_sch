@@ -15,7 +15,7 @@ public class BuilderOptions{
     private final String selectOption = "SELECTED_OPTION";  // Remember last used profile
 
     /*  For General Preferences  */
-    private final String showProfileSwitchSave = "HINT_PROF_SWITCHED";
+    private final String helpProfileSwitchSave = "HELP_PREFERENCES_SAVE";
 
     /*  For Days Off section */
     private final String booleanDaysOff = "PREF_DAYS_OFF";
@@ -56,7 +56,7 @@ public class BuilderOptions{
     public void createProfile(String profileName){
         setCurrentProfile(profileName);
         SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(showProfileSwitchSave, true);
+        editor.putBoolean(helpProfileSwitchSave, true);
         editor.commit();
     }
 
@@ -86,8 +86,8 @@ public class BuilderOptions{
     /* ************    Setters   ****************/
     /* ******************************************/
 
-    public void setShowProfileSwitchSave(boolean b){
-        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(showProfileSwitchSave, b).commit();
+    public void setShowHelpPreferences(boolean b){
+        PreferenceManager.getDefaultSharedPreferences(c).edit().putBoolean(helpProfileSwitchSave, b).commit();
     }
 
     public void setCurrentProfile(String profName){
@@ -177,8 +177,8 @@ public class BuilderOptions{
         return currentProfile;
     }
 
-    public boolean getShowProfileSwitchSave(){
-        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(showProfileSwitchSave, true);
+    public boolean getShowHelpPreferences(){
+        return PreferenceManager.getDefaultSharedPreferences(c).getBoolean(helpProfileSwitchSave, true);
     }
 
     public boolean getDaysOffBoolean() {
