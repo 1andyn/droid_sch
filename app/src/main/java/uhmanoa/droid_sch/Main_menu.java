@@ -3,8 +3,10 @@ package uhmanoa.droid_sch;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -40,6 +43,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     ParserDataCheck prs;
     Dialog d;
     protected SQL_DataSource datasource;
+    PreferencesHelper ph = new PreferencesHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,21 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         curr_year = curr_time.get(Calendar.YEAR);
         datasource = new SQL_DataSource(this);
         datasource.open();
+
+        BuilderOptions bos = new BuilderOptions(getApplicationContext());
+        if (bos.isFirstUse()) {
+            ph.createPreferencesFile(getString(R.string.spin_default_profile), bos);
+            bos.setSelectedOption(0);
+
+        }
+    }
+
+    private void checkPrefFiles(){
+        ArrayList<String> names = ph.getPreferenceFiles();
+        String prefs = "";
+        for (String s : names)
+            prefs += s + " ";
+        Toast.makeText(this, "Pref files: " + prefs, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -78,7 +97,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         arraylst_btn.add((Button) findViewById(R.id.bt_create));
         arraylst_btn.add((Button) findViewById(R.id.bt_view));
         arraylst_btn.add((Button) findViewById(R.id.bt_search));
-//        arraylst_btn.add((Button) findViewById(R.id.bt_pref));
+        arraylst_btn.add((Button) findViewById(R.id.bt_pref));
         arraylst_btn.add((Button) findViewById(R.id.bt_exit));
 
         configureBtnListeners();
@@ -121,15 +140,15 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
                     }
                 });
 
-//        arraylst_btn.get(App_const.buttons.about.ordinal()).setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent prefIntent = new Intent(Main_menu.this, Preferences.class);
-//                        startActivity(prefIntent);
-//
-//                    }
-//                });
+        arraylst_btn.get(App_const.buttons.prefs.ordinal()).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent prefIntent = new Intent(Main_menu.this, Preferences.class);
+                        startActivity(prefIntent);
+
+                    }
+                });
 
         arraylst_btn.get(App_const.buttons.exit.ordinal()).setOnClickListener(
                 new View.OnClickListener() {

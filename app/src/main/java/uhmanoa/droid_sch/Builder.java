@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -48,12 +51,13 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     // --------DEBUG
     private boolean DEBUG = false;
+    private String LOGTAG = "SCHEDULER";
     // --------DEBUG
 
     private SingletonOptions sgo;
 
-
     private BuilderOptions bos;
+    private PreferencesHelper ph = new PreferencesHelper(this);
     private boolean lastLoadSuccess = false;
 
     private SearchView sv;
@@ -64,6 +68,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private Resources res_srch;
     private Point pt_resolution;
     private Spinner spinner;
+    private Button btnDeleteProfile;
     private SlidingUpPanelLayout slideupl;
     private ViewStub empty_desire;
     private ViewStub empty_star;
@@ -117,6 +122,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         datasource.open();
 
         bos = new BuilderOptions(getApplicationContext());
+        ArrayList<String> profiles = ph.getPreferenceFiles();
+        // make sure we're using the current profile
+        bos.setCurrentProfile(profiles.get(bos.getSelectedOption()));
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 getApplicationContext());
@@ -124,7 +132,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 String.valueOf(year), false);
 
         loadImageResources();
-        loadProfiles();
+        populateProfiles();
         configureSpinner();
         configureSlidingPanel();
         configureViewStubs();
@@ -178,6 +186,15 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     protected void onResume() {
         reloadDBData();
         super.onResume();
+        updateProfiles();
+        spinner.setSelection(bos.getSelectedOption());
+// -----------   DEBUG  ------------------
+        if (DEBUG){
+            Log.w(LOGTAG, "(onResume) RGet selected option: " + bos.getSelectedOption());
+
+        }
+// -----------   END DEBUG  ------------------
+
     }
 
     @Override
@@ -185,11 +202,43 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         super.onPause();
     }
 
-    private void loadProfiles() {
+    private void populateProfiles() {
         al_profiles = new ArrayList<>();
-        al_profiles.add("Default Settings");
-        al_profiles.add("Custom Settings");
+        al_profiles.addAll(ph.getPreferenceFiles());
+        al_profiles.add(getString(R.string.spin_new_profile));
+
+// -----------   DEBUG  ------------------
+        if (DEBUG){
+            String profs = "";
+            for (String s : al_profiles) {
+                profs += s + ", ";
+            }
+            Log.w(LOGTAG, "Profiles: " + profs);
+
+        }
+// -----------   END DEBUG  ------------------
         cfg_settings_from_profile();
+    }
+
+    private void updateProfiles(){
+        ArrayList<String> updatedProfiles = new ArrayList<>(ph.getPreferenceFiles());
+        al_profiles.clear();
+        al_profiles.addAll(updatedProfiles);
+        al_profiles.add(getString(R.string.spin_new_profile));
+        //populateProfiles();
+        spinner_data.notifyDataSetChanged();
+        spinner.setSelection(bos.getSelectedOption());
+
+        // -----------   DEBUG  ------------------
+        if (DEBUG){
+            String profs = "";
+            for (String s : updatedProfiles) {
+                profs += s + ", ";
+            }
+            Log.w(LOGTAG, "Updated Profiles: " + profs);
+
+        }
+// -----------   END DEBUG  ------------------
     }
 
     private void cfg_settings_from_profile() {
@@ -209,16 +258,73 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
-                bos.setSelectedOption(pos);
-                builderSelection = pos;
-                new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
-                        Toast.LENGTH_SHORT);
+                // An item was selected. You can retrieve the selected item
+                String profName = spinner.getSelectedItem().toString();
+                if (profName.equals(getString(R.string.spin_new_profile))){
+                    addProfileName();
+                }
+                else {
+                    bos = new BuilderOptions(getApplicationContext(), profName);
+                    bos.setSelectedOption(pos);
+
+                    builderSelection = pos;
+                    new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
+                            Toast.LENGTH_SHORT);
+                }
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
             }
         });
+    }
+
+    private void addProfileName(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Builder.this);
+        View v = getLayoutInflater().inflate(R.layout.dialog_new_profile, null);
+        final EditText newName = (EditText) v.findViewById(R.id.etProfileName);
+        builder.setView(v)
+                .setTitle(Html.fromHtml("<font color='#66FFCC'>" + getApplicationContext().getString(R.string.tv_add_profile_desc) + "</font>"))
+                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String tempName = newName.getText().toString();
+                        if (tempName.equals("") || tempName.equals(" ")) {
+                            Toast.makeText(Builder.this, "Please enter a valid profile name.", Toast.LENGTH_SHORT).show();
+                            spinner.setSelection(bos.getSelectedOption());
+                            return;
+                        }
+
+                        // remove any trailing spaces
+                        while (tempName.charAt(tempName.length() - 1) == ' ') {
+                            tempName = tempName.substring(0, tempName.indexOf(' '));
+                        }
+                        al_profiles.remove(al_profiles.size() - 1);
+                        al_profiles.add(tempName);
+                        al_profiles.add(getString(R.string.spin_new_profile));
+                        spinner_data.notifyDataSetChanged();
+                        spinner.setSelection(al_profiles.size() - 2);
+                        bos.setSelectedOption(al_profiles.size() - 2); // sets remembered profile to the new profile
+                        ph.createPreferencesFile(tempName, bos);
+
+//-------------  DEBUG  ----------------------
+                        if (DEBUG) {
+                            Log.w(LOGTAG, "(ADD PROFILE) New profile: " + spinner.getItemAtPosition(al_profiles.size() - 2).toString() +
+                                    " at position " + bos.getSelectedOption());
+                        }
+//-------------  END DEBUG  ----------------------
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        spinner.setSelection(bos.getSelectedOption());
+                    }
+                })
+                .show();
+
     }
 
     private void configureListViews() {
@@ -307,8 +413,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ToastWrapper(Builder.this, "Delete selected entries",
-                        Toast.LENGTH_SHORT);
+                //new ToastWrapper(Builder.this, "Delete selected entries",
+                //        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = desd_adp.getChecked_list();
                 System.out.println("Outputting Selection");
                 for (Long l : checked) {
@@ -326,7 +432,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onClick(View v) {
 
                 if (desd_adp.getCount() < 2) {
-                    new ToastWrapper(Builder.this, "Please add atleast two courses.",
+                    new ToastWrapper(Builder.this, "Please add at least two courses.",
                             Toast.LENGTH_SHORT);
                 } else {
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
@@ -344,6 +450,23 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             }
         });
 
+        btnDeleteProfile = (Button) findViewById(R.id.btnDeleteProfile);
+        btnDeleteProfile.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String toDelete = spinner.getSelectedItem().toString();
+                if (toDelete.equals(getString(R.string.spin_default_profile))) {
+                    Toast.makeText(getApplicationContext(), "Cannot remove the default profile.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                al_profiles.remove(toDelete);
+                spinner_data.notifyDataSetChanged();
+                spinner.setSelection(0);
+                bos.setSelectedOption(0);
+                ph.removePreferenceFile(toDelete);
+
+            }
+        });
     }
 
     private void configBuilderOptions() {
@@ -538,9 +661,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 if (res == RESULT_OK) {
                     Bundle results = data.getExtras();
                     boolean saved = results.getBoolean("SAVE");
-                    if (saved) {
-                        bos.setSelectedOption(1);
-                        spinner.setSelection(1);
+                    if(saved) {
+                        //bos.setSelectedOption(1);
+                        //spinner.setSelection(1);
                     }
                 }
         }
@@ -799,5 +922,4 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         int full_hr = hr * 100;
         return full_hr + min;
     }
-
 }

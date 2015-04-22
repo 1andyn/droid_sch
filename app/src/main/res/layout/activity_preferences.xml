@@ -4,391 +4,479 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/ll_preferences" >
+    android:id="@+id/ll_preferences">
 
-    <!--  Days off Section -->
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:background="@drawable/shape_rounded_rectangle"
-        >
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/CheckBoxTitle"
-            android:id="@+id/chkDays"
-            android:text="@string/days_off"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/llDaysOff"
-            >
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chk_m"
-                android:id="@+id/chkDaysM"
-                style="@style/CheckBoxBasic"
-                android:layout_weight="1"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chk_t"
-                android:id="@+id/chkDaysT"
-                style="@style/CheckBoxBasic"
-                android:layout_weight="1"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chk_w"
-                android:id="@+id/chkDaysW"
-                style="@style/CheckBoxBasic"
-                android:layout_weight="1"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chk_r"
-                android:id="@+id/chkDaysR"
-                style="@style/CheckBoxBasic"
-                android:layout_weight="1"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chk_f"
-                style="@style/CheckBoxBasic"
-                android:id="@+id/chkDaysF"
-                android:layout_weight="1"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chk_s"
-                style="@style/CheckBoxBasic"
-                android:id="@+id/chkDaysS"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <Spinner
+            android:id="@+id/spProfiles"
+            style="@style/btnStyleGenoa"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_margin="1dp"
+            android:layout_height="40dp" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            style="@style/btnStyleGenoa"
+            android:layout_weight="2"
+            android:text="@string/btn_delete_profile"
+            android:id="@+id/btnDeleteProfile" />
     </LinearLayout>
-    <!-- SPACER -->
+
+    <!-- SPACER
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/layout_spacer"/>
+-->
+    <!--  ScrollView wrapper  -->
 
-    <!-- Times Off Section -->
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:background="@drawable/shape_rounded_rectangle"
-        >
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/chkTimes"
-            style="@style/CheckBoxTitle"
-            android:text="@string/times_off"/>
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnAddTimeOff"
-            android:background="@drawable/plus"
-            android:scaleType="fitXY"
-            android:visibility="invisible"
-            android:layout_alignParentRight="true"
-            android:text="@string/plus"/>
-
-        <!-- Times off layout #1  -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/btnAddTimeOff"
-            android:id="@+id/llTimesOffTimesWrapper1"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/llTimesOffTimes"
-                >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/start"
-                    android:layout_weight="1"
-                    />
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:hint="@string/start_hint"
-                    android:id="@+id/etStartTimeOff"
-                    android:focusable="false"
-                    style="@style/EditTextTimePicker"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/end"
-                    android:gravity="right"
-                    android:layout_weight="1"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:hint="@string/end_hint"
-                    android:id="@+id/etEndTimeOff"
-                    android:focusable="false"
-                    style="@style/EditTextTimePicker"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@id/llTimesOffTimes"
-                android:id="@+id/llTimesOffDays"
-                >
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_m"
-                    android:id="@+id/chkTimesM"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_t"
-                    android:id="@+id/chkTimesT"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_w"
-                    android:id="@+id/chkTimesW"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_r"
-                    android:id="@+id/chkTimesR"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_f"
-                    style="@style/CheckBoxBasic"
-                    android:id="@+id/chkTimesF"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_s"
-                    style="@style/CheckBoxBasic"
-                    android:id="@+id/chkTimesS"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-        </LinearLayout>
-        <!-- End Times off layout #1  -->
-
-        <!-- Times off layout #2 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/llTimesOffTimesWrapper1"
-            android:id="@+id/llTimesOffTimesWrapper2"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/llTimesOffTimes2"
-                >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/start"
-                    android:layout_weight="1"
-                    />
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:hint="@string/start_hint"
-                    android:id="@+id/etStartTimeOff2"
-                    android:focusable="false"
-                    style="@style/EditTextTimePicker"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/end"
-                    android:gravity="right"
-                    android:layout_weight="1"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:hint="@string/end_hint"
-                    android:id="@+id/etEndTimeOff2"
-                    android:focusable="false"
-                    style="@style/EditTextTimePicker"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@id/llTimesOffTimes2"
-                android:id="@+id/llTimesOffDays2"
-                >
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_m"
-                    android:id="@+id/chkTimesM2"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_t"
-                    android:id="@+id/chkTimesT2"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_w"
-                    android:id="@+id/chkTimesW2"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_r"
-                    android:id="@+id/chkTimesR2"
-                    style="@style/CheckBoxBasic"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_f"
-                    style="@style/CheckBoxBasic"
-                    android:id="@+id/chkTimesF2"
-                    android:layout_weight="1"/>
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chk_s"
-                    style="@style/CheckBoxBasic"
-                    android:id="@+id/chkTimesS2"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-        </LinearLayout>
-        <!-- End Times off layout #2 -->
-
-
-    </RelativeLayout>
-
-    <!-- SPACER -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/layout_spacer"/>
-
-    <!-- Other Preferences Section -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:id="@+id/llOtherPrefs"
-        android:background="@drawable/shape_rounded_rectangle"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:padding="1dp"
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <!--  Days off Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@drawable/shape_rounded_rectangle"
+
+                >
                 <CheckBox
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/chkEarliestStart"
                     style="@style/CheckBoxTitle"
-                    android:layout_weight="2"
-                    android:text="@string/earliest_start"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/etEarliestStart"
-                    android:layout_weight="1"
-                    android:focusable="false"
-                    android:hint="@string/start_end_hint"
-                    style="@style/EditTextTimePicker"/>
+                    android:id="@+id/chkDays"
+                    android:text="@string/days_off"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/llDaysOff"
+                    >
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_m"
+                        android:id="@+id/chkDaysM"
+                        style="@style/CheckBoxBasic"
+                        android:layout_weight="1"/>
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_t"
+                        android:id="@+id/chkDaysT"
+                        style="@style/CheckBoxBasic"
+                        android:layout_weight="1"/>
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_w"
+                        android:id="@+id/chkDaysW"
+                        style="@style/CheckBoxBasic"
+                        android:layout_weight="1"/>
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_r"
+                        android:id="@+id/chkDaysR"
+                        style="@style/CheckBoxBasic"
+                        android:layout_weight="1"/>
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_f"
+                        style="@style/CheckBoxBasic"
+                        android:id="@+id/chkDaysF"
+                        android:layout_weight="1"/>
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_s"
+                        style="@style/CheckBoxBasic"
+                        android:id="@+id/chkDaysS"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- SPACER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:paddingTop="@dimen/layout_spacer"/>
+
+            <!-- Times Off Section -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@drawable/shape_rounded_rectangle"
+                >
                 <CheckBox
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/chkLatestEnd"
+                    android:id="@+id/chkTimes"
                     style="@style/CheckBoxTitle"
-                    android:layout_weight="2"
-                    android:text="@string/latest_end"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/etLatestEnd"
-                    android:layout_weight="1"
-                    android:focusable="false"
-                    android:hint="@string/start_end_hint"
-                    style="@style/EditTextTimePicker"/>
+                    android:text="@string/times_off"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnAddTimeOff"
+                    android:background="@drawable/plus"
+                    android:scaleType="fitXY"
+                    android:visibility="invisible"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/plus"/>
+
+                <!-- Times off layout #1  -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btnAddTimeOff"
+                    android:id="@+id/llTimesOffTimesWrapper1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/llTimesOffTimes"
+                        >
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/start"
+                            android:layout_weight="1"
+                            />
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:hint="@string/start_hint"
+                            android:id="@+id/etStartTimeOff"
+                            android:focusable="false"
+                            style="@style/EditTextTimePicker"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/end"
+                            android:gravity="right"
+                            android:layout_weight="1"/>
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:hint="@string/end_hint"
+                            android:id="@+id/etEndTimeOff"
+                            android:focusable="false"
+                            style="@style/EditTextTimePicker"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_below="@id/llTimesOffTimes"
+                        android:id="@+id/llTimesOffDays"
+                        >
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_m"
+                            android:id="@+id/chkTimesM"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_t"
+                            android:id="@+id/chkTimesT"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_w"
+                            android:id="@+id/chkTimesW"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_r"
+                            android:id="@+id/chkTimesR"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_f"
+                            style="@style/CheckBoxBasic"
+                            android:id="@+id/chkTimesF"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_s"
+                            style="@style/CheckBoxBasic"
+                            android:id="@+id/chkTimesS"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- End Times off layout #1  -->
+
+                <!-- Times off layout #2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/llTimesOffTimesWrapper1"
+                    android:id="@+id/llTimesOffTimesWrapper2"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/llTimesOffTimes2"
+                        >
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/start"
+                            android:layout_weight="1"
+                            />
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:hint="@string/start_hint"
+                            android:id="@+id/etStartTimeOff2"
+                            android:focusable="false"
+                            style="@style/EditTextTimePicker"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/end"
+                            android:gravity="right"
+                            android:layout_weight="1"/>
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:hint="@string/end_hint"
+                            android:id="@+id/etEndTimeOff2"
+                            android:focusable="false"
+                            style="@style/EditTextTimePicker"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_below="@id/llTimesOffTimes2"
+                        android:id="@+id/llTimesOffDays2"
+                        >
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_m"
+                            android:id="@+id/chkTimesM2"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_t"
+                            android:id="@+id/chkTimesT2"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_w"
+                            android:id="@+id/chkTimesW2"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_r"
+                            android:id="@+id/chkTimesR2"
+                            style="@style/CheckBoxBasic"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_f"
+                            style="@style/CheckBoxBasic"
+                            android:id="@+id/chkTimesF2"
+                            android:layout_weight="1"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chk_s"
+                            style="@style/CheckBoxBasic"
+                            android:id="@+id/chkTimesS2"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+<!-- End Times off layout #2 -->
+
+
+            </RelativeLayout>
+
+<!-- SPACER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_spacer"/>
+
+<!-- Other Preferences Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:id="@+id/llOtherPrefs"
+                android:background="@drawable/shape_rounded_rectangle"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/chkEarliestStart"
+                            style="@style/CheckBoxTitle"
+                            android:layout_weight="2"
+                            android:text="@string/earliest_start"/>
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/etEarliestStart"
+                            android:layout_weight="1"
+                            android:focusable="false"
+                            android:hint="@string/start_end_hint"
+                            style="@style/EditTextTimePicker"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/chkLatestEnd"
+                            style="@style/CheckBoxTitle"
+                            android:layout_weight="2"
+                            android:text="@string/latest_end"/>
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/etLatestEnd"
+                            android:layout_weight="1"
+                            android:focusable="false"
+                            android:hint="@string/start_end_hint"
+                            style="@style/EditTextTimePicker"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+<!-- SPACER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_spacer"/>
+
+<!-- Help Options section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/llHelpOptions"
+                android:paddingTop="@dimen/layout_top_bottom_pad"
+                android:paddingBottom="@dimen/layout_top_bottom_pad"
+                android:background="@drawable/shape_rounded_rectangle">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/CheckBoxTitle"
+                    android:text="@string/help_title"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chkHelpPreferences"
+                    style="@style/CheckBoxBasic"
+                    android:text="@string/help_preferences"/>
+
             </LinearLayout>
         </LinearLayout>
+    </ScrollView>
+
+<!--   Buttons Section -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            style="@style/btnStyleGenoa"
+            android:id="@+id/btnCancel"
+            android:text="@string/cancel"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            style="@style/btnStyleGenoa"
+            android:id="@+id/btnReset"
+            android:text="@string/btn_reset"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            style="@style/btnStyleGenoa"
+            android:id="@+id/btnSave"
+            android:text="@string/btn_save"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            style="@style/btnStyleGenoa"
+            android:id="@+id/btnDone"
+            android:text="@string/btn_done"
+            />
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="2dp"
-                style="@style/btnStyleGenoa"
-                android:id="@+id/btnCancel"
-                android:text="@string/cancel"
-                />
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="2dp"
-                style="@style/btnStyleGenoa"
-                android:id="@+id/btnSave"
-                android:text="@string/save"/>
-        </LinearLayout>
-    </RelativeLayout>
 
 </LinearLayout>

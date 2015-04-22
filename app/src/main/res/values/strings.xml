@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="dialog_do_not_show">Do not show this message in the future.</string>
+
     <string name="app_name">Mānoa Scheduler</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -91,6 +93,16 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_available__schedules">Available Schedules</string>
 
+    <!-- Additional strings for Builder Activity -->
+    <string name="spin_default_profile">Default Profile</string>
+    <string name="spin_select_profile">Select Profile</string>
+    <string name="spin_new_profile">New profile...</string>
+    <string name="btn_new_profile">New Profile</string>
+    <string name="btn_delete_profile">Delete Profile</string>
+    <string name="btn_remove_course">Remove Course</string>
+    <string name="tv_add_profile_desc">Enter Profile Name</string>
+    <string name="hint_profile_name">Profile name...</string>
+
     <!-- Strings for Available Schedules Activity -->
 
     <string name="previous">&lt;</string>
@@ -127,6 +139,19 @@
     <string name="minimum_break">Minimum break time:</string>
     <string name="maximum_break">Maximum break time:</string>
     <string name="break_hint">(in minutes)</string>
-    <string name="save">Save</string>
+    <string name="btn_save">Save Settings</string>
+    <string name="btn_reset">Reset Settings</string>
+    <string name="btn_done">Done</string>
+    <string name="confirm_profile_change">Confirm Profile Change</string>
+
+    <string name="dialog_warning_profile_change">If you change profiles without saving the settings for the current profile, you will loose any unsaved
+        changes.</string>
+
+    <string name="help_title">Show help dialogs for the following screens:</string>
+    <string name="help_preferences">Preferences</string>
+    <string name="help_home">Home Screen</string>
+    <string name="help_create">Create Schedules</string>
+    <string name="help_view">View Schedules</string>
+    <string name="help_search">Search for Courses</string>
 
 </resources>
