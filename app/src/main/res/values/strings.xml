@@ -63,7 +63,7 @@
     <string name="res_foc">Focus/GE: </string>
     <string name="menu_build">Go to Schedule Builder</string>
     <string name="menu_refresh">Refresh Seating Data</string>
-    <string name="menu_build_pref">Custom Schedule Options</string>
+    <string name="menu_build_pref">Configure Schedule Profile</string>
 
     <string-array name="gefc_list">
         <item>(FGA) Foundation GMP-A</item>
@@ -187,7 +187,7 @@
 <!-- Strings for Create Schedules Activity -->
     <string name="help_create_search">Search:</string>
     <string name="help_create_min_course">Set Minimum Course Count:</string>
-    <string name="help_create_options">Custom Schedule Options:</string>
+    <string name="help_create_options">Configure Schedule Profile:</string>
     <string name="help_create_profiles">Selecting a Profile:</string>
     <string name="help_create_delete_profile">Delete Profile:</string>
     <string name="help_create_build">Build Schedules:</string>
