@@ -68,7 +68,7 @@ public class ScheduleView extends LinearLayout {
 
             if(c.getStart2() != 9999) {
 
-                TextView tvc = produceFormattedTV("^");
+                TextView tvc = produceFormattedTV(c.getCourse()+"*");
                 tvc.setTextColor(getResources().getColor(R.color.dark_aqua));
 
                 TextView tvt = produceFormattedTV(c.getTimeString(true));
