@@ -12,6 +12,16 @@ android {
         versionCode 2
         versionName "1.1"
     }
+    //stub keys
+    signingConfigs {
+        release {
+            storeFile file("myreleasekey.keystore")
+            storePassword "password"
+            keyAlias "MyReleaseKey"
+            keyPassword "password"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
