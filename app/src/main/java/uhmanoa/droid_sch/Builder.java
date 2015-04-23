@@ -62,6 +62,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private ArrayList<Long> selectedstar;
     private ArrayList<Long> selectedcrs;
 
+    private boolean alreadyrun = false;
     private boolean lastLoadSuccess = false;
 
     private SearchView sv;
@@ -206,13 +207,18 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     @Override
     protected void onResume() {
+        if(sv != null) {
+            sv.clearFocus();
+        }
         reloadDBData();
         super.onResume();
         updateProfiles();
         spinner.setSelection(bos.getSelectedOption());
 
-        if (bos.getShowHelpCreateSchedules())
+        if (bos.getShowHelpCreateSchedules() && !alreadyrun) {
             showHelp();
+            alreadyrun = true;
+        }
     }
 
     @Override
@@ -867,11 +873,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         int end1 = bos.getDayTimesEnd1();
         int start2 = bos.getDayTimesStart2();
         int end2 = bos.getDayTimesEnd2();
-
-        System.out.println("DEBUG: " + start1);
-        System.out.println("DEBUG: " + start2);
-        System.out.println("DEBUG: " + end1);
-        System.out.println("DEBUG: " + end2);
 
         //Four Unique Cases
         // #1 Both are complete, add both

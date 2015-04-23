@@ -46,7 +46,6 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     Dialog d;
     protected SQL_DataSource datasource;
     PreferencesHelper ph = new PreferencesHelper(this);
-
     BuilderOptions bos;
 
     @Override
@@ -108,8 +107,9 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         datasource.open();
         super.onResume();
 
-        if (bos.getShowHelpMain())
+        if (bos.getShowHelpMain()) {
             showHelp();
+        }
     }
 
     @Override

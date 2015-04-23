@@ -60,6 +60,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
 
     private static String pref_file = "PREF_FILE";
 
+    private boolean alreadyrun = false;
+
     private SearchView sv;
     private boolean lastLoadSuccess = false;
     private String srch_key = "";
@@ -242,8 +244,10 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     {
         reloadDBData();
         super.onResume();
-        if (bos.getShowHelpSearchCourses())
+        if (bos.getShowHelpSearchCourses() && !alreadyrun) {
             showHelp();
+            alreadyrun = true;
+        }
     }
 
     @Override
