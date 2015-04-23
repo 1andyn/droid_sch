@@ -22,7 +22,7 @@
     <string name="bt_gefoc"> GE / Focus</string>
     <string name="title_activity_search"> Search for Courses</string>
     <string name="ok">OK</string>
-    <string name="force_update">Refresh Course Data ⟳</string>
+    <string name="force_update">Refresh Course Data</string>
     <string name="cancel">Cancel</string>
     <string name="srch_title">Search for Courses</string>
     <string name="menu_gefc">Gen Ed/Focus Filter</string>
