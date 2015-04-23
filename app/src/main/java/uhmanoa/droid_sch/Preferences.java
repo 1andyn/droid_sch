@@ -375,7 +375,8 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 break;
             case R.id.btnSave:              // Save Profile Button
                 saveSettings();
-                Toast.makeText(Preferences.this, "Settings for " + bos.getCurrentProfile() + " saved.", Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Preferences.this, "Settings for " + bos.getCurrentProfile() +
+                        " saved.", Toast.LENGTH_SHORT);
                 break;
             case R.id.btnReset:
                 resetPreferenceValues();
@@ -395,7 +396,8 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //toDelete = spProfiles.getSelectedItem().toString();
                                 if (toDelete.equals(getString(R.string.spin_default_profile))) {
-                                    Toast.makeText(getApplicationContext(), "Cannot remove the default profile.", Toast.LENGTH_SHORT).show();
+                                    new ToastWrapper(getApplicationContext(), "Cannot remove the " +
+                                            "default profile.", Toast.LENGTH_SHORT);
                                     return;
                                 }
                                 profilesList.remove(toDelete);
@@ -628,7 +630,8 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String tempName = newName.getText().toString();
                         if (tempName.equals("") || tempName.equals(" ")) {
-                            Toast.makeText(Preferences.this, "Please enter a valid profile name.", Toast.LENGTH_SHORT).show();
+                            new ToastWrapper(Preferences.this, "Please enter a valid profile name.",
+                                    Toast.LENGTH_SHORT);
                             spProfiles.setSelection(bos.getSelectedOption());
                             return;
                         }
