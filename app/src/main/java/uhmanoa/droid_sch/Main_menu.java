@@ -68,7 +68,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         if (bos.isFirstUse()) {
             ph.createPreferencesFile(getString(R.string.spin_default_profile), bos);
             bos.setSelectedOption(0);
-
+            bos.setNotFirst();
         }
 
     }

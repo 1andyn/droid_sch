@@ -42,6 +42,9 @@ public class BuilderOptions{
 
     private final String booleanTimeOff = "PREF_TIME_OFF";
 
+    private final String first_run= "FIRST_RUN";
+
+
     private String currentProfile;
 
     public BuilderOptions (Context ctx) {
@@ -74,8 +77,16 @@ public class BuilderOptions{
     }
 
     public boolean isFirstUse(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        return !prefs.contains(selectOption);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(c);
+        boolean firstuse = settings.getBoolean(first_run, true);
+        return firstuse;
+    }
+
+    public void setNotFirst(){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(first_run, false);
+        editor.commit();
     }
 
     public int getSelectedOption() {
