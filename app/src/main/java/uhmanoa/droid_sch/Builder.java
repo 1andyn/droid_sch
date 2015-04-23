@@ -17,6 +17,7 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -149,20 +150,19 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private void showHelp(){
 
         AlertDialog.Builder help = new AlertDialog.Builder(Builder.this);
-
-        help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
+        LayoutInflater inflater = this.getLayoutInflater();
+                help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
                 getApplicationContext().getString(R.string.help_create_title) + "</font>"))
-                .setView(R.layout.dialog_help_create)
+                .setView(inflater.inflate(R.layout.dialog_help_create, null))
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
+                        CheckBox cb = (CheckBox) ((AlertDialog) dialog).findViewById(R.id.chkDontShow);
                         bos.setShowHelpCreateSchedules(!cb.isChecked());
                         return;
                     }
                 })
                 .show();
-
     }
 
     private void checkCourseData() {
@@ -655,7 +655,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     Dialog diag_min = createMinDialog();
                 } else {
                     new ToastWrapper(Builder.this, "Please add atleast two courses before" +
-                            "attempting to configure this option.",
+                            " attempting to configure this option.",
                             Toast.LENGTH_SHORT);
                 }
                 return true;

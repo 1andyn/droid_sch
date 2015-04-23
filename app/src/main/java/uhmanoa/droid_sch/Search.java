@@ -147,10 +147,10 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private void showHelp(){
 
         AlertDialog.Builder help = new AlertDialog.Builder(Search.this);
-
+        LayoutInflater li = this.getLayoutInflater();
         help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
                 getApplicationContext().getString(R.string.help_search_title) + "</font>"))
-                .setView(R.layout.dialog_help_search)
+                .setView(li.inflate(R.layout.dialog_help_search, null))
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {

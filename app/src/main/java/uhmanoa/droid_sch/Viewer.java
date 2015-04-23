@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,10 +68,10 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     private void showHelp(){
 
         AlertDialog.Builder help = new AlertDialog.Builder(Viewer.this);
-
+        LayoutInflater li = this.getLayoutInflater();
         help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
                 getApplicationContext().getString(R.string.help_view_title) + "</font>"))
-                .setView(R.layout.dialog_help_view)
+                .setView(li.inflate(R.layout.dialog_help_view, null))
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {

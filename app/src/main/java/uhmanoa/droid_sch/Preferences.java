@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -658,10 +659,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     private void showHelp(){
 
         AlertDialog.Builder warning = new AlertDialog.Builder(Preferences.this);
-
+        LayoutInflater li = this.getLayoutInflater();
         warning.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
                 getApplicationContext().getString(R.string.help_preferences_title) + "</font>"))
-                .setView(R.layout.dialog_help_preferences)
+                .setView(li.inflate(R.layout.dialog_help_preferences, null))
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {

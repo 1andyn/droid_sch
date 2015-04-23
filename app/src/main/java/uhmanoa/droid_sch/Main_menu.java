@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -75,10 +76,10 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     private void showHelp(){
 
         AlertDialog.Builder help = new AlertDialog.Builder(Main_menu.this);
-
+        LayoutInflater inflater = this.getLayoutInflater();
         help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
                     getApplicationContext().getString(R.string.help_main_title) + "</font>"))
-                .setView(R.layout.dialog_help_main)
+                .setView(inflater.inflate(R.layout.dialog_help_main, null))
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
