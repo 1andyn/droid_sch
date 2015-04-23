@@ -66,6 +66,8 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
 
         bos = new BuilderOptions(getApplicationContext());
         if (bos.isFirstUse()) {
+            ph.removePreferenceFile(getString(R.string.spin_default_profile)); //make sure it doesnt
+            //create a duplicate
             ph.createPreferencesFile(getString(R.string.spin_default_profile), bos);
             bos.setSelectedOption(0);
             bos.setNotFirst();
