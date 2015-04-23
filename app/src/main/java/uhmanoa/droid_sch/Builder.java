@@ -280,10 +280,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 } else {
                     bos = new BuilderOptions(getApplicationContext(), profName);
                     bos.setSelectedOption(pos);
-
                     builderSelection = pos;
-                    //new ToastWrapper(Builder.this, "Using " + al_profiles.get(pos),
-                    //        Toast.LENGTH_SHORT);
                 }
             }
 
@@ -393,18 +390,13 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteItemStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //new ToastWrapper(Builder.this, "Deleting selected items on star list.",
-                //        Toast.LENGTH_SHORT);
-
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
-                System.out.println("Outputting Selection");
                 for (Long l : checked) {
-                    if (DEBUG) System.out.println(l);
                     deleteStarByID(l);
                 }
                 sobj_adp.clearCheckedList();
                 mandatoryDataChange();
-                Toast.makeText(Builder.this, "Selected items removed.", Toast.LENGTH_SHORT).show();
+                new ToastWrapper(Builder.this, "Selected items removed.", Toast.LENGTH_SHORT);
             }
         });
 
@@ -416,9 +408,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 new ToastWrapper(Builder.this, "Added to courses desired list",
                         Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = sobj_adp.getChecked_list();
-                System.out.println("Outputting Selection");
                 for (Long l : checked) {
-                    if (DEBUG) System.out.println(l);
                     addDesiredFromStar(l);
                 }
                 mandatoryDataChange();
@@ -429,12 +419,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //new ToastWrapper(Builder.this, "Delete selected entries",
-                //        Toast.LENGTH_SHORT);
                 ArrayList<Long> checked = desd_adp.getChecked_list();
-                System.out.println("Outputting Selection");
                 for (Long l : checked) {
-                    if (DEBUG) System.out.println(l);
                     deleteItemByID(l);
                 }
                 desd_adp.clearCheckedList(); //Finished deleting so clear this list
@@ -446,10 +432,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         BuildScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (desd_adp.getCount() < 2) {
-//                    new ToastWrapper(Builder.this, "Please add at least two courses.",
-//                            Toast.LENGTH_SHORT);
-//                } else {
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
                     Bundle b = new Bundle();
                     b.putInt("SEMESTER", sem);
@@ -459,10 +441,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
                     //configure SingletonOptions
                     configBuilderOptions();
-
                     startActivity(i);
-//                }
-            }
+        }
         });
 
         btnDeleteProfile = (Button) findViewById(R.id.btnDeleteProfile);
@@ -471,7 +451,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onClick(View view) {
                 String toDelete = spinner.getSelectedItem().toString();
                 if (toDelete.equals(getString(R.string.spin_default_profile))) {
-                    Toast.makeText(getApplicationContext(), "Cannot remove the default profile.", Toast.LENGTH_SHORT).show();
+                    new ToastWrapper(Builder.this,  "Cannot remove the default profile.",
+                            Toast.LENGTH_SHORT);
                     return;
                 }
                 al_profiles.remove(toDelete);
@@ -583,7 +564,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         for (int x = 0; x < al_strobj.size(); x++) {
             Long temp = al_strobj.get(x).getID();
             if (temp.equals(id)) {
-                if (DEBUG) System.out.println("Deleting " + id + " " + al_strobj.get(x).getCRN());
                 datasource.deleteStar(id);
                 sobj_adp.remove(al_strobj.get(x));
             }
@@ -594,7 +574,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         for (int x = 0; x < al_desired.size(); x++) {
             Long temp = al_desired.get(x).getID();
             if (temp.equals(id)) {
-                if (DEBUG) System.out.println("Deleting " + id + " " + al_desired.get(x).getCRN());
                 datasource.deleteTStar(id);
                 desd_adp.remove(al_desired.get(x));
             }
@@ -763,82 +742,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         }
     }
 
-    // For future Changes, Dialogs Should probably be split into Classes
-    private Dialog createTimeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Builder.this);
-        LayoutInflater infl = Builder.this.getLayoutInflater();
-        final View diag_view = infl.inflate(R.layout.time_dialog, null);
-        en_start = (CheckBox) diag_view.findViewById(R.id.start_chkbox);
-        en_end = (CheckBox) diag_view.findViewById(R.id.end_chkbox);
-        dtp_start = (TimePicker) diag_view.findViewById(R.id.start_picker);
-        dtp_end = (TimePicker) diag_view.findViewById(R.id.end_picker);
-
-        //Load previous settings
-        en_start.setChecked(en_start_tp);
-        en_end.setChecked(en_end_tp);
-        dtp_start.setCurrentHour(start_hr);
-        dtp_start.setCurrentMinute(start_min);
-        dtp_end.setCurrentHour(end_hr);
-        dtp_end.setCurrentMinute(end_min);
-
-        if (!en_start.isChecked()) {
-            dtp_start.setVisibility(View.GONE);
-        }
-
-        if (!en_end.isChecked()) {
-            dtp_end.setVisibility(View.GONE);
-        }
-
-        en_start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (!(en_start.isChecked())) {
-                    dtp_start.setVisibility(View.GONE);
-                } else {
-                    dtp_start.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        en_end.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (!(en_end.isChecked())) {
-                    dtp_end.setVisibility(View.GONE);
-                } else {
-                    dtp_end.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        builder.setView(diag_view)
-                // Add action buttons
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        en_start_tp = en_start.isChecked();
-                        en_end_tp = en_end.isChecked();
-                        start_hr = dtp_start.getCurrentHour();
-                        start_min = dtp_start.getCurrentMinute();
-                        end_hr = dtp_end.getCurrentHour();
-                        end_min = dtp_end.getCurrentMinute();
-
-                        if (DEBUG) {
-                            System.out.println(en_start_tp);
-                            System.out.println(en_end_tp);
-                            System.out.println("START" + start_hr + ":" + start_min);
-                            System.out.println("END" + end_hr + ":" + end_min);
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel(); // Effectively don't do anything
-                    }
-                });
-
-        Dialog dlg = builder.show();
-        return builder.create();
-    }
-
     private int uniqueDesiredCount() {
         int count = desd_adp.getCount();
 
@@ -951,8 +854,4 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         }
     }
 
-    private int timeConvert(int hr, int min) {
-        int full_hr = hr * 100;
-        return full_hr + min;
-    }
 }
