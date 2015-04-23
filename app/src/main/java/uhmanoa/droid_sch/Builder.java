@@ -432,16 +432,20 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         BuildScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (desd_adp.getCount() < 2) {
+                    new ToastWrapper(Builder.this, "Please add atleast two courses.",
+                            Toast.LENGTH_SHORT);
+                } else {
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
                     Bundle b = new Bundle();
                     b.putInt("SEMESTER", sem);
                     b.putInt("YEAR", year);
                     b.putInt("MONTH", month);
                     i.putExtras(b);
-
                     //configure SingletonOptions
                     configBuilderOptions();
                     startActivity(i);
+                }
         }
         });
 
