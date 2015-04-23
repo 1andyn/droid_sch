@@ -48,7 +48,7 @@
     <string name="res_clear">Clear Results (X)</string>
     <string name="des_clear">Clear List</string>
     <string name="des_delete">Delete</string>
-    <string name="des_build">Build Schedules</string>
+    <string name="des_build">Build Schedules ✓</string>
     <string name="menu_crs_min">Set Minimum Course Count</string>
     <string name="menu_tblock">Set Time Off</string>
     <string name="str_panel_add">Add to List</string>
