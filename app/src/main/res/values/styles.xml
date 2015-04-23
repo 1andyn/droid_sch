@@ -25,9 +25,9 @@
         <item name="android:height">40dp</item>
     </style>
 
-    <!-- Hack for Robolectric to run with appcompat.v7 -->
-    <style name="RoboAppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
-    </style>
+    <!--&lt;!&ndash; Hack for Robolectric to run with appcompat.v7 &ndash;&gt;-->
+    <!--<style name="RoboAppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">-->
+    <!--</style>-->
 
     <style name="tvTitle" parent="@android:style/Widget.TextView">
         <item name="android:textSize">17sp</item>

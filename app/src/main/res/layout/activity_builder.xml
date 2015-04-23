@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:orientation="horizontal"
-        android:paddingBottom="2dp">
+        android:orientation="horizontal">
         <Spinner
             android:id="@+id/major_spinner"
             style="@style/btnStyleGenoa"
