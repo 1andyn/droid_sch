@@ -22,16 +22,16 @@
     <string name="bt_gefoc"> GE / Focus</string>
     <string name="title_activity_search"> Search for Courses</string>
     <string name="ok">OK</string>
-    <string name="force_update">Refresh Course Data</string>
+    <string name="force_update">Refresh Course Data ⟳</string>
     <string name="cancel">Cancel</string>
     <string name="srch_title">Search for Courses</string>
     <string name="menu_gefc">Gen Ed/Focus Filter</string>
-    <string name="menu_time">Start/End Time Filter</string>
+    <string name="menu_time">Start/End Time Filter </string>
     <string name="menu_fil">Show Courses by Major</string>
     <string name="action_anchor_enable">Enable Anchor Point</string>
     <string name="action_anchor_disable">Disable Anchor Point</string>
     <string name="str_panel_clear">Clear List</string>
-    <string name="str_panel_delete">Delete</string>
+    <string name="str_panel_delete">Delete ✕</string>
     <string name="start_chkbox">Set Earliest Start Time</string>
     <string name="end_chkbox">Set Latest End Time</string>
     <string name="str_course"> Course: </string>
@@ -45,7 +45,7 @@
     <string name="res_end">End: </string>
     <string name="res_days">Days: </string>
     <string name="res_loc">Location: </string>
-    <string name="res_clear">Clear Results (X)</string>
+    <string name="res_clear">Clear Results ✕</string>
     <string name="des_clear">Clear List</string>
     <string name="des_delete">Delete</string>
     <string name="des_build">Build Schedules ✓</string>
@@ -61,7 +61,7 @@
     <string name="res_dates">Dates: </string>
     <string name="res_preq">Prequsites: </string>
     <string name="res_foc">Focus/GE: </string>
-    <string name="menu_build">Go to Schedule Builder</string>
+    <string name="menu_build">Go to Schedule Builder →</string>
     <string name="menu_refresh">Refresh Seating Data</string>
     <string name="menu_build_pref">Configure Schedule Profile</string>
 
@@ -141,8 +141,8 @@
     <string name="minimum_break">Minimum break time:</string>
     <string name="maximum_break">Maximum break time:</string>
     <string name="break_hint">(in minutes)</string>
-    <string name="btn_save">Save Settings</string>
-    <string name="btn_reset">Reset Settings</string>
+    <string name="btn_save">Save Settings ✓</string>
+    <string name="btn_reset">Reset Settings ✕</string>
     <string name="btn_done">Return to Main Menu</string>
     <string name="btn_return">Return</string>
     <string name="confirm_profile_change">Confirm Profile Change</string>

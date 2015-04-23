@@ -70,9 +70,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         ss = SingletonSchedule.getInstance();
 
         checked = new ArrayList<>();
-
-        bos = new BuilderOptions(getApplicationContext());
-
         star_list = new ArrayList<>();
 
         Bundle extras = getIntent().getExtras();
@@ -92,8 +89,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     private void runBuildTask() {
+        Course c = sgo.getTimeOff();
         sbt = new ScheduleBuildTask(Available_Schedules.this, datasource,
-                Available_Schedules.this, sem, year, star_list, sgo.getMinCourse());
+                Available_Schedules.this, sem, year, star_list, sgo.getMinCourse(), c);
         sbt.execute();
     }
 
@@ -389,7 +387,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     }
 
     private ArrayList<Schedule> dayFilter(ArrayList<Schedule> s) {
-        ArrayList<Character> offDays = bos.getDaysOffArray();
+        ArrayList<Character> offDays = sgo.getDaysOff();
         ArrayList<Schedule> filtered_results = new ArrayList<>();
         for (Schedule sc : s) {
             boolean match = false;
@@ -412,9 +410,11 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     @Override
     public void onBuildTaskComplete() {
         ArrayList<Schedule> final_results = timeFilter(sbt.getResults());
-        int size = (bos.getDaysOffArray().size());
-        if(bos.getDaysOffBoolean() && size != 0) {
-            final_results = dayFilter(final_results);
+        if(sgo.getDaysOffBool() && sgo.getDaysOff() != null) {
+            int size = (sgo.getDaysOff().size());
+            if (size != 0) {
+                final_results = dayFilter(final_results);
+            }
         }
         if (final_results.size() == 0) {
             new ToastWrapper(getApplicationContext(), "Your course list produced 0 possible " +

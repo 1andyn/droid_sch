@@ -238,7 +238,7 @@ public class BuilderOptions{
     }
 
     public ArrayList<Character> getDaysOffArray() {
-        SharedPreferences settings = c.getSharedPreferences(currentProfile, Context.MODE_PRIVATE);
+        //SharedPreferences settings = c.getSharedPreferences(currentProfile, Context.MODE_PRIVATE);
         return getCharsFromString(stringDaysOff);
     }
 
@@ -269,7 +269,7 @@ public class BuilderOptions{
     }
 
     public ArrayList<Character> getDayTimesOff1Array(){
-        SharedPreferences settings = c.getSharedPreferences(currentProfile, Context.MODE_PRIVATE);
+        //SharedPreferences settings = c.getSharedPreferences(currentProfile, Context.MODE_PRIVATE);
         return getCharsFromString(stringDayTimes1);
     }
 

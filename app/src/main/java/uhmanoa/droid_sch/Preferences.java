@@ -1,6 +1,7 @@
 package uhmanoa.droid_sch;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -129,10 +130,8 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
             days = days + "S";
         }
 
-        //DEBUG
-        System.out.println("DEBUG " + days);
-
         bos.setDaysOffString(days);
+
 
         /* *********************************
         ********* Times Off Section ********
@@ -143,6 +142,9 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 /* ********* Day Times Off part 1  ************/
         bos.setStartTime1(timesStart1);
         bos.setEndTime1(timesEnd1);
+
+        System.out.println("DEBUG: " + bos.getDayTimesStart1());
+        System.out.println("DEBUG: " + bos.getDayTimesEnd1());
 
         String days1 = "";
         if (chkTimesM.isChecked())
@@ -163,6 +165,10 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 /* ********* Day Times Off part 2  ************/
         bos.setStartTime2(timesStart2);
         bos.setEndTime2(timesEnd2);
+
+        System.out.println("DEBUG: " + bos.getDayTimesStart2());
+        System.out.println("DEBUG: " + bos.getDayTimesEnd2());
+
 
         String days2 = "";
         if (chkTimesM2.isChecked())
@@ -228,40 +234,40 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         chkTimes.setChecked(bos.getBooleanDayTimesOff());
 
                 /* ***********  Start Time 1 for Times off section  **********/
-        int dayTimesStart1 = bos.getDayTimesStart1();
-        if (dayTimesStart1 != -1){
-            int hr = dayTimesStart1 / 100;
-            int min = dayTimesStart1 % 100;
+        timesStart1 = bos.getDayTimesStart1();
+        if (timesStart1 != -1){
+            int hr = timesStart1 / 100;
+            int min = timesStart1 % 100;
             etStartTimeOff.setText(getTimeString(hr, min));
         }
         else
             etStartTimeOff.setText("");
 
                 /* ***********  End Time 1 for Times off section  **********/
-        int dayTimesEnd1 = bos.getDayTimesEnd1();
-        if (dayTimesEnd1 != -1){
-            int hr = dayTimesEnd1 / 100;
-            int min = dayTimesEnd1 % 100;
+        timesEnd1 = bos.getDayTimesEnd1();
+        if (timesEnd1 != -1){
+            int hr = timesEnd1 / 100;
+            int min = timesEnd1 % 100;
             etEndTimeOff.setText(getTimeString(hr, min));
         }
         else
             etEndTimeOff.setText("");
 
                 /* ************  Start Time 2 for Times off section  ***********/
-        int dayTimesStart2 = bos.getDayTimesStart2();
-        if (dayTimesStart2 != -1){
-            int hr = dayTimesStart2 / 100;
-            int min = dayTimesStart2 % 100;
+        timesStart2 = bos.getDayTimesStart2();
+        if (timesStart2 != -1){
+            int hr = timesStart2 / 100;
+            int min = timesStart2 % 100;
             etStartTimeOff2.setText(getTimeString(hr, min));
         }
         else
             etStartTimeOff2.setText("");
 
                 /* *************  End Time 2 for Times off section  *************/
-        int dayTimesEnd2 = bos.getDayTimesEnd2();
-        if (dayTimesEnd2 != -1){
-            int hr = dayTimesEnd2 / 100;
-            int min = dayTimesEnd2 % 100;
+        timesEnd2 = bos.getDayTimesEnd2();
+        if (timesEnd2 != -1){
+            int hr = timesEnd2 / 100;
+            int min = timesEnd2 % 100;
             etEndTimeOff2.setText(getTimeString(hr, min));
         }
         else
@@ -382,8 +388,25 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 resetPreferenceValues();
                 break;
             case R.id.btnDone:
-                saveSettings();
-                finish();
+                //saveSettings();
+                AlertDialog.Builder confirm = new AlertDialog.Builder(Preferences.this)
+                        .setTitle(Html.fromHtml("<font color='#66FFCC'>Finish Confirmation</font>"))
+                        .setMessage("Are you sure you are done? Changes will not be saved if you did" +
+                                " not press the SAVE button.")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                                return;
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+                Dialog d = confirm.show();
                 break;
             case R.id.btnDeleteProfile:
                 final String toDelete = spProfiles.getSelectedItem().toString();
@@ -669,7 +692,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
+                        CheckBox cb = (CheckBox) ((AlertDialog) dialog).findViewById(R.id.chkDontShow);
                         chkHelpPreferences.setChecked(!cb.isChecked());
                         bos.setShowHelpPreferences(!cb.isChecked());
                         return;

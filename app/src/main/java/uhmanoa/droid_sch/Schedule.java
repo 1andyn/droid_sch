@@ -6,65 +6,65 @@ import java.util.ArrayList;
  * To guarantee courses do not overlap, this class is usually populated
  * using overlap checking methods from the {@link Course} class prior to
  * adding to the Schedule.
- * 
+ *
  * @author Jimmy
  *
  */
 public class Schedule {
     private long sid;
-	private ArrayList<Course> schedule;
+    private ArrayList<Course> schedule;
     private int semester;
     private int year;
     private boolean checked = false; //always initally unchecked
-	
-	/** 
-	 * Empty constructor.
-	 */
-	public Schedule(long id, int yr, int sem){
+
+    /**
+     * Empty constructor.
+     */
+    public Schedule(long id, int yr, int sem){
         sid = id;
-		year = yr;
+        year = yr;
         semester = sem;
         schedule = new ArrayList<>();
-	}
-	
-	/**
-	 * Copy constructor adds all courses from the given course
-	 * to the new course.
-	 * @param s Existing schedule of courses to be copied.
-	 */
-	public Schedule(Schedule s){
-		this.sid = s.getID();
+    }
+
+    /**
+     * Copy constructor adds all courses from the given course
+     * to the new course.
+     * @param s Existing schedule of courses to be copied.
+     */
+    public Schedule(Schedule s){
+        this.sid = s.getID();
         this.year = s.getYear();
         this.semester = s.getSemester();
         schedule = new ArrayList<>();
         checked = false; //alaways initially unchecked
-		for (Course c : s.getCourses()){
-			schedule.add(c);
-		}
-	}
-	
-	/** 
-	 * Returns the schedule's list of courses
-	 * @return	List of courses.
-	 */
-	public ArrayList<Course> getCourses(){
-		return schedule;
-	}
-	
-	/**
-	 * Adds a course to the schedule.
-	 * @param c	Course to be added.
-	 */
-	public void addCourse(Course c){
-		if (!schedule.contains(c))
-			if (!c.isInvalid())
-				schedule.add(new Course(c));
-			else{
-				System.out.println("Invalid course, please fill in appropriate fields.");
-				System.out.println("Current course data is: ");
-				c.display();
-			}
-	}
+        for (Course c : s.getCourses()){
+            schedule.add(c);
+        }
+    }
+
+    /**
+     * Returns the schedule's list of courses
+     * @return	List of courses.
+     */
+    public ArrayList<Course> getCourses(){
+        return schedule;
+    }
+
+    /**
+     * Adds a course to the schedule.
+     * @param c	Course to be added.
+     */
+    public void addCourse(Course c){
+        if (!schedule.contains(c))
+            if (!c.isInvalid()) {
+                schedule.add(new Course(c));
+            }
+    }
+
+    public void addTimeBlock(Course c) {
+        schedule.add(c);
+    }
 
     public void setID(long pId) {
         sid = pId;
@@ -86,13 +86,13 @@ public class Schedule {
         return year;
     }
 
-	/**
-	 * Display the list of courses in the schedule.
-	 */
-	public void display(){
-		for (Course c : getCourses())
-			c.display();
-	}
+    /**
+     * Display the list of courses in the schedule.
+     */
+    public void display(){
+        for (Course c : getCourses())
+            c.display();
+    }
 
     public int earliestStart() {
         int time = getCourses().get(0).getStart1(); //initialize to very first start possible

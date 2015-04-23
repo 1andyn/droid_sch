@@ -7,14 +7,32 @@ public class SingletonOptions {
     private static SingletonOptions instance = null;
 	private boolean en_StartTime = false;
     private boolean en_EndTime = false;
+    private boolean daysOffBool = false;
     private int startTime = 0;
     private int endTime = 0;
     private int mincrs = -1;
     private ArrayList<Character> daysOff;
+    private Course timeOff = null;
 
 	private SingletonOptions(){
         //do nothing
 	}
+
+    public void setTimeOff(Course c) {
+        timeOff = c;
+    }
+
+    public void setDaysOffBool(boolean i) {
+        daysOffBool = i;
+    }
+
+    public boolean getDaysOffBool() {
+        return daysOffBool;
+    }
+
+    public Course getTimeOff() {
+        return timeOff;
+    }
 
     public static SingletonOptions getInstance() {
         if(instance == null) {

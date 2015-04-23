@@ -80,8 +80,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private ArrayList<Star_obj> al_desired;
     private ArrayList<String> al_profiles;
     private ArrayAdapter<String> spinner_data;
-    private boolean en_start_tp, en_end_tp, en_min_np = false;
-    private int start_hr, end_hr, start_min, end_min = 0;
+    private boolean en_min_np = false;
     private ListView lv_desd, lv_sobj;
 
     private CheckBox en_min;
@@ -151,11 +150,11 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     }
 
-    private void showHelp(){
+    private void showHelp() {
 
         AlertDialog.Builder help = new AlertDialog.Builder(Builder.this);
         LayoutInflater inflater = this.getLayoutInflater();
-                help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
+        help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
                 getApplicationContext().getString(R.string.help_create_title) + "</font>"))
                 .setView(inflater.inflate(R.layout.dialog_help_create, null))
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
@@ -227,7 +226,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         al_profiles.add(getString(R.string.spin_new_profile));
 
 // -----------   DEBUG  ------------------
-        if (DEBUG){
+        if (DEBUG) {
             String profs = "";
             for (String s : al_profiles) {
                 profs += s + ", ";
@@ -239,7 +238,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         cfg_settings_from_profile();
     }
 
-    private void updateProfiles(){
+    private void updateProfiles() {
         ArrayList<String> updatedProfiles = new ArrayList<>(ph.getPreferenceFiles());
         al_profiles.clear();
         al_profiles.addAll(updatedProfiles);
@@ -249,7 +248,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         spinner.setSelection(bos.getSelectedOption());
 
         // -----------   DEBUG  ------------------
-        if (DEBUG){
+        if (DEBUG) {
             String profs = "";
             for (String s : updatedProfiles) {
                 profs += s + ", ";
@@ -261,10 +260,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     }
 
     private void cfg_settings_from_profile() {
-        //Set up Dialog settings from Profile settings
-        en_start_tp = false; //stub
-        en_end_tp = false; //stub
-        en_min_np = false; //stub
+        en_min_np = false;
     }
 
     private void configureSpinner() {
@@ -294,7 +290,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         });
     }
 
-    private void addProfileName(){
+    private void addProfileName() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Builder.this);
         View v = getLayoutInflater().inflate(R.layout.dialog_new_profile, null);
         final EditText newName = (EditText) v.findViewById(R.id.etProfileName);
@@ -447,7 +443,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     configBuilderOptions();
                     startActivity(i);
                 }
-        }
+            }
         });
 
         btnDeleteProfile = (Button) findViewById(R.id.btnDeleteProfile);
@@ -456,7 +452,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onClick(View view) {
                 String toDelete = spinner.getSelectedItem().toString();
                 if (toDelete.equals(getString(R.string.spin_default_profile))) {
-                    new ToastWrapper(Builder.this,  "Cannot remove the default profile.",
+                    new ToastWrapper(Builder.this, "Cannot remove the default profile.",
                             Toast.LENGTH_SHORT);
                     return;
                 }
@@ -470,13 +466,13 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         });
 
         btnDone = (Button) findViewById(R.id.btnDone);
-        btnDone.setOnClickListener(new Button.OnClickListener(){
+        btnDone.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder confirm = new AlertDialog.Builder(Builder.this);
                 confirm.setTitle(Html.fromHtml("<font color='#66FFCC'>Confirm...</font>"))
                         .setMessage(R.string.dialog_confirm_home)
-                        .setPositiveButton("Yes", new AlertDialog.OnClickListener(){
+                        .setPositiveButton("Yes", new AlertDialog.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 finish();
@@ -489,15 +485,24 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     }
 
     private void configBuilderOptions() {
-        if (builderSelection == 0) {
-            //default don't use any options
-            sgo.setEn_StartTime(0, false);
-            sgo.setEn_EndTime(0, false);
+
+        boolean start = bos.getBooleanEarliestStart();
+        boolean end = bos.getBooleanLatestEnd();
+        sgo.setEn_StartTime(bos.getEarliestStart(), start);
+        sgo.setEn_EndTime(bos.getLatestEnd(), end);
+
+        if(bos.getDaysOffBoolean()) {
+            sgo.setDaysOffBool(true);
+            sgo.setDaysOff(bos.getDaysOffArray());
         } else {
-            boolean start = bos.getBooleanEarliestStart();
-            boolean end = bos.getBooleanLatestEnd();
-            sgo.setEn_StartTime(bos.getEarliestStart(), start);
-            sgo.setEn_EndTime(bos.getLatestEnd(), end);
+            sgo.setDaysOffBool(false);
+            sgo.setDaysOff(null);
+        }
+
+        if (bos.getBooleanDayTimesOff()) {
+            sgo.setTimeOff(timeBlockBuilder());
+        } else {
+            sgo.setTimeOff(null);
         }
 
         if (en_min_np) {
@@ -505,9 +510,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         } else {
             sgo.setMinCrs(-1);
         }
-
-        sgo.setDaysOff(bos.getDaysOffArray());
-
     }
 
     private Star_obj getResultById(long id) {
@@ -678,7 +680,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                 if (res == RESULT_OK) {
                     Bundle results = data.getExtras();
                     boolean saved = results.getBoolean("SAVE");
-                    if(saved) {
+                    if (saved) {
                         //bos.setSelectedOption(1);
                         //spinner.setSelection(1);
                     }
@@ -858,5 +860,81 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             editor.commit();
         }
     }
+
+    private Course timeBlockBuilder() {
+        Course c;
+        int start1 = bos.getDayTimesStart1();
+        int end1 = bos.getDayTimesEnd1();
+        int start2 = bos.getDayTimesStart2();
+        int end2 = bos.getDayTimesEnd2();
+
+        System.out.println("DEBUG: " + start1);
+        System.out.println("DEBUG: " + start2);
+        System.out.println("DEBUG: " + end1);
+        System.out.println("DEBUG: " + end2);
+
+        //Four Unique Cases
+        // #1 Both are complete, add both
+        // #2 One is complete, create one
+        // #3 One is complete (other) create one
+        // Else don't add either
+        if (start1 != -1 && end1 != -1 && start2 != -1 && end2 != -1 &&
+                bos.getDayTimesOff1Array().size() > 0 &&
+                bos.getDayTimesOff2Array().size() > 0) {
+            c = new Course("T",
+                    "",
+                    0,
+                    "",
+                    "",
+                    bos.getDayTimesOff1Array(),
+                    bos.getDayTimesOff2Array(),
+                    start1,
+                    start2,
+                    end1,
+                    end2,
+                    "",
+                    "",
+                    0,
+                    0,
+                    0,
+                    0,
+                    "",
+                    "");
+        } else if (start1 != -1 && end1 != -1 && bos.getDayTimesOff1Array().size() > 0) {
+            c = new Course("T",
+                    "",
+                    0,
+                    "",
+                    "",
+                    bos.getDayTimesOff1Array(),
+                    start1, end1,
+                    "",
+                    0,
+                    0,
+                    0,
+                    0,
+                    "",
+                    "");
+        } else if (start2 != -1 && end2 != -1 && bos.getDayTimesOff2Array().size() > 0) {
+            c = new Course("T",
+                    "",
+                    0,
+                    "",
+                    "",
+                    bos.getDayTimesOff2Array(),
+                    start2, end2,
+                    "",
+                    0,
+                    0,
+                    0,
+                    0,
+                    "",
+                    "");
+        } else {
+            return null;
+        }
+        return c;
+    }
+
 
 }
