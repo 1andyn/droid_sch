@@ -471,6 +471,7 @@
         android:orientation="vertical">
 
         <Button
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -479,6 +480,7 @@
             android:text="@string/cancel"
             />
         <Button
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -487,6 +489,7 @@
             android:text="@string/btn_reset"
             />
         <Button
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -494,6 +497,7 @@
             android:id="@+id/btnSave"
             android:text="@string/btn_save"/>
         <Button
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
