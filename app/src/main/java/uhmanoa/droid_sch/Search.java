@@ -749,12 +749,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                         dialog.cancel();
                     }
                 });
-        //This is a bit hackish, maybe Google will create an easier way to change divider color?
         Dialog dlg = builder.show();
-//        int dividerId = dlg.getContext().getResources().getIdentifier("android:id/titleDivider",
-//                null, null);
-//        View dv = dlg.findViewById(dividerId);
-//        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
         return builder.create();
     }
 
