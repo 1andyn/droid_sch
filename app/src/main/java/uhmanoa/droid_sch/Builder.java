@@ -446,11 +446,10 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         BuildScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (desd_adp.getCount() < 2) {
-                    new ToastWrapper(Builder.this, "Please add at least two courses.",
-                            Toast.LENGTH_SHORT);
-                } else {
+//                if (desd_adp.getCount() < 2) {
+//                    new ToastWrapper(Builder.this, "Please add at least two courses.",
+//                            Toast.LENGTH_SHORT);
+//                } else {
                     Intent i = new Intent(Builder.this, Available_Schedules.class);
                     Bundle b = new Bundle();
                     b.putInt("SEMESTER", sem);
@@ -462,7 +461,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     configBuilderOptions();
 
                     startActivity(i);
-                }
+//                }
             }
         });
 
