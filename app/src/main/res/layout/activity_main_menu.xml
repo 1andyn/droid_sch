@@ -35,7 +35,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:paddingTop="40dp"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
