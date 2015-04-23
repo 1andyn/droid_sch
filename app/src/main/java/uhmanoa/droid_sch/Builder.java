@@ -56,9 +56,12 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     // --------DEBUG
 
     private SingletonOptions sgo;
-
     private BuilderOptions bos;
     private PreferencesHelper ph = new PreferencesHelper(this);
+
+    private ArrayList<Long> selectedstar;
+    private ArrayList<Long> selectedcrs;
+
     private boolean lastLoadSuccess = false;
 
     private SearchView sv;
@@ -81,11 +84,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private int start_hr, end_hr, start_min, end_min = 0;
     private ListView lv_desd, lv_sobj;
 
-    // Dialog for Timer Picker
-    private CheckBox en_start, en_end, en_min;
+    private CheckBox en_min;
     private NumberPicker min_pick;
-    private TimePicker dtp_start;
-    private TimePicker dtp_end;
+
 
     //Course Data Check Vars
     PowerManager.WakeLock wl;
@@ -106,6 +107,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_builder);
 
+        selectedcrs = new ArrayList<>();
+        selectedstar = new ArrayList<>();
+
         Bundle extras = getIntent().getExtras();
         sem = extras.getInt("SEMESTER");
         year = extras.getInt("YEAR");
@@ -114,8 +118,8 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         pt_resolution = new Point();
         al_strobj = new ArrayList<>();
         al_desired = new ArrayList<>();
-        sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
-        desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired);
+        sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj, selectedstar);
+        desd_adp = new StarListAdapter(this, R.layout.course_view, al_desired, selectedcrs);
 
         sgo = SingletonOptions.getInstance();
 
@@ -390,11 +394,10 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteItemStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Long> checked = sobj_adp.getChecked_list();
-                for (Long l : checked) {
+                for (Long l : selectedstar) {
                     deleteStarByID(l);
                 }
-                sobj_adp.clearCheckedList();
+                selectedstar.clear();
                 mandatoryDataChange();
                 new ToastWrapper(Builder.this, "Selected items removed.", Toast.LENGTH_SHORT);
             }
@@ -407,8 +410,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             public void onClick(View v) {
                 new ToastWrapper(Builder.this, "Added to courses desired list",
                         Toast.LENGTH_SHORT);
-                ArrayList<Long> checked = sobj_adp.getChecked_list();
-                for (Long l : checked) {
+                for (Long l : selectedstar) {
                     addDesiredFromStar(l);
                 }
                 mandatoryDataChange();
@@ -419,11 +421,10 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         DeleteStarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Long> checked = desd_adp.getChecked_list();
-                for (Long l : checked) {
+                for (Long l : selectedcrs) {
                     deleteItemByID(l);
                 }
-                desd_adp.clearCheckedList(); //Finished deleting so clear this list
+                selectedcrs.clear(); //Finished deleting so clear this list
                 mandatoryDataChange();
             }
         });

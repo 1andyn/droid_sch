@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,6 +45,13 @@ public class ScheduleView extends LinearLayout {
         ll_crs_list = (LinearLayout) findViewById(R.id.crs_list);
         ll_time_list = (LinearLayout) findViewById(R.id.time_list);
         ll_day_list = (LinearLayout) findViewById(R.id.day_list);
+
+        CheckBox cb = (CheckBox) findViewById(R.id.check_box);
+        if(sched.isChecked()) {
+            cb.setChecked(true);
+        } else {
+            cb.setChecked(false);
+        }
 
         ll_crs_list.removeAllViews();
         ll_time_list.removeAllViews();

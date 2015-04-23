@@ -124,10 +124,6 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
                             }
                         });
                 Dialog d = confirm.show();
-//                int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
-//                        null, null);
-//                View dv = d.findViewById(dividerId);
-//                dv.setBackgroundColor(getResources().getColor(R.color.aqua));
             }
         });
     }

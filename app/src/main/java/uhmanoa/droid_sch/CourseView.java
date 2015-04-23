@@ -3,6 +3,7 @@ package uhmanoa.droid_sch;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,13 @@ public class CourseView extends LinearLayout implements App_const{
 
     private void configureTextViews() {
         // Str_Obj Data
+        CheckBox cb = (CheckBox) findViewById(R.id.check_box_crs);
+        if(crs.isChecked()) {
+            cb.setChecked(true);
+        } else {
+            cb.setChecked(false);
+        }
+
         tvCrn = (TextView) findViewById(R.id.tv_crn);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         tvCrs = (TextView) findViewById(R.id.tv_crs);

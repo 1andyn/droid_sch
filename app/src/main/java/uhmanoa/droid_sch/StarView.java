@@ -2,6 +2,7 @@ package uhmanoa.droid_sch;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,13 @@ public class StarView extends LinearLayout implements App_const{
         tvCrn = (TextView) findViewById(R.id.tv_crn);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         tvCrs = (TextView) findViewById(R.id.tv_crs);
+
+        CheckBox cb = (CheckBox) findViewById(R.id.check_box_star);
+        if(sobj.isChecked()) {
+            cb.setChecked(true);
+        } else {
+            cb.setChecked(false);
+        }
 
         if(sobj.isClass()) {
             tvCrn.setText(ModifySpacingString(String.valueOf(sobj.getCRN()), ViewStringCat.crn));

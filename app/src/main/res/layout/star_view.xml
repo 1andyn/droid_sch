@@ -126,7 +126,7 @@
         </LinearLayout>
         <CheckBox
             android:gravity="right"
-            android:id="@+id/chk_star"
+            android:id="@+id/check_box_star"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp" />

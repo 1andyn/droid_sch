@@ -24,13 +24,14 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
     private LayoutInflater inflater;
     private int layout_resrc;
 
-    public StarListAdapter(Context c, int rsrc, ArrayList<Star_obj> star_list) {
+    public StarListAdapter(Context c, int rsrc, ArrayList<Star_obj> star_list,
+                           ArrayList<Long> checked) {
         super(c, rsrc, star_list);
         app_Context = c;
         object_list = star_list;
         layout_resrc = rsrc;
         inflater = LayoutInflater.from(c);
-        checked_list = new ArrayList<>();
+        checked_list = checked;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
             convertView = sview;
             sh.sv = sview;
 
-            cb = (CheckBox) convertView.findViewById(R.id.chk_star);
+            cb = (CheckBox) convertView.findViewById(R.id.check_box_star);
             sh.cbx = cb;
 
             convertView.setTag(sh);
@@ -71,37 +72,15 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 if (buttonView.isChecked()) {
-//                    new ToastWrapper(app_Context, "Checked " + so.getID() + " " + so.getCRN(),
-//                            Toast.LENGTH_SHORT);
                     checked_list.add(object_list.get(pos).getID());
                     so.setChecked(true);
                 } else {
-//                    new ToastWrapper(app_Context, "UnChecked " + so.getID() + " " + so.getCRN(),
-//                            Toast.LENGTH_SHORT);
                     so.setChecked(false);
-                    checkedRemove(object_list.get(pos).getID());
+                    checked_list.remove(object_list.get(pos).getID());
                 }
             }
         });
         return convertView;
     }
-
-    public ArrayList<Long> getChecked_list() {
-        return checked_list;
-    }
-
-    public void checkedRemove(long id) {
-        for(int x = 0; x < checked_list.size(); x++) {
-            Long temp = checked_list.get(x);
-            if(temp.equals(id)) {
-                checked_list.remove(x);
-            }
-        }
-    }
-
-    public void clearCheckedList() {
-        checked_list.clear();
-    }
-
 }
 

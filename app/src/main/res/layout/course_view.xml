@@ -550,7 +550,7 @@
             android:focusableInTouchMode="false" />
 
         <CheckBox
-            android:id="@+id/chk_star"
+            android:id="@+id/check_box_crs"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:paddingRight="10dp" />

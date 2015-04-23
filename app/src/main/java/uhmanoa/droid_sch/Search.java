@@ -51,6 +51,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         OnSearchTaskComplete {
 
     private ArrayList<String> focList;
+    private ArrayList<Long> selectedCourses;
+    private ArrayList<Long> selectedStars;
 
     // --------DEBUG
     private boolean DEBUG = true;
@@ -110,20 +112,21 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         yr = extras.getInt("YEAR");
         month = extras.getInt("MONTH");
 
+        selectedCourses = new ArrayList<>();
+        selectedStars = new ArrayList<>();
+
         pt_resolution = new Point();
         SelectedItems = new ArrayList<>();
         al_strobj = new ArrayList<>();
         al_course = new ArrayList<>();
 
-        sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj);
-        crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course);
+        sobj_adp = new StarListAdapter(this, R.layout.star_view, al_strobj, selectedStars);
+        crs_adp = new ResultListAdapter(this, R.layout.course_view, al_course, selectedCourses);
 
         datasource = new SQL_DataSource(this);
         datasource.open();
 
         bos = new BuilderOptions(this);
-
-        System.out.println("DEBUG: SEM: " + sem + " YEAR: " + yr);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                 getApplicationContext());
@@ -205,9 +208,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private void checkCourseData() {
 
         if(!datasource.courseDataExists(sem, yr) || !lastLoadSuccess ) {
-
             //Retrieve Course Data
-            //datasource.clearCourseData(sem, yr);
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                     getApplicationContext());
             SharedPreferences.Editor editor = settings.edit();
@@ -306,7 +307,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                         Toast.LENGTH_SHORT);
                 datasource.deleteAllStar();
                 sobj_adp.clear();
-                sobj_adp.clearCheckedList();
+                selectedStars.clear();
                 mandatoryDataChange();
             }
         });
@@ -317,13 +318,10 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             public void onClick(View v) {
                 new ToastWrapper(Search.this, "Delete selected entries",
                         Toast.LENGTH_SHORT);
-                ArrayList<Long> checked = sobj_adp.getChecked_list();
-                System.out.println("Outputting Selection");
-                for (Long l : checked) {
-                    if (DEBUG) System.out.println(l);
+                for (Long l : selectedStars) {
                     deleteStarByID(l);
                 }
-                sobj_adp.clearCheckedList(); //Finished deleting so clear this list
+                selectedStars.clear(); //Finished deleting so clear this list
                 mandatoryDataChange();
             }
         });
@@ -334,9 +332,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             public void onClick(View v) {
                 new ToastWrapper(Search.this, "Add Selected Courses",
                         Toast.LENGTH_SHORT);
-                ArrayList<Long> checked = crs_adp.getChecked_list();
-                System.out.println("Outputting Selection");
-                for (Long l : checked) {
+                for (Long l : selectedCourses) {
                     Course temp = getResultById(l);
                     addStarFromResults(temp, false);
                 }
@@ -350,9 +346,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             public void onClick(View v) {
                 new ToastWrapper(Search.this, "Add Selected CRN's",
                         Toast.LENGTH_SHORT);
-                ArrayList<Long> checked = crs_adp.getChecked_list();
-                System.out.println("Outputting Selection");
-                for (Long l : checked) {
+                for (Long l : selectedCourses) {
                     Course temp = getResultById(l);
                     addStarFromResults(temp, true);
                 }
@@ -420,7 +414,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         for (int x = 0; x < al_strobj.size(); x++) {
             Long temp = al_strobj.get(x).getID();
             if (temp.equals(id)) {
-                if (DEBUG) System.out.println("Deleting " + id + " " + al_strobj.get(x).getCRN());
                 datasource.deleteStar(id);
                 sobj_adp.remove(al_strobj.get(x));
             }
@@ -447,10 +440,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                     }
                 });
         Dialog d = confirm.show();
-//        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
-//                null, null);
-//        View dv = d.findViewById(dividerId);
-//        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
     }
 
     private long uniqueID(boolean main_list) {
@@ -606,18 +595,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         ll_sliderlayout.setBackgroundDrawable(drw_bg);
     }
 
-    // DEBUG
-    private int randValue() {
-        // for 0 to 1         return (1 == (r.nextInt(2) + 0));
-        int count = 3;
-        int offset = 0;
-        Random r = new Random(System.currentTimeMillis());
-        return (r.nextInt(count) + offset);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //int id = item.getItemId();
         switch (item.getItemId()) {
             case R.id.action_gefc_fil:
                 Dialog diag_fil = createFilterDialog();
@@ -627,7 +606,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 return true;
             case R.id.action_clear_results:
                 crs_adp.clear();
-                crs_adp.clearCheckedList();
+                selectedCourses.clear();
                 mandatoryDataChange();
                 return true;
             case R.id.action_force_fil:
@@ -810,13 +789,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                         start_min = dtp_start.getCurrentMinute();
                         end_hr = dtp_end.getCurrentHour();
                         end_min = dtp_end.getCurrentMinute();
-
-                        if (DEBUG) {
-                            System.out.println(en_start_tp);
-                            System.out.println(en_end_tp);
-                            System.out.println("START" + start_hr + ":" + start_min);
-                            System.out.println("END" + end_hr + ":" + end_min);
-                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -832,7 +804,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     @Override
     public void onDestroy(){
         super.onDestroy();
-        //datasource.close();
     }
 
     @Override
@@ -867,7 +838,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     public void onSearchTaskComplete() {
         //clear search display
         crs_adp.clear();
-        crs_adp.clearCheckedList();
+        selectedCourses.clear();
         mandatoryDataChange();
         populateResults(st.getResults());
 
@@ -917,7 +888,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         }
 
         //time filtering END TIME
-
         final_results = focusFilter(final_results);
 
         //add results
