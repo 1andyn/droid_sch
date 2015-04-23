@@ -34,6 +34,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     private Resources res_srch;
     private Point pt_resolution;
     private ArrayList<Schedule> al_sched;
+    private ArrayList<Long> checked;
     private ViewStub empty_sched;
     private ListView lv_sched;
     private SchListAdapter sch_adp;
@@ -49,13 +50,15 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
+        checked = new ArrayList<>();
+
         ds = new SQL_DataSource(this);
         ds.open();
         ss = SingletonSchedule.getInstance();
 
         bos  = new BuilderOptions(this);
 
-        sch_adp = new SchListAdapter(this, R.layout.sch_view, al_sched, this);
+        sch_adp = new SchListAdapter(this, R.layout.sch_view, al_sched, this, checked);
         pt_resolution = new Point();
         loadImageResources();
         configureListView();
@@ -106,12 +109,10 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 new ToastWrapper(Viewer.this, "Deleting selected items",
                                         Toast.LENGTH_SHORT);
-                                ArrayList<Long> checked = sch_adp.getChecked_list();
-                                System.out.println("Outputting Selection");
                                 for (Long l : checked) {
                                     deleteSchedByID(l);
                                 }
-                                sch_adp.clearCheckedList();
+                                checked.clear();
                                 mandatoryDataChange();
                                 return;
                             }
@@ -137,12 +138,12 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
             if(temp == id) {
                 sch_adp.remove(al_sched.get(x));
                 ds.deleteSchedule(id);
+                break;
             }
         }
     }
 
     private void load_schedules() {
-        sch_adp.clearCheckedList();
         sch_adp.clear();
         ArrayList<Schedule> sch = ds.getAllSchedules();
         for(Schedule s: sch) {

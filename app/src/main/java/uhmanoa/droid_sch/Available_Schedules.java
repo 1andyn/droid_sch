@@ -33,6 +33,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     public static final String LOGTAG = "SCHED";
     public static final String CONFIRM_SAVE = "Warning: By clicking ok you will save the selected " +
             "schedules and discard all other schedules.  Are you sure you want to continue?";
+    private final String CONFIRM_DELETE ="Warning: By clicking ok you will delete all the selected " +
+            "schedules. Are you sure you want to continue?";
     public static final int ITEMS_PER_PAGE = 4;
 
     private int sem, year, month;
@@ -43,8 +45,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     SingletonOptions sgo;
     ArrayList<String> titles, t1;
     ArrayList<String> subtitles, s1;
+    ArrayList<Long> checked;
     ListView lv_item;
-    Button btnPrev, btnNext, btnGoto, btnSave;
+    Button btnPrev, btnNext, btnGoto, btnSave, btnDel;
     TextView tvTitle;
     SchListAdapter adapter;
     SingletonSchedule ss;
@@ -55,7 +58,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
     private SQL_DataSource datasource;
     private ScheduleBuildTask sbt;
 
-    int totalPages, currentPage;
+    int totalPages, currentPage = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,8 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
 
         sgo = SingletonOptions.getInstance();
         ss = SingletonSchedule.getInstance();
+
+        checked = new ArrayList<>();
 
         bos = new BuilderOptions(getApplicationContext());
 
@@ -112,6 +117,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         btnPrev = (Button) findViewById(R.id.btn_prev);
         btnNext = (Button) findViewById(R.id.btn_next);
         btnGoto = (Button) findViewById(R.id.btn_goto);
+        btnDel = (Button) findViewById(R.id.btn_del_selected);
         btnSave = (Button) findViewById(R.id.btn_save_selected);
         tvTitle = (TextView) findViewById(R.id.tvNumSchedules);
 
@@ -119,6 +125,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         btnNext.setOnClickListener(this);
         btnGoto.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+        btnDel.setOnClickListener(this);
 
         btnPrev.setEnabled(false);
 
@@ -141,13 +148,58 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         }
 
         totalPages = 0;
-        currentPage = 0;
+
 
         // find out how many pages we have
         totalPages = schedules.size() / ITEMS_PER_PAGE;
         if ((schedules.size() % ITEMS_PER_PAGE) != 0)
             totalPages++;
+
+        //set page to first if it an initial population
+        if(currentPage != -1) {
+            //not initial population (e.g. this func was called from deletion)
+            //only update page if it is bigger than the new max page count
+            if(currentPage > totalPages - 1)
+                currentPage = totalPages - 1;
+        } else {
+            currentPage = 0;
+        }
     }
+
+    private void deleteSelection(){
+        for(int x = 0; x < checked.size(); x++) {
+            deleteScheduleById(checked.get(x));
+        }
+        checked.clear();
+        adapter.notifyDataSetChanged();
+
+        ArrayList<Schedule> new_list = new ArrayList<>();
+        new_list.addAll(schedules);
+
+        if(new_list.size() == 0) {
+            new ToastWrapper(getApplicationContext(), "All schedules were deleted, returning to " +
+                    "Builder.", Toast.LENGTH_LONG);
+            finish();
+            return;
+        }
+
+        populateList(new_list);
+        tvTitle.setText("Your courses generated " + titles.size() + " schedules.");
+        updateGotoButton();
+        populateNextPage();
+
+    }
+
+    private void deleteScheduleById(long id) {
+        for(int x = 0; x < schedules.size(); x++) {
+            long sid = schedules.get(x).getID();
+            if(sid == id) {
+                schedules.remove(schedules.get(x));
+                break;
+            }
+        }
+    }
+
 
     private void populateNextPage() {
         t1 = new ArrayList<>(ITEMS_PER_PAGE);
@@ -170,8 +222,9 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
             schedPage.add(schedules.get(i));
         }
 
-        Log.e(LOGTAG, "Size! " + schedules.size());
-        adapter = new SchListAdapter(this, R.layout.sch_view, schedPage, this);
+        //Log.e(LOGTAG, "Size! " + schedules.size());
+        adapter = new SchListAdapter(this, R.layout.sch_view, schedPage, this,
+                checked);
         lv_item.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -210,7 +263,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                     btnPrev.setEnabled(false);
                 if (currentPage < totalPages - 1)
                     btnNext.setEnabled(true);
-
                 break;
             case R.id.btn_next:
                 if (currentPage < totalPages - 1)
@@ -220,7 +272,6 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                     btnNext.setEnabled(false);
                 if (currentPage > 0)
                     btnPrev.setEnabled(true);
-
                 break;
             case R.id.btn_goto:
                 final EditText input = new EditText(this);
@@ -259,6 +310,24 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                             }
                         });
                 Dialog d = pagenum.show();
+                break;
+            case R.id.btn_del_selected:
+                AlertDialog.Builder confirm_del = new AlertDialog.Builder(this)
+                        .setTitle(Html.fromHtml("<font color='#66FFCC'>Confirm DELETE</font>"))
+                        .setMessage(CONFIRM_DELETE)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deleteSelection();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                return;
+                            }
+                        });
+                Dialog ddg = confirm_del.show();
                 break;
             case R.id.btn_save_selected:
                 AlertDialog.Builder confirm = new AlertDialog.Builder(this)
@@ -352,6 +421,7 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
                     "schedules. Try using different courses or schedule options.", Toast.LENGTH_LONG);
             finish();
         } else {
+            schAssignID(final_results);
             populateList(final_results);
             initLayout();
             populateNextPage();
@@ -368,4 +438,12 @@ public class Available_Schedules extends ActionBarActivity implements View.OnCli
         i.putExtras(b);
         startActivity(i);
     }
+
+    private void schAssignID(ArrayList<Schedule> input) {
+        for(int x = 0; x < input.size(); x++) {
+            input.get(x).setID(x);
+        }
+    }
+
+
 }
