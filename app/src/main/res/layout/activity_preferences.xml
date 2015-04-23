@@ -503,7 +503,7 @@
             android:layout_margin="2dp"
             style="@style/btnStyleGenoa"
             android:id="@+id/btnDone"
-            android:text="@string/btn_done"
+            android:text="@string/btn_return"
             />
     </LinearLayout>
 

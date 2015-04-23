@@ -109,7 +109,8 @@
     <string name="previous">&lt;</string>
     <string name="next">></string>
     <string name="txt_num_sched">Currently building Schedules…</string>
-    <string name="bt_txt_save_sel">Save Selected</string>
+    <string name="bt_txt_del_sel">Delete Selected</string>
+    <string name="bt_txt_save_sel">Save Selected ✓</string>
     <string name="txt_avail_sched_subtitle">Select the schedule(s) you would like to save.</string>
     <string name="title_activity_preferences">Preferences</string>
 
@@ -142,7 +143,8 @@
     <string name="break_hint">(in minutes)</string>
     <string name="btn_save">Save Settings</string>
     <string name="btn_reset">Reset Settings</string>
-    <string name="btn_done">Done</string>
+    <string name="btn_done">Return to Main Menu</string>
+    <string name="btn_return">Return</string>
     <string name="confirm_profile_change">Confirm Profile Change</string>
 
     <string name="help_title">Show help dialogs for the following screens:</string>
@@ -151,6 +153,7 @@
     <string name="help_create">Create Schedules</string>
     <string name="help_view">View Schedules</string>
     <string name="help_search">Search for Courses</string>
+
 
 
 <!--**********************************-->

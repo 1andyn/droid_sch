@@ -11,23 +11,21 @@
 
     <!-- Style for Menu Buttons -->
     <style name="btnStyleGenoa" parent="@android:style/Widget.Button">
+        <item name="android:layout_margin">2dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:gravity">center</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
         <item name="android:minHeight">35dip</item>
-        <item name="android:shadowRadius">0.6</item>
+        <item name="android:shadowRadius">2</item>
         <item name="android:background">@drawable/btn_genoa</item>
         <item name="android:padding">5dip</item>
         <item name="android:height">40dp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
     </style>
 
-    <!--&lt;!&ndash; Hack for Robolectric to run with appcompat.v7 &ndash;&gt;-->
-    <!--<style name="RoboAppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">-->
-    <!--</style>-->
 
     <style name="tvTitle" parent="@android:style/Widget.TextView">
         <item name="android:textSize">17sp</item>
