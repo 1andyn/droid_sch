@@ -66,6 +66,11 @@ public class CourseView extends LinearLayout implements App_const{
         tvFoc = (TextView) findViewById(R.id.tv_foc);
 
         tvProf.setText(ModifySpacingString(String.valueOf(crs.getProfessor()), ViewStringCat.prof));
+        if(crs.getProfessor().length() > 15) {
+           tvProf.setTextSize(12);
+           TextView staticProf = (TextView) findViewById(R.id.tv_prof_static);
+            staticProf.setText("Prof: ");
+        }
         tvDay.setText(ModifySpacingString(String.valueOf(crs.getDayString(false)),
                 ViewStringCat.day));
         tvLoc.setText(ModifySpacingString(String.valueOf(crs.getRoom1()), ViewStringCat.loc));

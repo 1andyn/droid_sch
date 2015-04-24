@@ -7,9 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="No results."
+        android:text="No results. Tap the magnifying glass to search for Courses!"
         android:textStyle="bold"
         android:textColor="@color/dark_gray"
-        android:paddingBottom="120dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>

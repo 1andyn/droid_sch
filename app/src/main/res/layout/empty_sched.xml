@@ -10,6 +10,5 @@
         android:text="No Schedules Saved."
         android:textStyle="bold"
         android:textColor="@color/dark_gray"
-        android:paddingBottom="100dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>

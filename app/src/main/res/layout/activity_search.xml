@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:orientation="horizontal"
-        android:paddingBottom="2dp">
+        android:orientation="horizontal">
         <Spinner
             android:id="@+id/major_spinner"
             style="@style/btnStyleGenoa"
@@ -20,57 +19,66 @@
             android:layout_height="40dp" />
     </LinearLayout>
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/sec_ll"
+        sothree:umanoPanelHeight="30dp"
+        sothree:umanoShadowHeight="4dp"
         android:gravity="bottom">
         <!--Layout for Search Result List-->
         <LinearLayout
             android:id="@+id/result_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
             android:orientation="vertical">
-            <!--android:paddingTop="50sp">-->
-            <ViewStub
-                android:id="@+id/empty_search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:clickable="false"
-                android:layout="@layout/empty_search" />
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="1dp">
-                <Button
-                    android:id="@+id/results_add_CRN"
-                    style="@style/btnStyleGenoa"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/res_crn" />
-                <Button
-                    android:id="@+id/results_add_crs"
-                    style="@style/btnStyleGenoa"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/res_crs" />
-            </LinearLayout>
-            <ListView
-                android:paddingBottom="24dp"
-                android:id="@+id/lv_result"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/empty_search"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="3sp"
-                android:longClickable="true" />
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="1dp">
+                    <Button
+                        android:id="@+id/results_add_CRN"
+                        style="@style/btnStyleGenoa"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/res_crn" />
+                    <Button
+                        android:id="@+id/results_add_crs"
+                        style="@style/btnStyleGenoa"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/res_crs" />
+                </LinearLayout>
+                <ViewStub
+                    android:id="@+id/empty_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:clickable="false"
+                    android:layout="@layout/empty_search" />
+                <ListView
+                    android:id="@+id/lv_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/empty_search"
+                    android:clickable="true"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="3sp"
+                    android:longClickable="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="18dp"/>
         </LinearLayout>
         <!--Use this Layout for Starred Objects -->
         <LinearLayout

@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -361,7 +362,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         slideupl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slideupl.setDragView(starpanel);
         slideupl.setOverlayed(true);
-        slideupl.setPanelHeight(sliderHeight);
+        //slideupl.setPanelHeight(sliderHeight);
         slideupl.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {

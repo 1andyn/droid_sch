@@ -273,7 +273,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         slideupl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slideupl.setDragView(starpanel);
         slideupl.setOverlayed(true);
-        slideupl.setPanelHeight(sliderHeight);
+        //slideupl.setPanelHeight(sliderHeight);
         slideupl.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
