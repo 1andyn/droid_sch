@@ -70,6 +70,10 @@ public class CourseView extends LinearLayout implements App_const{
            tvProf.setTextSize(12);
            TextView staticProf = (TextView) findViewById(R.id.tv_prof_static);
             staticProf.setText("Prof: ");
+        } else {
+            TextView staticProf = (TextView) findViewById(R.id.tv_prof_static);
+            staticProf.setText("Professor: ");
+            tvProf.setTextSize(15);
         }
         tvDay.setText(ModifySpacingString(String.valueOf(crs.getDayString(false)),
                 ViewStringCat.day));
