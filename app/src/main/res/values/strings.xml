@@ -269,7 +269,7 @@
     <string name="help_preferences_profiles_desc">Select the profile to edit or create a new profile.</string>
     <string name="help_preferences_delete_profile_desc">Delete the currently selected profile.  Cannot be undone.</string>
     <string name="help_preferences_days_off_desc">Specify days which you wish to not have classes.</string>
-    <string name="help_preferences_times_off_desc">Specify times you wish to not have classes. You can also specify the
+    <string name="help_preferences_times_off_desc">Specify times you wish to not have classes. You must also specify the
         individual days you wish this setting to apply to.</string>
     <string name="help_preferences_start_desc">The earliest time your first class may be.</string>
     <string name="help_preferences_end_desc">The latest time your last class may be.</string>
