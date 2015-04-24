@@ -334,7 +334,12 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         AddCourseStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ToastWrapper(Search.this, "Add Selected Courses",
+                if(selectedCourses.size() == 0) {
+                    new ToastWrapper(Search.this, "Nothing selected.",
+                            Toast.LENGTH_SHORT);
+                    return;
+                }
+                new ToastWrapper(Search.this, "Added Selected Courses",
                         Toast.LENGTH_SHORT);
                 for (Long l : selectedCourses) {
                     Course temp = getResultById(l);
@@ -348,7 +353,12 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         AddCRNStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ToastWrapper(Search.this, "Add Selected CRN's",
+                if(selectedCourses.size() == 0) {
+                    new ToastWrapper(Search.this, "Nothing selected.",
+                            Toast.LENGTH_SHORT);
+                    return;
+                }
+                new ToastWrapper(Search.this, "Added Selected CRN's",
                         Toast.LENGTH_SHORT);
                 for (Long l : selectedCourses) {
                     Course temp = getResultById(l);
