@@ -51,6 +51,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     private final int LATEST_END = 5;
 
     private BuilderOptions bos;
+    private boolean alreadyshowing = false;
 
     EditText etStartTimeOff, etEndTimeOff;
     EditText etStartTimeOff2, etEndTimeOff2;
@@ -98,7 +99,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
         super.onResume();
         spProfiles.setSelection(bos.getSelectedOption());
 
-        if (bos.getShowHelpPreferences())
+        if (bos.getShowHelpPreferences() && !alreadyshowing)
             showHelp();
     }
 
@@ -683,7 +684,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     }
 
     private void showHelp(){
-
+        alreadyshowing = true;
         AlertDialog.Builder warning = new AlertDialog.Builder(Preferences.this);
         LayoutInflater li = this.getLayoutInflater();
         warning.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
@@ -695,6 +696,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
                         CheckBox cb = (CheckBox) ((AlertDialog) dialog).findViewById(R.id.chkDontShow);
                         chkHelpPreferences.setChecked(!cb.isChecked());
                         bos.setShowHelpPreferences(!cb.isChecked());
+                        alreadyshowing = false;
                         return;
                     }
                 })
@@ -794,7 +796,7 @@ public class Preferences extends ActionBarActivity implements View.OnClickListen
     @Override
     public void onBackPressed(){
         spProfiles.setSelection(bos.getSelectedOption());
+        alreadyshowing = false;
         super.onBackPressed();
-
     }
 }

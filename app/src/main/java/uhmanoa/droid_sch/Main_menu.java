@@ -3,10 +3,8 @@ package uhmanoa.droid_sch;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -25,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -37,6 +34,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     private Point pt_resolution;
     private ArrayList<Button> arraylst_btn;
     private ArrayList<Boolean> available;
+    private boolean alreadyshowing = false;
     private int curr_year, curr_year2;
     final int FALL = 0;
     final int SPRING = 1;
@@ -75,7 +73,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     }
 
     private void showHelp(){
-
+        alreadyshowing = true;
         AlertDialog.Builder help = new AlertDialog.Builder(Main_menu.this);
         LayoutInflater inflater = this.getLayoutInflater();
         help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
@@ -86,6 +84,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
                     public void onClick(DialogInterface dialog, int i) {
                         CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
                         bos.setShowHelpMain(!cb.isChecked());
+                        alreadyshowing = false;
                         return;
                     }
                 })
@@ -107,7 +106,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         datasource.open();
         super.onResume();
 
-        if (bos.getShowHelpMain()) {
+        if (bos.getShowHelpMain() && !alreadyshowing) {
             showHelp();
         }
     }
@@ -344,10 +343,6 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
     public void onCheckTaskComplete() {
         available = prs.getDataStatus();
         d.show();
-//        int dividerId = d.getContext().getResources().getIdentifier("android:id/titleDivider",
-//                null, null);
-//        View dv = d.findViewById(dividerId);
-//        dv.setBackgroundColor(getResources().getColor(R.color.aqua));
 
         if(prs.getException() != null) {
             new ToastWrapper(Main_menu.this, "Warning: the class availability website did not respond " +
@@ -356,4 +351,12 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
         }
         prs = null; //deference
     }
+
+    @Override
+    public void onBackPressed() {
+        alreadyshowing = false;
+        super.onBackPressed();
+    }
+
+
 }

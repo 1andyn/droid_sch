@@ -64,6 +64,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     private ArrayList<Long> selectedcrs;
 
     private boolean alreadyrun = false;
+    private boolean alreadyshowing = false;
     private boolean lastLoadSuccess = false;
 
     private SearchView sv;
@@ -153,7 +154,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
     }
 
     private void showHelp() {
-
+        alreadyshowing = true;
         AlertDialog.Builder help = new AlertDialog.Builder(Builder.this);
         LayoutInflater inflater = this.getLayoutInflater();
         help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
@@ -164,6 +165,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     public void onClick(DialogInterface dialog, int i) {
                         CheckBox cb = (CheckBox) ((AlertDialog) dialog).findViewById(R.id.chkDontShow);
                         bos.setShowHelpCreateSchedules(!cb.isChecked());
+                        alreadyshowing = false;
                         return;
                     }
                 })
@@ -216,7 +218,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         updateProfiles();
         spinner.setSelection(bos.getSelectedOption());
 
-        if (bos.getShowHelpCreateSchedules() && !alreadyrun) {
+        if (bos.getShowHelpCreateSchedules() && !alreadyrun && !alreadyshowing) {
             showHelp();
             alreadyrun = true;
         }
@@ -737,6 +739,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         } else {
             super.onBackPressed();
         }
+        alreadyshowing = false;
     }
 
     protected void toggle_ViewStub() {

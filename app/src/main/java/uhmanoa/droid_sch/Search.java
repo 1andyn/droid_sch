@@ -61,6 +61,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private static String pref_file = "PREF_FILE";
 
     private boolean alreadyrun = false;
+    private boolean alreadyshowing = false;
 
     private SearchView sv;
     private boolean lastLoadSuccess = false;
@@ -150,7 +151,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     }
 
     private void showHelp(){
-
+        alreadyshowing = true;
         AlertDialog.Builder help = new AlertDialog.Builder(Search.this);
         LayoutInflater li = this.getLayoutInflater();
         help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
@@ -161,6 +162,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                     public void onClick(DialogInterface dialog, int i) {
                         CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
                         bos.setShowHelpSearchCourses(!cb.isChecked());
+                        alreadyshowing = false;
                         return;
                     }
                 })
@@ -244,7 +246,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     {
         reloadDBData();
         super.onResume();
-        if (bos.getShowHelpSearchCourses() && !alreadyrun) {
+        if (bos.getShowHelpSearchCourses() && !alreadyrun && !alreadyshowing) {
             showHelp();
             alreadyrun = true;
         }
@@ -664,6 +666,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         } else {
             super.onBackPressed();
         }
+        alreadyshowing = false;
     }
 
     protected void toggle_ViewStub() {

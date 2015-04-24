@@ -40,6 +40,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     private SchListAdapter sch_adp;
     private SingletonSchedule ss;
 
+    private boolean alreadyshowing = false;
     private SQL_DataSource ds;
 
     BuilderOptions bos;
@@ -69,7 +70,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     }
 
     private void showHelp(){
-
+        alreadyshowing = true;
         AlertDialog.Builder help = new AlertDialog.Builder(Viewer.this);
         LayoutInflater li = this.getLayoutInflater();
         help.setTitle(Html.fromHtml("<font color='#66FFCC'>" +
@@ -80,6 +81,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
                     public void onClick(DialogInterface dialog, int i) {
                         CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
                         bos.setShowHelpViewSchedules(!cb.isChecked());
+                        alreadyshowing = false;
                         return;
                     }
                 })
@@ -92,7 +94,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     {
         super.onResume();
 
-        if (bos.getShowHelpViewSchedules())
+        if (bos.getShowHelpViewSchedules() && !alreadyshowing)
             showHelp();
     }
 
@@ -240,6 +242,11 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
 
     }
 
+    @Override
+    public void onBackPressed() {
+        alreadyshowing = false;
+        super.onBackPressed();
+    }
 
     @Override
     public void onParseTaskComplete(IOException e) {
