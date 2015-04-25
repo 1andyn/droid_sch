@@ -552,8 +552,13 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     private void addDesiredFromStar(long id) {
         Star_obj resd = getResultById(id);
-        Star_obj so = new Star_obj(resd.getCourse(), resd.getCourseTitle(), resd.getCRN(), id,
-                resd.getSemester(), resd.getYear());
+        addToDesired(resd);
+    }
+
+
+    private void addToDesired(Star_obj resd) {
+        Star_obj so = new Star_obj(resd.getCourse(), resd.getCourseTitle(), resd.getCRN(),
+                resd.getID(), resd.getSemester(), resd.getYear());
 
         if (so.isClass()) {
             if (!crnExists(so.getCRN())) {
@@ -839,8 +844,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         } else {
             match.setID(uniqueID());
             match.setID(datasource.saveTStar(match));
-            desd_adp.add(match);
-            mandatoryDataChange();
+            addToDesired(match);
         }
         sv.setQuery("", false);
         sv.clearFocus();
