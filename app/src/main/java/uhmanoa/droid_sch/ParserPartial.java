@@ -96,7 +96,7 @@ public class ParserPartial extends AsyncTask<Void, Integer, Integer> {
                     return -1;
                 }
                 publishProgress(2);
-                Thread.sleep(1000);                 //sleep for one second
+                Thread.sleep(100);                 //sleep for one second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
