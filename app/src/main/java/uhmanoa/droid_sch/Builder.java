@@ -843,7 +843,6 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     Toast.LENGTH_LONG);
         } else {
             match.setID(uniqueID());
-            match.setID(datasource.saveTStar(match));
             addToDesired(match);
         }
         sv.setQuery("", false);
