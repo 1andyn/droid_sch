@@ -93,6 +93,13 @@ public class CourseView extends LinearLayout implements App_const{
                 ViewStringCat.sect));
 
         tvSeats.setText(String.valueOf(crs.getSeats_avail()));
+
+        if(crs.getSeats_avail() > 99) {
+            tvSeats.setTextSize(12);
+        } else {
+            tvSeats.setTextSize(15);
+        }
+
         tvWait.setText(String.valueOf(crs.getWaitlisted()));
         tvWaita.setText(String.valueOf(crs.getWait_avail()));
         tvDates.setText(crs.getDates());
