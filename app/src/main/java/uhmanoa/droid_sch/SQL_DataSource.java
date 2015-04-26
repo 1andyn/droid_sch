@@ -319,7 +319,6 @@ public class SQL_DataSource {
     }
 
     public ArrayList<Star_obj> getAllStar(int sem, int yr) {
-        database.beginTransaction();
         String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ?";
         String whereArgs[] = {
                 String.valueOf(sem),
@@ -336,13 +335,10 @@ public class SQL_DataSource {
             curse.moveToNext();
         }
         curse.close();
-        database.setTransactionSuccessful();
-        database.endTransaction();
         return all_starobj;
     }
 
     public ArrayList<Star_obj> getAllTempStar(int sem, int yr) {
-        database.beginTransaction();
         String whereClause = SQL_Helper.COLUMN_SEM + " = ? AND " + SQL_Helper.COLUMN_YEAR + " = ?";
         String whereArgs[] = {
                 String.valueOf(sem),
@@ -358,8 +354,6 @@ public class SQL_DataSource {
             curse.moveToNext();
         }
         curse.close();
-        database.setTransactionSuccessful();
-        database.endTransaction();
         return all_starobj;
     }
 
@@ -762,8 +756,6 @@ public class SQL_DataSource {
 
     public ArrayList<Course> getCoursesByName(int sem, int year, String name) {
         ArrayList<Course> results = new ArrayList<>();
-        database.beginTransaction();
-
         String select = "SELECT * FROM " + SQL_Helper.TABLE_COURSE +
                 " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) +
                 " AND " + SQL_Helper.COLUMN_YEAR + " = " + String.valueOf(year) +
@@ -779,8 +771,6 @@ public class SQL_DataSource {
             curse.moveToNext();
         }
         curse.close();
-        database.setTransactionSuccessful();
-        database.endTransaction();
         return results;
     }
 
