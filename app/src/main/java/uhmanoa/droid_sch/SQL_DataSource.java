@@ -734,7 +734,7 @@ public class SQL_DataSource {
 
     // used by get schedule function
     public Course getCourseByCRN(int sem, int year, int crn) {
-        database.beginTransaction();
+       // database.beginTransaction();
 
         String select = "SELECT * FROM " + SQL_Helper.TABLE_COURSE +
                 " WHERE " + SQL_Helper.COLUMN_SEM + " = " + String.valueOf(sem) +
@@ -749,8 +749,8 @@ public class SQL_DataSource {
             c = cursorToCourse(curse);
         }
         curse.close();
-        database.setTransactionSuccessful();
-        database.endTransaction();
+//        database.setTransactionSuccessful();
+//        database.endTransaction();
         return c;
     }
 

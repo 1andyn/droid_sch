@@ -108,7 +108,7 @@ public class Visualize extends Activity {
     private void configureDisplay() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        pxWidth = metrics.widthPixels;
+        pxWidth = metrics.widthPixels - 2;
     }
 
     @Override
