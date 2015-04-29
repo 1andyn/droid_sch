@@ -341,66 +341,6 @@ public class ParserThread implements Callable<Void> {
         return time;
     }
 
-
-    /**
-     * Method used to see if row starts with a CRN Number
-     *
-     * @param str String to be checked if is also an integer.
-     * @return True if string is also an integer. False if not.
-     */
-
-    public static boolean isInteger(String str) {
-        if (str == null) {
-            return false;
-        }
-        int length = str.length();
-        if (length == 0) {
-            return false;
-        }
-        int i = 0;
-        if (str.charAt(0) == '-') {
-            if (length == 1) {
-                return false;
-            }
-            i = 1;
-        }
-        for (; i < length; i++) {
-            char c = str.charAt(i);
-            if (c <= '/' || c >= ':') {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public int calculateURLyear(int year, int sem) {
-        int yr = year;
-        if (sem == 0) {
-            yr = yr + 1; //fall URL offset
-        }
-        return yr;
-    }
-
-    public int getURLDigit(int sem) {
-        int x = 10; //default assume fall
-        switch (sem) {
-            case 0:
-                return x; //fall
-            case 1:
-                return 30; //spring
-            case 2:
-                return 40; //summer
-            default:
-                return -1; //something went wrong
-        }
-    }
-
-    private String calculateURLField(int year, int sem) {
-        String yr = String.valueOf(calculateURLyear(year, sem));
-        String dig = String.valueOf(getURLDigit(sem));
-        return yr + dig;
-    }
-
     @Override
     public Void call() throws Exception {
         parseCourseData(url, semester, year);
