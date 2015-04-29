@@ -10,7 +10,7 @@
         <TextView
             android:padding="10dp"
             android:id="@+id/vis_title"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:background="@color/dark_gray"
             android:textColor="@color/white"
