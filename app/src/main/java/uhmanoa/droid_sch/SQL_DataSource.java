@@ -785,7 +785,7 @@ public class SQL_DataSource {
 
         //deleteDuplicateCourse(crn, sem, year);
 
-        database.beginTransaction();
+        //database.beginTransaction();
         ContentValues values = new ContentValues();
         values.put(SQL_Helper.COLUMN_CRN, crs.getCrn());
         values.put(SQL_Helper.COLUMN_CRS, crs.getCourse());
@@ -837,6 +837,15 @@ public class SQL_DataSource {
             saveCFocus(sem, year, crs.getCourse(), crs.getFocusReqs());
         }
         curse.close();
+//        database.setTransactionSuccessful();
+//        database.endTransaction();
+    }
+
+    public void startTrans() {
+        database.beginTransaction();
+    }
+
+    public void endTrans() {
         database.setTransactionSuccessful();
         database.endTransaction();
     }

@@ -47,6 +47,8 @@ public class ParserThread implements Callable<Void> {
             String className = "NULL";
             String crsTitle = "NULL";
 
+            datasource.startTrans();
+
             for (int z = 0; z < rows.size(); z++) {
                 Element row = rows.get(z);
                 Elements col = row.select("td");
@@ -297,7 +299,7 @@ public class ParserThread implements Callable<Void> {
                     datasource.saveCourse(c);
                 }
             }
-
+        datasource.endTrans();
         } catch (IOException e) {
             //do nothing for now
         }
