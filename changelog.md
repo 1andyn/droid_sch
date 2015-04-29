@@ -7,8 +7,10 @@
 + Removed unnecessary transcation calls for data retrieval queries
 + Improved visualize Spacing for Width
 + Fixed bug with duplicates in Builder Activity
++ Fixed typo "waitlsited"
++ Added red text coloring to full courses
 
-##v1.1
+##v1.1 [Currently Published]
 -------------------
 + Added schedule deletion to available schedules activity
 + Minor UI Facelift (button appearance and locations)
