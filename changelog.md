@@ -10,6 +10,7 @@
 + Fixed typo "waitlsited"
 + Added red text coloring to full courses
 + Improved Schedule View Spacing (using weights now)
++ Improved Star View Spacing (using different weights)
 
 ##v1.1 [Currently Published]
 -------------------
