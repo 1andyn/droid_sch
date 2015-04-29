@@ -9,6 +9,7 @@
 + Fixed bug with duplicates in Builder Activity
 + Fixed typo "waitlsited"
 + Added red text coloring to full courses
++ Improved Schedule View Spacing (using weights now)
 
 ##v1.1 [Currently Published]
 -------------------
