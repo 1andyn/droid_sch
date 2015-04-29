@@ -58,11 +58,15 @@ public class ScheduleView extends LinearLayout {
         ll_day_list.removeAllViews();
 
         ArrayList<Course> crs = sched.getCourses();
-        for(int x = 0; x < sched.getCourses().size(); x++){
+        for(int x = 0; x < sched.getCourses().size(); x++) {
             Course c = crs.get(x);
 
             TextView tvcrs = produceFormattedTV(c.getCourse());
-            tvcrs.setTextColor(getResources().getColor(R.color.dark_aqua));
+            if (c.getSeats_avail() == 0) {
+                tvcrs.setTextColor(getResources().getColor(R.color.light_red));
+            } else {
+                tvcrs.setTextColor(getResources().getColor(R.color.dark_aqua));
+            }
 
             TextView tvtime = produceFormattedTV(c.getTimeString(false));
             tvtime.setTextColor(getResources().getColor(R.color.white));

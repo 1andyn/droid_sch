@@ -100,6 +100,12 @@ public class CourseView extends LinearLayout implements App_const{
             tvSeats.setTextSize(15);
         }
 
+        if(crs.getSeats_avail() == 0) {
+            tvSeats.setTextColor(getResources().getColor(R.color.light_red));
+        } else {
+            tvSeats.setTextColor(getResources().getColor(R.color.dark_aqua));
+        }
+
         tvWait.setText(String.valueOf(crs.getWaitlisted()));
         tvWaita.setText(String.valueOf(crs.getWait_avail()));
         tvDates.setText(crs.getDates());
