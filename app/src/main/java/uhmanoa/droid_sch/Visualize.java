@@ -195,7 +195,7 @@ public class Visualize extends Activity {
             creds.setText("Credits: " + String.valueOf(c.getCredits()));
 
             seats.setText("Seats Avail: " + String.valueOf(c.getSeats_avail()));
-            wait.setText("Waitlsited: " + String.valueOf(c.getWaitlisted()));
+            wait.setText("Waitlisted: " + String.valueOf(c.getWaitlisted()));
             waitav.setText("Wait Avail: " + String.valueOf(c.getWait_avail()));
 
             dates.setText("Dates: " + c.getDates());
