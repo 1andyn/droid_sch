@@ -67,7 +67,11 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
             cb = sh.cbx;
         }
 
-        cb.setChecked(so.isChecked());
+        if(checked_list.contains(so.getID())) {
+            cb.setChecked(true);
+        } else {
+            cb.setChecked(false);
+        }
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {

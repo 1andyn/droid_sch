@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -90,18 +91,23 @@ public class SchListAdapter extends ArrayAdapter<Schedule> {
             });
 
             //checkbox listener
-            cb.setChecked(sch.isChecked());
+            if(checklist.contains(sch.getID())) {
+                cb.setChecked(true);
+            } else {
+                cb.setChecked(false);
+            }
+            //cb.setChecked(sch.isChecked());
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView,
                                              boolean isChecked) {
                     if (buttonView.isChecked()) {
-//                        new ToastWrapper(app_Context, "Checked " + sch.getID(),
-//                                Toast.LENGTH_SHORT);
+                        new ToastWrapper(app_Context, "Checked " + sch.getID(),
+                                Toast.LENGTH_SHORT);
                         checklist.add(object_list.get(pos).getID());
                         sch.setChecked(true);
                     } else {
-//                        new ToastWrapper(app_Context, "UnChecked " + sch.getID(),
-//                                Toast.LENGTH_SHORT);
+                        new ToastWrapper(app_Context, "UnChecked " + sch.getID(),
+                                Toast.LENGTH_SHORT);
                         sch.setChecked(false);
                         checklist.remove(object_list.get(pos).getID());
                     }

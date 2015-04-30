@@ -65,7 +65,11 @@ public class ResultListAdapter extends ArrayAdapter<Course> {
             cb = v.cbx;
         }
 
-        cb.setChecked(crs.isChecked());
+        if(checked_list.contains(crs.getID())) {
+            cb.setChecked(true);
+        } else {
+            cb.setChecked(false);
+        }
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
