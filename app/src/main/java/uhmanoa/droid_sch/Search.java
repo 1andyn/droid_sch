@@ -852,6 +852,11 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     }
 
     @Override
+    public void onPartialParseTaskComplete() {
+        return;
+    }
+
+    @Override
     public void onSearchTaskComplete() {
         //clear search display
         crs_adp.clear();

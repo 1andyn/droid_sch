@@ -40,6 +40,8 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     private SchListAdapter sch_adp;
     private SingletonSchedule ss;
 
+    private ParserPartial pp;
+
     private boolean alreadyshowing = false;
     private SQL_DataSource ds;
 
@@ -237,7 +239,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
         for(Schedule s : al_sched) {
             spp_data.add(s.getParsePackage());
         }
-        ParserPartial pp = new ParserPartial(ds, this, this, spp_data);
+        pp = new ParserPartial(ds, this, this, spp_data);
         pp.execute();
 
     }
@@ -250,12 +252,21 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
 
     @Override
     public void onParseTaskComplete(IOException e) {
-        if(e != null) {
-            new ToastWrapper(this, "Some data could not be updated.", Toast.LENGTH_LONG);
-        } else {
-            new ToastWrapper(this, "Data successfully updated.", Toast.LENGTH_LONG);
-        }
+//        if(e != null) {
+//            new ToastWrapper(this, "Some data could not be updated.", Toast.LENGTH_LONG);
+//        } else {
+//            new ToastWrapper(this, "Data successfully updated.", Toast.LENGTH_LONG);
+//        }
+//        load_schedules();
+    }
 
+    @Override
+    public void onPartialParseTaskComplete() {
+        if(!pp.getTaskCancelled()) {
+            new ToastWrapper(this, "Data successfully updated.", Toast.LENGTH_LONG);
+        } else {
+            new ToastWrapper(this, "Update Cancelled.", Toast.LENGTH_LONG);
+        }
         load_schedules();
     }
 }

@@ -46,6 +46,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 
 
 public class Builder extends ActionBarActivity implements App_const, OnCheckTaskComplete,
@@ -88,6 +89,7 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
 
     private CheckBox en_min;
     private NumberPicker min_pick;
+    private ParserPartial pp;
 
 
     //Course Data Check Vars
@@ -442,15 +444,9 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
                     new ToastWrapper(Builder.this, "Please add atleast two courses.",
                             Toast.LENGTH_SHORT);
                 } else {
-                    Intent i = new Intent(Builder.this, Available_Schedules.class);
-                    Bundle b = new Bundle();
-                    b.putInt("SEMESTER", sem);
-                    b.putInt("YEAR", year);
-                    b.putInt("MONTH", month);
-                    i.putExtras(b);
+
                     //configure SingletonOptions
-                    configBuilderOptions();
-                    startActivity(i);
+                    refreshData();
                 }
             }
         });
@@ -874,6 +870,20 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
         }
     }
 
+    @Override
+    public void onPartialParseTaskComplete() {
+//        if(!pp.getTaskCancelled()) {
+            configBuilderOptions();
+            Intent i = new Intent(Builder.this, Available_Schedules.class);
+            Bundle b = new Bundle();
+            b.putInt("SEMESTER", sem);
+            b.putInt("YEAR", year);
+            b.putInt("MONTH", month);
+            i.putExtras(b);
+            startActivity(i);
+//        }
+    }
+
     private Course timeBlockBuilder() {
         Course c;
         int start1 = bos.getDayTimesStart1();
@@ -942,6 +952,24 @@ public class Builder extends ActionBarActivity implements App_const, OnCheckTask
             return null;
         }
         return c;
+    }
+
+    private void refreshData() {
+        ArrayList<String> mjrs = new ArrayList<>();
+        for(Iterator<Star_obj> i = al_desired.iterator(); i.hasNext();) {
+            Star_obj so = i.next();
+            String crs = so.getCourse();
+            String[] mj = crs.split("\\s+");
+            if(!mjrs.contains(mj[0])) {
+                mjrs.add(mj[0]);
+            }
+        }
+
+        ArrayList<ScheduleParsePackage> spp = new ArrayList<>();
+        ScheduleParsePackage sp = new ScheduleParsePackage(sem, year,mjrs);
+        spp.add(sp);
+        pp = new ParserPartial(datasource, this, this, spp);
+        pp.execute();
     }
 
 

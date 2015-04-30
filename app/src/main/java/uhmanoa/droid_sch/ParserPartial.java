@@ -135,7 +135,7 @@ public class ParserPartial extends AsyncTask<Void, Integer, Integer> {
     @Override
     protected void onPostExecute(Integer result) {
         pdialog.dismiss();
-        listener.onParseTaskComplete(ex);
+        listener.onPartialParseTaskComplete();
     }
 
     public int calculateURLyear(int year, int sem) {

@@ -7,4 +7,5 @@ import java.io.IOException;
  */
 public interface OnParseTaskComplete {
     void onParseTaskComplete(IOException e);
+    void onPartialParseTaskComplete();
 }
