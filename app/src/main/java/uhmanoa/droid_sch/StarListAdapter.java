@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -72,10 +73,12 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
         } else {
             cb.setChecked(false);
         }
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-                if (buttonView.isChecked()) {
+
+
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
                     checked_list.add(object_list.get(pos).getID());
                     so.setChecked(true);
                 } else {
@@ -84,6 +87,7 @@ public class StarListAdapter extends ArrayAdapter<Star_obj> {
                 }
             }
         });
+
         return convertView;
     }
 }

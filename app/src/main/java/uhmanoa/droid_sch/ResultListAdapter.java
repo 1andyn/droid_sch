@@ -70,10 +70,11 @@ public class ResultListAdapter extends ArrayAdapter<Course> {
         } else {
             cb.setChecked(false);
         }
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-                if (buttonView.isChecked()) {
+
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
                     checked_list.add(object_list.get(pos).getID());
                     crs.setChecked(true);
                 } else {
@@ -82,6 +83,7 @@ public class ResultListAdapter extends ArrayAdapter<Course> {
                 }
             }
         });
+        
         return convertView;
     }
 

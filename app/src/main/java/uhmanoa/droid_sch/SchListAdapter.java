@@ -26,7 +26,7 @@ public class SchListAdapter extends ArrayAdapter<Schedule> {
 
 
         //Context in which eventListAdapter is being used
-        private Context app_Context;
+        private final Context app_Context;
         private ArrayList<Schedule> object_list;
         private LayoutInflater inflater;
         private int layout_resrc;
@@ -97,10 +97,11 @@ public class SchListAdapter extends ArrayAdapter<Schedule> {
                 cb.setChecked(false);
             }
             //cb.setChecked(sch.isChecked());
-            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView,
-                                             boolean isChecked) {
-                    if (buttonView.isChecked()) {
+
+            cb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (((CheckBox) v).isChecked()) {
                         new ToastWrapper(app_Context, "Checked " + sch.getID(),
                                 Toast.LENGTH_SHORT);
                         checklist.add(object_list.get(pos).getID());
