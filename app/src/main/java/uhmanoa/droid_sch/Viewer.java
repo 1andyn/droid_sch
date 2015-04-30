@@ -28,7 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnParseTaskComplete {
+public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnParseTaskComplete,
+        OnRetrieveTaskComplete {
 
     private Drawable drw_bg;
     private Resources res_srch;
@@ -39,7 +40,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     private ListView lv_sched;
     private SchListAdapter sch_adp;
     private SingletonSchedule ss;
-
+    private SchRetrieveTask srt = null;
     private ParserPartial pp;
 
     private boolean alreadyshowing = false;
@@ -59,7 +60,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
         ds.open();
         ss = SingletonSchedule.getInstance();
 
-        bos  = new BuilderOptions(this);
+        bos = new BuilderOptions(this);
 
         sch_adp = new SchListAdapter(this, R.layout.sch_view, al_sched, this, checked);
         pt_resolution = new Point();
@@ -71,7 +72,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
         load_schedules();
     }
 
-    private void showHelp(){
+    private void showHelp() {
         alreadyshowing = true;
         AlertDialog.Builder help = new AlertDialog.Builder(Viewer.this);
         LayoutInflater li = this.getLayoutInflater();
@@ -81,7 +82,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
                 .setPositiveButton("OK", new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        CheckBox cb = (CheckBox) ((AlertDialog)dialog).findViewById(R.id.chkDontShow);
+                        CheckBox cb = (CheckBox) ((AlertDialog) dialog).findViewById(R.id.chkDontShow);
                         bos.setShowHelpViewSchedules(!cb.isChecked());
                         alreadyshowing = false;
                         return;
@@ -92,8 +93,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
 
         if (bos.getShowHelpViewSchedules() && !alreadyshowing)
@@ -135,7 +135,7 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
     private void deleteSchedByID(long id) {
         for (int x = 0; x < al_sched.size(); x++) {
             Long temp = al_sched.get(x).getID();
-            if(temp == id) {
+            if (temp == id) {
                 sch_adp.remove(al_sched.get(x));
                 ds.deleteSchedule(id);
                 break;
@@ -145,11 +145,9 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
 
     private void load_schedules() {
         sch_adp.clear();
-        ArrayList<Schedule> sch = ds.getAllSchedules();
-        for(Schedule s: sch) {
-            sch_adp.add(s);
-        }
         mandatoryDataChange();
+        srt = new SchRetrieveTask(this, ds, this);
+        srt.execute();
     }
 
     private void configureListView() {
@@ -236,12 +234,11 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
 
     private void refreshCourseData() {
         ArrayList<ScheduleParsePackage> spp_data = new ArrayList<>();
-        for(Schedule s : al_sched) {
+        for (Schedule s : al_sched) {
             spp_data.add(s.getParsePackage());
         }
         pp = new ParserPartial(ds, this, this, spp_data);
         pp.execute();
-
     }
 
     @Override
@@ -262,11 +259,20 @@ public class Viewer extends ActionBarActivity implements OnViewButtonPress, OnPa
 
     @Override
     public void onPartialParseTaskComplete() {
-        if(!pp.getTaskCancelled()) {
+        if (!pp.getTaskCancelled()) {
             new ToastWrapper(this, "Data successfully updated.", Toast.LENGTH_LONG);
         } else {
             new ToastWrapper(this, "Update Cancelled.", Toast.LENGTH_LONG);
         }
         load_schedules();
+    }
+
+    @Override
+    public void onRetrieveTaskComplete() {
+        ArrayList<Schedule> sch = srt.getSchedules();
+        for (Schedule s : sch) {
+            sch_adp.add(s);
+        }
+        mandatoryDataChange();
     }
 }

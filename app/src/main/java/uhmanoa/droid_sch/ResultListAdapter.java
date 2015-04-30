@@ -83,7 +83,7 @@ public class ResultListAdapter extends ArrayAdapter<Course> {
                 }
             }
         });
-        
+
         return convertView;
     }
 
