@@ -326,7 +326,7 @@ public class Main_menu extends ActionBarActivity implements OnCheckTaskComplete{
                         // of the selected item
 
                         //vieeer activity doesn't need internet
-                        if (available.get(which) == false) {
+                        if (!available.get(which)) {
                             new ToastWrapper(Main_menu.this, "Course data is currently " +
                                             "unavailable for that semester.",
                                     Toast.LENGTH_SHORT);
