@@ -15,8 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-
-
 public class Visualize extends Activity {
 
     final int white = -1;
@@ -138,9 +136,15 @@ public class Visualize extends Activity {
     private void config_Title() {
         String sem = "SEM";
         switch (semester) {
-            case 0: sem = "FALL"; break;
-            case 1: sem = "SPRING"; break;
-            case 2: sem = "SUMNER"; break;
+            case 0:
+                sem = "FALL";
+                break;
+            case 1:
+                sem = "SPRING";
+                break;
+            case 2:
+                sem = "SUMNER";
+                break;
         }
         sem = sem + " " + String.valueOf(year);
         TextView tv = (TextView) findViewById(R.id.vis_title);
@@ -150,13 +154,17 @@ public class Visualize extends Activity {
     private void config_ListDisplay() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.vis_LinearLayout1);
 
-        for(Course c: sch.getCourses()) {
+        for (Course c : sch.getCourses()) {
             View vw = getLayoutInflater().inflate(R.layout.vis_list_item, null);
-            vw.setBackgroundColor(getResources().getColor(color_values.get((int)c.getID())));
+            if ((int) c.getID() > color_values.size()) {
+                vw.setBackgroundColor(getResources().getColor(R.color.dark_aqua));
+            } else {
+                vw.setBackgroundColor(getResources().getColor(color_values.get((int) c.getID())));
+            }
             //LinearLayout top = (LinearLayout) vw.findViewById(R.id.vis_frs_crs);
             LinearLayout bot = (LinearLayout) vw.findViewById(R.id.vis_sec_crs);
             LinearLayout seatdta = (LinearLayout) vw.findViewById(R.id.ll_seat_data);
-            if(c.getStart2() == 9999) {
+            if (c.getStart2() == 9999) {
                 bot.setVisibility(View.GONE);
             } else {
                 TextView crs2 = (TextView) vw.findViewById(R.id.vis_crs2);
@@ -232,7 +240,7 @@ public class Visualize extends Activity {
             }
 
             Vis_CellRow vis_row = null;
-            if(row != hours_day) {
+            if (row != hours_day) {
                 vis_row = height_values.get(row);
             }
 
@@ -270,30 +278,42 @@ public class Visualize extends Activity {
                         start.setLayoutParams(new TableRow.LayoutParams());
                         start.getLayoutParams().height = vc.getTop();
                         start.getLayoutParams().width = getColumnWidth();
-                        if((int)vc.getTopColor() == white) {
+                        if ((int) vc.getTopColor() == white) {
                             start.setBackgroundColor(getResources().getColor(R.color.white));
                         } else {
-                            start.setBackgroundColor(getResources().getColor(color_values.get(
-                                    (int) vc.getTopColor())));
+                            if ((int) vc.getTopColor() > color_values.size()) {
+                                start.setBackgroundColor(getResources().getColor(R.color.dark_aqua));
+                            } else {
+                                start.setBackgroundColor(getResources().getColor(color_values.get(
+                                        (int) vc.getTopColor())));
+                            }
                         }
                         middle.setLayoutParams(new TableRow.LayoutParams());
                         middle.getLayoutParams().height = vc.getMid();
                         middle.getLayoutParams().width = getColumnWidth();
-                        if((int)vc.getMidColor() == white) {
+                        if ((int) vc.getMidColor() == white) {
                             middle.setBackgroundColor(getResources().getColor(R.color.white));
                         } else {
-                            middle.setBackgroundColor(getResources().getColor(color_values.get(
-                                    (int) vc.getMidColor())));
+                            if ((int) vc.getMidColor() > color_values.size()) {
+                                middle.setBackgroundColor(getResources().getColor(R.color.dark_aqua));
+                            } else {
+                                middle.setBackgroundColor(getResources().getColor(color_values.get(
+                                        (int) vc.getMidColor())));
+                            }
                         }
 
                         end.setLayoutParams(new TableRow.LayoutParams());
                         end.getLayoutParams().height = vc.getBot();
                         end.getLayoutParams().width = getColumnWidth();
-                        if((int)vc.getBotColor() == white) {
+                        if ((int) vc.getBotColor() == white) {
                             end.setBackgroundColor(getResources().getColor(R.color.white));
                         } else {
-                            end.setBackgroundColor(getResources().getColor(color_values.get(
-                                    (int) vc.getBotColor())));
+                            if ((int) vc.getBotColor() > color_values.size()) {
+                                end.setBackgroundColor(getResources().getColor(R.color.dark_aqua));
+                            } else {
+                                end.setBackgroundColor(getResources().getColor(color_values.get(
+                                        (int) vc.getBotColor())));
+                            }
                         }
 
                         table_row.addView(vis_box);
@@ -364,16 +384,16 @@ public class Visualize extends Activity {
         }
     }
 
-    private boolean containsDay (Course c, boolean sec, int day) {
+    private boolean containsDay(Course c, boolean sec, int day) {
         ArrayList<Character> days;
-        if(sec) {
+        if (sec) {
             days = c.getDays2();
         } else {
             days = c.getDays1();
         }
 
         char firstLetter = day_values.get(day).charAt(0);
-        if(days.contains(firstLetter)) {
+        if (days.contains(firstLetter)) {
             return true;
         }
 
@@ -395,7 +415,7 @@ public class Visualize extends Activity {
             boolean firstDayCheck = containsDay(c, false, day);
             boolean secDayCheck = false;
 
-            if(c.getStart2() != 9999) {
+            if (c.getStart2() != 9999) {
                 secDayCheck = containsDay(c, true, day);
             }
 
@@ -431,7 +451,7 @@ public class Visualize extends Activity {
             boolean firstDayCheck = containsDay(c, false, day);
             boolean secDayCheck = false;
 
-            if(c.getStart2() != 9999) {
+            if (c.getStart2() != 9999) {
                 secDayCheck = containsDay(c, true, day);
             }
 
@@ -443,7 +463,7 @@ public class Visualize extends Activity {
                 sec_sel.add(false); //Looking at START1/END1
             }
 
-            if(c.getEnd2() != 9999) {
+            if (c.getEnd2() != 9999) {
                 top = courseTimeToMinutes(c.getEnd2());
                 if (top >= start && top <= end && secDayCheck) {
                     special_matches.add(c);
@@ -460,7 +480,7 @@ public class Visualize extends Activity {
                 start_end.add(true); //Looking at START TIME
                 sec_sel.add(false); //Looking at START1/END1
             }
-            if(c.getStart2() != 9999) {
+            if (c.getStart2() != 9999) {
                 bot = courseTimeToMinutes(c.getStart2());
                 if (bot >= start && bot <= end && secDayCheck) {
                     special_matches.add(c);
@@ -547,7 +567,7 @@ public class Visualize extends Activity {
     }
 
     public void assignUniqueID(ArrayList<Course> crs) {
-        if(crs == null || crs.size() == 0) return;
+        if (crs == null || crs.size() == 0) return;
         for (Course c : crs) {
             c.setID(uniqueCourseID(crs));
         }
@@ -581,7 +601,7 @@ public class Visualize extends Activity {
 
     private ArrayList<Course> getDayMatches(int day, Schedule s) {
         ArrayList<Course> matches = new ArrayList<>();
-        if(s.getCourses().size() == 0 || s.getCourses() == null) {
+        if (s.getCourses().size() == 0 || s.getCourses() == null) {
             return matches;
         }
 
@@ -657,7 +677,7 @@ public class Visualize extends Activity {
                         bot.getID(), vcase);
             case 3:
                 return new Vis_Cell(top_height, (max_height - top_height - bot_height), bot_height,
-                        top.getID(), white, bot.getID(),vcase);
+                        top.getID(), white, bot.getID(), vcase);
             case 4:
                 // Assumes that if a time entire hour is taken by a course then it the course is
                 // passed through the TOP course parameter
@@ -693,7 +713,7 @@ public class Visualize extends Activity {
         final int min_hour = 60;
 
         double et = (double) getTimeMinutes(EndTime);
-        double height = (et/60) * max_height;
+        double height = (et / 60) * max_height;
 
         return (int) height;
     }
@@ -705,12 +725,12 @@ public class Visualize extends Activity {
         final int max_height = 300;
         final int min_hour = 60;
 
-        double st= (double) getTimeMinutes(StartTime);
-        double height = ((min_hour - st)/60) * max_height;
+        double st = (double) getTimeMinutes(StartTime);
+        double height = ((min_hour - st) / 60) * max_height;
 
         //bug fix
-        if(vcase == 3) {
-            if((int)height == 300) {
+        if (vcase == 3) {
+            if ((int) height == 300) {
                 return 0;
             }
         }
