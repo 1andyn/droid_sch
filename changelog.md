@@ -1,9 +1,9 @@
 #Change Log
 
-##1.3
+##v1.3 [Next Version]
 -------------------
 
-##v1.2 [Publishing Soon]
+##v1.2 [Published]
 -------------------
 + Builder Activity now attempts to update partial course data before building schedules
 + Fixed major bug with scheduler builder when using CRN's
@@ -19,7 +19,7 @@
 + Improved Schedule View Spacing (using weights now)
 + Improved Star View Spacing (using different weights)
 
-##v1.1 [Currently Published]
+##v1.1
 -------------------
 + Added schedule deletion to available schedules activity
 + Minor UI Facelift (button appearance and locations)
