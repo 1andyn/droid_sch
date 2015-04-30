@@ -85,7 +85,8 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
     private boolean en_start_tp, en_end_tp = false;
     private int start_hr, end_hr, start_min, end_min = 0;
     private ListView lv_results, lv_sobj;
-    PowerManager.WakeLock wl;
+    private PowerManager.WakeLock wl;
+    private LinearLayout ll_mainlayout;
 
     // Dialog for Timer Picker
     private CheckBox en_start;
@@ -595,7 +596,7 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
         res_srch = getResources();
 
         ImageView iv_mmlogo, iv_mmtitle;
-        LinearLayout ll_mainlayout;
+
         LinearLayout ll_sliderlayout;
 
         Bitmap bmp_bg = ImgLoader.decodedSampledBitmapResource(res_srch, R.drawable.o_bg,
@@ -641,6 +642,9 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
                 i.putExtras(response);
                 setResult(RESULT_OK, i);
                 finish();
+                overridePendingTransition(0, 0);
+                ll_mainlayout.setAlpha(0);
+                ll_mainlayout.animate().alpha(1).setDuration(2000);
                 return true;
             case R.id.force_update:
                 handleRefresh();
@@ -846,7 +850,6 @@ public class Search extends ActionBarActivity implements App_const, OnParseTaskC
             editor.putBoolean("lastLoadSuccess" + String.valueOf(sem) + String.valueOf(yr), true);
             editor.commit();
         }
-
         configureSpinnerData(p.getFull_mjr_list(), p.getMajors());
         reloadDBData();
     }
