@@ -102,13 +102,9 @@ public class SchListAdapter extends ArrayAdapter<Schedule> {
                 @Override
                 public void onClick(View v) {
                     if (((CheckBox) v).isChecked()) {
-                        new ToastWrapper(app_Context, "Checked " + sch.getID(),
-                                Toast.LENGTH_SHORT);
                         checklist.add(object_list.get(pos).getID());
                         sch.setChecked(true);
                     } else {
-                        new ToastWrapper(app_Context, "UnChecked " + sch.getID(),
-                                Toast.LENGTH_SHORT);
                         sch.setChecked(false);
                         checklist.remove(object_list.get(pos).getID());
                     }
