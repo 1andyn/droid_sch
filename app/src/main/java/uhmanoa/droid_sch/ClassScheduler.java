@@ -8,14 +8,11 @@ import org.paukov.combinatorics.ICombinatoricsVector;
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ClassScheduler {
 
-    private static final int START = 0;
-    private static final int END = 1;
     public static final int SCHED_SIZE = 0;
-    public static final int SCHED_START = 1;
-    public static final int SCHED_DAYS = 2;
     private int year;
     private int semester;
     private SQL_DataSource ds;
@@ -71,26 +68,27 @@ public class ClassScheduler {
             return results;
         }
 
-//        ArrayList<Schedule> new_results = new ArrayList<>();
-//        new_results.addAll(results);
-
         for (Star_obj so : crns) {
-            Star_obj star = so;
             String crs = so.getCourse();
 
             ArrayList<Integer> crn_match = new ArrayList<>();
             for (int x = 0; x < crns.size(); x++) {
-                if (star.getCourse().equals(crns.get(x).getCourse())) {
+                if (crs.equals(crns.get(x).getCourse())) {
                     crn_match.add(crns.get(x).getCRN());
                 }
             }
 
             for (Schedule s : results) {
                 ArrayList<Course> crz = s.getCourses();
-                for (int x = 0; x < crz.size(); x++) {
-                    if (crz.get(x).getCourse().equals(crs)) {
-                        if (!crn_match.contains(crz.get(x).getCrn())) {
-                            crz.remove(crz.get(x));
+                for(Iterator<Course> c = crz.iterator(); c.hasNext();) {
+                    Course crse = c.next();
+                    String crs_name = crse.getCourse();
+                    int crs_crn = crse.getCrn();
+
+                    if(crs_name.equals(crs)) {
+                        //If the name matches the current course we are looking at
+                        if(!crn_match.contains(crs_crn)) {
+                            c.remove();
                         }
                     } else {
                         break;
@@ -98,6 +96,7 @@ public class ClassScheduler {
                 }
             }
         }
+
         return results;
     }
 

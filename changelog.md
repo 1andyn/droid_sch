@@ -1,5 +1,8 @@
 #Change Log
 
+##1.3
+-------------------
+
 ##v1.2
 -------------------
 + Bulk Transactions for Improving Parser Performance
@@ -11,6 +14,7 @@
 + Added red text coloring to full courses
 + Improved Schedule View Spacing (using weights now)
 + Improved Star View Spacing (using different weights)
++ Fixed major bug with scheduler builder when using CRN's
 
 ##v1.1 [Currently Published]
 -------------------
